@@ -1,10 +1,11 @@
 import React from 'react'
-import Button from '@mui/material/Button'
+import { Link } from 'react-router-dom'
+import { default as UILink } from '@mui/material/Link'
 
 export const SignIn: React.FC = () => {
   return (
-    <div>
-      <Button variant="contained">Авторизация</Button>
-    </div>
+    <Link to="/sign-up">
+      <UILink>Авторизация</UILink>
+    </Link>
   )
 }
