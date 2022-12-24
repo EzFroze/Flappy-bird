@@ -1,0 +1,6 @@
+export { SignIn } from './sign-in'
+export { SignUp } from './sign-up'
+export { Game } from './game'
+export { Profile } from './profile'
+export { Leaderboard } from './leaderboard'
+export { NotFound } from './404'
