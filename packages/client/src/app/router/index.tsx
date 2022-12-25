@@ -10,9 +10,12 @@ import {
 
 export const routes = createBrowserRouter([
   {
+    path: '*',
+    element: <NotFound />,
+  },
+  {
     path: '/',
     element: <SignIn />,
-    errorElement: <NotFound />,
   },
   {
     path: '/sign-up',
