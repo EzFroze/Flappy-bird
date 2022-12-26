@@ -1,22 +1,16 @@
 import { createBrowserRouter } from 'react-router-dom'
-import {
-  // SignIn,
-  // SignUp,
-  // Game,
-  // Profile,
-  // Leaderboard,
-  NotFoundPage,
-} from '../../pages'
+import { NotFoundPage } from '../../pages/NotFoundPage'
+import { ExamplePage } from '../../pages/ExamplePage'
 
 export const router = createBrowserRouter([
   {
     path: '*',
     element: <NotFoundPage />,
   },
-  // {
-  //   path: '/',
-  //   element: <SignInPage />,
-  // },
+  {
+    path: '/',
+    element: <ExamplePage />,
+  },
   // {
   //   path: '/sign-up',
   //   element: <SignUpPage />,
