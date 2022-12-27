@@ -1,3 +1,4 @@
+import React from 'react'
 import { PageComponent } from './PageComponent'
 import { useExample } from '../hooks/useExample'
 
