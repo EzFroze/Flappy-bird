@@ -1,4 +1,4 @@
-import { Box, Container, Paper, TextField, Typography } from '@mui/material'
+import { Container, Paper, TextField, Typography } from '@mui/material'
 import { useParams } from 'react-router-dom'
 import { ForumsNames, ForumsNamesRu } from '../types'
 import { ForumSendMessage } from './ForumSendMessage'
