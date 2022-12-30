@@ -1,6 +1,7 @@
 import { createBrowserRouter } from 'react-router-dom'
 import { NotFoundPage } from '../../pages/NotFoundPage'
 import { ExamplePage } from '../../pages/ExamplePage'
+import { GamePage } from '../../pages/GamePage'
 
 export const router = createBrowserRouter([
   {
