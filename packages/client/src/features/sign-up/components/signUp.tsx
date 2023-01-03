@@ -16,12 +16,12 @@ import {
   validateLogin,
 } from '../../sign-in/services/validation'
 import { SignUpData } from '../types'
-import { Input } from '../../sign-in/components/input'
-import { PasswordInput } from '../../sign-in/components/passwordInput'
+import { Input } from '../../sign-in/components/Input'
+import { PasswordInput } from '../../sign-in/components/PasswordInput'
 
 const theme = createTheme()
 
-export function SignUp() {
+export const SignUp: React.FC = () => {
   const {
     register,
     control,
@@ -75,9 +75,9 @@ export function SignUp() {
             width: '400px',
           }}>
           <Typography
+            variant="h4"
             sx={{
-              fontSize: '32px',
-              fonrWeight: 'bolder',
+              fontWeight: 'bolder',
             }}
             color="black"
             align="center">

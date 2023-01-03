@@ -1,4 +1,4 @@
-import React, { FC } from 'react'
+import React from 'react'
 import { useForm } from 'react-hook-form'
 import {
   createTheme,
@@ -11,8 +11,8 @@ import {
   Link as MuiLink,
 } from '@mui/material'
 import { Link as RouterLink } from 'react-router-dom'
-import { Input } from './input'
-import { PasswordInput } from './passwordInput'
+import { Input } from './Input'
+import { PasswordInput } from './PasswordInput'
 import {
   validateName,
   validateEmail,
@@ -24,7 +24,7 @@ import { SignInData } from '../types'
 
 const theme = createTheme()
 
-export function SignIn() {
+export const SignIn: React.FC = () => {
   const {
     control,
     watch,
@@ -78,9 +78,9 @@ export function SignIn() {
             width: '400px',
           }}>
           <Typography
+            variant="h4"
             sx={{
-              fontSize: '32px',
-              fonrWeight: 'bolder',
+              fontWeight: 'bolder',
             }}
             color="black"
             align="center">

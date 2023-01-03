@@ -1,10 +1,10 @@
-import { FC } from 'react'
+import React from 'react'
 import { Controller } from 'react-hook-form'
 import { TextField, styled } from '@mui/material'
 import { Inputs } from '../types'
 
 export const ValidationTextField = styled(TextField)({
-  '& input:valid + fieldset ': {
+  '& input:valid + fieldset': {
     borderColor: '#86868b',
     borderWidth: 3,
     borderRadius: '10px',
@@ -19,10 +19,11 @@ export const ValidationTextField = styled(TextField)({
     padding: '4px !important',
   },
 
-  '& label': {
+  '& label ': {
     color: '#f8a488',
     fontWidth: 'bold',
   },
+
   '& .MuiOutlinedInput-root fieldset': {
     borderColor: '#86868b',
     borderWidth: 3,
@@ -40,13 +41,13 @@ export const ValidationTextField = styled(TextField)({
   },
 })
 
-export const Input: FC<Inputs> = function ({
+export const Input: React.FC<Inputs> = ({
   control,
   name,
   rules,
   errors,
   label,
-}) {
+}) => {
   return (
     <Controller
       name={name}

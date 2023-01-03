@@ -1,12 +1,12 @@
-import { FC } from 'react'
+import React from 'react'
 import { Controller } from 'react-hook-form'
 import { Visibility } from '@mui/icons-material'
 import { VisibilityOff } from '@mui/icons-material'
 import { IconButton } from '@mui/material'
 import { Inputs } from '../types'
-import { ValidationTextField } from './input'
+import { ValidationTextField } from './Input'
 
-export const PasswordInput: FC<Inputs> = function ({
+export const PasswordInput: React.FC<Inputs> = ({
   control,
   name,
   rules,
@@ -15,7 +15,7 @@ export const PasswordInput: FC<Inputs> = function ({
   handleShow,
   handleClick,
   handleMouseDown,
-}) {
+}) => {
   return (
     <Controller
       name={name}
