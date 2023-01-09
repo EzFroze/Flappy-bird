@@ -1,6 +1,7 @@
 import { createBrowserRouter } from 'react-router-dom'
 import { NotFoundPage } from '../../pages/NotFoundPage'
 import { ExamplePage } from '../../pages/ExamplePage'
+import { LeaderboardPage } from '../../pages/LeaderboardPage'
 
 export const router = createBrowserRouter([
   {
@@ -19,10 +20,10 @@ export const router = createBrowserRouter([
   //   path: '/profile',
   //   element: <ProfilePage />,
   // },
-  // {
-  //   path: '/leaderboard',
-  //   element: <LeaderboardPage />,
-  // },
+  {
+    path: '/leaderboard',
+    element: <LeaderboardPage />,
+  },
   // {
   //   path: '/game',
   //   element: <GamePage />,
