@@ -2,16 +2,14 @@ import {
   Box,
   Button,
   Modal,
-  Paper,
   Stack,
   TextField,
   Typography,
 } from '@mui/material'
-import { flexbox, textAlign } from '@mui/system'
 import { useEffect, useRef, useState } from 'react'
 
 const modalStyle = {
-  position: 'absolute' as 'absolute',
+  position: 'absolute' as const,
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
@@ -29,7 +27,7 @@ export const Game_v2: React.FC = () => {
 
   // state =============================
   const [frame, setFrame] = useState(0)
-  const [canvas, setCanvas] = useState({
+  const [canvas ] = useState({
     width: 900,
     height: 400,
   })
@@ -39,21 +37,19 @@ export const Game_v2: React.FC = () => {
     y: 100,
     width: 100,
     height: 100,
-    gravity: 1,
+    gravity: 0.3,
   })
   const [block, setBlock] = useState({
     x: canvas.width,
     y: canvas.height - 120,
-    width: 150,
+    width: 100,
     height: 120,
   })
-  const [collision, setCollision] = useState(false)
-
   // refs ===============================
   const canvasRef = useRef<HTMLCanvasElement>(null)
 
   // coefficients =======================
-  const speedCoef = 1
+  const speedCoef = 0.7
 
   // engine =============================
   const drawFrame = (ctx: CanvasRenderingContext2D, frame: number) => {
@@ -120,7 +116,10 @@ export const Game_v2: React.FC = () => {
 
     if (getColIndex() > -1) {
       setPaused(true)
-      setGameOver(true)
+      
+      setTimeout(() => {
+        setGameOver(true)
+      }, 700)
     }
 
     if (blocks.length === 0) {
@@ -135,13 +134,13 @@ export const Game_v2: React.FC = () => {
   useEffect(() => {
     if (paused) return
 
-    setPlayer(p => ({ ...p, y: player.y /* + player.gravity */ }))
+    setPlayer(p => ({ ...p, y: player.y + player.gravity }))
   }, [paused, frame])
 
   useEffect(() => {
     if (paused) return
 
-    let frameId: any = null
+    let frameId = 0
 
     const ctx = canvasRef.current?.getContext('2d')
 
