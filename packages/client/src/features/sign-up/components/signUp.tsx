@@ -11,14 +11,13 @@ import { Link as RouterLink } from 'react-router-dom'
 import {
   validatePassword,
   validateLogin,
-} from '../../sign-in/services/validation'
+} from '../../input/services/validation'
 import { SignUpData } from '../types'
-import { Input } from '../../sign-in/components/Input'
-import { PasswordInput } from '../../sign-in/components/PasswordInput'
+import { Input } from '../../input/components/Input'
+import { PasswordInput } from '../../passwordInput/components/PasswordInput'
 
 export const SignUp: React.FC = () => {
   const {
-    register,
     control,
     handleSubmit,
     formState: { errors },

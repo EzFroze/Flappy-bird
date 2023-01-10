@@ -3,8 +3,8 @@ import { Controller } from 'react-hook-form'
 import { Visibility } from '@mui/icons-material'
 import { VisibilityOff } from '@mui/icons-material'
 import { IconButton } from '@mui/material'
-import { Inputs } from '../types'
-import { ValidationTextField } from './Input'
+import { Inputs } from '../../input/types'
+import { TextField } from '@mui/material'
 
 export const PasswordInput: React.FC<Inputs> = ({
   control,
@@ -22,7 +22,7 @@ export const PasswordInput: React.FC<Inputs> = ({
       control={control}
       rules={rules}
       render={({ field }) => (
-        <ValidationTextField
+        <TextField
           {...field}
           id={name}
           label={label}

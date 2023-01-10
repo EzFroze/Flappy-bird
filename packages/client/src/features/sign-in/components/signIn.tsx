@@ -9,15 +9,15 @@ import {
   Link as MuiLink,
 } from '@mui/material'
 import { Link as RouterLink } from 'react-router-dom'
-import { Input } from './Input'
-import { PasswordInput } from './PasswordInput'
+import { Input } from '../../input/components/Input'
+import { PasswordInput } from '../../passwordInput/components/PasswordInput'
 import {
   validateName,
   validateEmail,
   validateLogin,
   validatePhone,
   validatePassword,
-} from '../services/validation'
+} from '../../input/services/validation'
 import { SignInData } from '../types'
 
 export const SignIn: React.FC = () => {
