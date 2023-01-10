@@ -1,7 +1,7 @@
 import Paper from '@mui/material/Paper'
 import Grid from '@mui/material/Grid'
 import Typography from '@mui/material/Typography'
-import { Container, Link, styled } from '@mui/material'
+import { Container, Link, ListItemButton, styled } from '@mui/material'
 import { ForumsNames } from '../types'
 import {
   Link as RouterLink,
@@ -37,14 +37,6 @@ const topicsDataStyles = {
   },
 }
 
-const HoverablePaper = styled(Paper)(() => ({
-  background: '#e7e7e7',
-  '&:hover': {
-    transition: '1s',
-    background: '#69f0ae',
-  },
-}))
-
 export const ForumList: React.FC = () => {
   const { forum } = useParams()
 
@@ -76,9 +68,11 @@ export const ForumList: React.FC = () => {
                     underline="none"
                     component={RouterLink}
                     to={link}>
-                    <HoverablePaper elevation={2} sx={{ p: 3 }}>
-                      {title}
-                    </HoverablePaper>
+                    <Paper elevation={2}>
+                      <ListItemButton sx={{ p: 3 }}>
+                        {title}
+                      </ListItemButton>
+                    </Paper>
                   </Link>
                 </Grid>
                 <Grid item xs={2}>

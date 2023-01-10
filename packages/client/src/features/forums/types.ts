@@ -16,4 +16,4 @@ export const ForumsNamesRu = {
   [ForumsNames.politics]: 'Политика',
   [ForumsNames.art]: 'Творчество',
   [ForumsNames.recycle]: 'Recycle Bin'
-}
+} as const
