@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { SortOrder } from "../components/Leaderboard";
+import { SortOrder } from "../types";
 
 export const useSortedUsers = (users: any[], sort: string, order: SortOrder) => {
   const sortedPosts: any[] = useMemo(() => {

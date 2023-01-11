@@ -1,6 +1,6 @@
 import { Avatar, List, ListItem, ListItemAvatar, ListItemText, Paper, Typography } from '@mui/material';
 import { pink } from '@mui/material/colors';
-import React, { FC } from 'react';
+import { FC } from 'react';
 import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
 import WorkspacePremiumIcon from '@mui/icons-material/WorkspacePremium';
 import CelebrationIcon from '@mui/icons-material/Celebration';
@@ -9,7 +9,7 @@ interface UsersListProps {
     users: any
 }
 
-const UsersList: FC<UsersListProps> = ({ users }, props) => {
+const UsersList: FC<UsersListProps> = ({ users }) => {
     return (
         <List
             sx={{ width: '100%', maxWidth: 750, bgcolor: 'background.paper' }}>

@@ -7,7 +7,7 @@ export const useFetching = (callback: (limit:number, page:number)=>void) => {
   const fetching = async (limit:number, page:number) => {
     try {
       setIsLoading(true);
-      await callback(limit, page);
+      callback(limit, page);
     } catch (e: any) {
       setError(e.message);
     } finally {

@@ -1,18 +1,13 @@
-import { ClassNames } from '@emotion/react';
-import { Box, Typography, Button } from '@mui/material';
-import React, { FC, useEffect, useState, useMemo } from 'react';
+import { Typography, Container } from '@mui/material';
+import { FC, useEffect, useState, useMemo } from 'react';
 import UsersList from './UsersList';
-import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
-import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import { useFetching } from '../hooks/useFetching';
-import UsersService from '../API/UsersService';
+import UsersService from '../services/UsersService';
 import { getPageCount } from '../utils/pages';
 import { useUsers } from '../hooks/useUsers';
-
-export const enum SortOrder {
-    AscendingOrder,
-    DescendingOrder
-}
+import { FetchUsersType, SortOrder } from '../types';
+import { ColumnHeader } from './ColumnHeader';
+import { styles } from '../styles/styles';
 
 export const Leaderboard: FC = () => {
 
@@ -41,8 +36,7 @@ export const Leaderboard: FC = () => {
         }
     }, []);
 
-    type FetchUsersType = ((...args: any[]) => Promise<void>)
-
+   
     useEffect(() => {
         (fetchUsers as FetchUsersType)(limit, page);
     }, [page, limit])
@@ -57,119 +51,19 @@ export const Leaderboard: FC = () => {
         setFilter({ ...filter, sort, order });
     }
 
-    const styles: { [key: string]: React.CSSProperties } = {
-        startContainer: {
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'flex-start',
-            alignItems: 'center',
-        },
-        centerContainer: {
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'center',
-            alignItems: 'center',
-        },
-        horizontalContainer: {
-            width: '750px',
-            display: 'flex',
-            justifyContent: 'flex-start',
-            padding: '2px'
-        },
-        container: {
-            display: 'flex',
-            flexDirection: 'row',
-            justifyContent: 'center',
-            alignItems: 'center',
-        },
-    };
-
     return (
-        <div style={styles.startContainer}>
+        <Container sx={styles.startContainer}>
             <Typography textAlign={'center'} variant="h4">
                 Результаты
             </Typography>
-            <div style={styles.horizontalContainer}>
-                <Box style={styles.centerContainer} sx={{ width: 150, height: 64, bgcolor: 'lightBlue' }}>
-                    <Box style={styles.container} >
-
-                        <Button onClick={() => changeSortOrder("id")} sx={{ minWidth: 32, height: 32 }} variant="text">
-                            {sortFields["id"] == SortOrder.AscendingOrder &&
-                                <ArrowDownwardIcon />
-                            }
-                            {sortFields["id"] == SortOrder.DescendingOrder &&
-                                <ArrowUpwardIcon />
-                            }
-
-                        </Button>
-
-                        <Typography variant="h5" component="h2">
-                            Место
-                        </Typography>
-
-                    </Box>
-                </Box>
-                <Box style={styles.centerContainer} sx={{ width: 200, height: 64, ml: '2px', bgcolor: 'lightBlue' }}>
-                    <Box style={styles.container} >
-
-                        <Button onClick={() => changeSortOrder("name")} sx={{ minWidth: 32, height: 32 }} variant="text">
-                            {sortFields["name"] == SortOrder.AscendingOrder &&
-                                <ArrowDownwardIcon />
-                            }
-                            {sortFields["name"] == SortOrder.DescendingOrder &&
-                                <ArrowUpwardIcon />
-                            }
-                        </Button>
-
-                        <Typography variant="h5" component="h2">
-                            Игрок
-                        </Typography>
-
-                    </Box>
-                </Box>
-                <Box style={styles.centerContainer} sx={{ width: 200, height: 64, ml: '2px', bgcolor: 'lightBlue' }}>
-
-                    <Box style={styles.container} >
-
-                        <Button onClick={() => changeSortOrder("scores")} sx={{ minWidth: 32, height: 32 }} variant="text">
-                            {sortFields["scores"] == SortOrder.AscendingOrder &&
-                                <ArrowDownwardIcon />
-                            }
-                            {sortFields["scores"] == SortOrder.DescendingOrder &&
-                                <ArrowUpwardIcon />
-                            }
-                        </Button>
-
-                        <Typography variant="h5" component="h2">
-                            Счёт
-                        </Typography>
-
-                    </Box>
-
-                </Box>
-                <Box style={styles.centerContainer} sx={{ width: 200, height: 64, ml: '2px', bgcolor: 'lightBlue' }}>
-                    <Box style={styles.container} >
-
-                        <Button onClick={() => changeSortOrder("date")} sx={{ minWidth: 32, height: 32 }} variant="text">
-                            {sortFields["date"] == SortOrder.AscendingOrder &&
-                                <ArrowDownwardIcon />
-                            }
-                            {sortFields["date"] == SortOrder.DescendingOrder &&
-                                <ArrowUpwardIcon />
-                            }
-                        </Button>
-
-                        <Typography variant="h5" component="h2">
-                            Дата
-                        </Typography>
-
-                    </Box>
-
-                </Box>
-            </div>
-
+            <Container disableGutters  sx={styles.horizontalContainer}>
+                <ColumnHeader text='Место' width={150} changeSortOrder={changeSortOrder} sortField={sortFields.id}/>
+                <ColumnHeader text='Игрок' width={200} changeSortOrder={changeSortOrder} sortField={sortFields.name}/>
+                <ColumnHeader text='Счёт' width={200} changeSortOrder={changeSortOrder} sortField={sortFields.scores}/>
+                <ColumnHeader text='Дата' width={200} changeSortOrder={changeSortOrder} sortField={sortFields.date}/>
+            </Container>
             <UsersList users={sortedAndSearchedUsers} />
-        </div>
+        </Container>
     );
 };
 
