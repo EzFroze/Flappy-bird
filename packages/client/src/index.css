@@ -1,0 +1,7 @@
+* {
+    font-family: "Roboto", sans-serif
+}
+
+#root, body, html {
+    height: 100%;
+}
