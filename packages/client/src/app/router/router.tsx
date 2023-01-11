@@ -1,6 +1,7 @@
 import { createBrowserRouter } from 'react-router-dom'
 import { NotFoundPage } from '../../pages/NotFoundPage'
-import { ExamplePage } from '../../pages/ExamplePage'
+import { SignInPage } from '../../pages/SignInPage'
+import { SignUpPage } from '../../pages/SignUpPage'
 import { ServerErrorPage } from '../../pages/ServerErrorPage'
 
 export const router = createBrowserRouter([
@@ -10,16 +11,16 @@ export const router = createBrowserRouter([
   },
   {
     path: '/',
-    element: <ExamplePage />,
+    element: <SignInPage />,
+  },
+  {
+    path: '/sign-up',
+    element: <SignUpPage />,
   },
   {
     path: '/500',
     element: <ServerErrorPage />,
   },
-  // {
-  //   path: '/sign-up',
-  //   element: <SignUpPage />,
-  // },
   // {
   //   path: '/profile',
   //   element: <ProfilePage />,
