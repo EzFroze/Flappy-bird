@@ -1,7 +1,7 @@
 import Paper from '@mui/material/Paper'
 import Grid from '@mui/material/Grid'
 import Typography from '@mui/material/Typography'
-import { Container, Link, ListItemButton, styled } from '@mui/material'
+import { Container, Link, ListItemButton } from '@mui/material'
 import { ForumsNames } from '../types'
 import {
   Link as RouterLink,

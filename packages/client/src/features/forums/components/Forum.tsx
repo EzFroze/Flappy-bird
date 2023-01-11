@@ -59,7 +59,7 @@ export const Forum: React.FC = () => {
       {(thread || pathname.includes(actionPaths.createThread)) ? (
         <ForumThreadOutlet />
       ) : (
-        <Container sx={{ mt: 2 }}>
+        <Container>
           <Typography variant="h3">{ForumsNamesRu[forumName]}</Typography>
           <Grid container spacing={2} sx={{ mt: 2 }}>
             <Grid item xs={3}>

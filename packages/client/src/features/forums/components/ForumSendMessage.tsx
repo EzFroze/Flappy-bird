@@ -1,5 +1,5 @@
 import { Send } from '@mui/icons-material'
-import { Button, Paper, Stack, TextField } from '@mui/material'
+import { Button, Paper, TextField } from '@mui/material'
 
 export const ForumSendMessage: React.FC<{ submitButtonTitle?: string }> = ({
   submitButtonTitle,
@@ -15,11 +15,9 @@ export const ForumSendMessage: React.FC<{ submitButtonTitle?: string }> = ({
         variant="outlined"
         sx={{ width: '100%' }}
       />
-      <Stack direction={'row'} sx={{ mt: 2 }}>
-        <Button variant={'contained'} startIcon={<Send />}>
+      <Button variant={'contained'} startIcon={<Send /> } sx={{ mt: 2 }}>
           {submitButtonTitle || 'Отправить'}
-        </Button>
-      </Stack>
+      </Button>
     </Paper>
   )
 }
