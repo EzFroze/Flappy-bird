@@ -2,7 +2,7 @@ import { createBrowserRouter } from 'react-router-dom'
 import { NotFoundPage } from '../../pages/NotFoundPage'
 import { ExamplePage } from '../../pages/ExamplePage'
 import { ProfilePage } from '../../pages/ProfilePage'
-import { ProfilePassChangePage } from '../../pages/ProfilePassChangePage'
+import { PasswordPage } from '../../pages/PasswordPage'
 
 export const router = createBrowserRouter([
   {
@@ -22,8 +22,8 @@ export const router = createBrowserRouter([
     element: <ProfilePage />,
   },
   {
-    path: '/profile-pass-change',
-    element: <ProfilePassChangePage />,
+    path: '/password',
+    element: <PasswordPage />,
   },
   // {
   //   path: '/leaderboard',

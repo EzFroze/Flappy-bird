@@ -17,7 +17,7 @@ export const ListChild: React.FC<Lists> = ({ label, text, disabled }) => {
           }}
           name={label}
           value={text}
-          disabled={disabled === 'true' ? true : false}
+          disabled={disabled}
         />
       </ListItem>
       <Divider color="white" sx={{ mb: '.5rem' }} light />
