@@ -1,4 +1,5 @@
 import { createBrowserRouter } from 'react-router-dom'
+import { ExamplePage } from '../../pages/ExamplePage'
 import { NotFoundPage } from '../../pages/NotFoundPage'
 import { SignInPage } from '../../pages/SignInPage'
 import { SignUpPage } from '../../pages/SignUpPage'
@@ -15,6 +16,10 @@ export const router = createBrowserRouter([
   {
     path: '/sign-up',
     element: <SignUpPage />,
+  },
+  {
+    path: '/example',
+    element: <ExamplePage />,
   },
   // {
   //   path: '/profile',
