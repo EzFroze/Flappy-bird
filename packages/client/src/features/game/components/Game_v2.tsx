@@ -1,6 +1,7 @@
 import { Box, Button, Modal, Stack, TextField, Typography } from '@mui/material'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import LinearProgress from '@mui/material/LinearProgress';
 
 const modalStyle = {
   position: 'absolute' as const,
@@ -72,18 +73,16 @@ export const Game_v2: React.FC = () => {
       ]
     }
 
-    return [
-      [100, 150],
-      [150, 100],
-      [50, 50],
-      [100, 200],
-      [75, 120],
-      [120, 50],
-      [140, 10],
-      [10, 140]
-    ].reduce((prev, [t, d]) => {
-      return [...prev, ...createBlocksPair(t, d)]
-    }, [] as any[])
+    const level = new Array(50)
+      .fill(null)
+      .map(() => [Math.random() * (140 - 50) + 50, Math.random() * (140 - 50) + 50])
+      .reduce((prev, [t, d]) => {
+        return [...prev, ...createBlocksPair(t, d)]
+      }, [] as any[])
+
+      console.log('level', level)
+
+    return level
   }, [])
 
   const updatedLevel = optimize(
@@ -196,9 +195,17 @@ export const Game_v2: React.FC = () => {
     }
   }, [paused, frame])
 
+  const progress = Math.abs(100 - updatedLevel.length)
+
   return (
     <>
-      <TextField label="frames" value={frame} sx={{ width: 100 }} />
+      <Stack direction={'row'} spacing={2}>
+        <TextField label="frames" value={frame} sx={{ width: 100 }} />
+        <TextField label="progress" value={progress} InputProps={{ readOnly: true }} sx={{ width: 100 }} />
+      </Stack>
+      <Box sx={{ mt: 2, width: canvas.width}}>
+        <LinearProgress variant='determinate' value={progress} />
+      </Box>
       <div style={{ marginTop: 20 }}>
         <canvas
           style={{ outline: '1px solid silver' }}
