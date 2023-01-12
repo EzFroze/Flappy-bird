@@ -1,12 +1,6 @@
-import {
-  Box,
-  Button,
-  Modal,
-  Stack,
-  TextField,
-  Typography,
-} from '@mui/material'
-import { useEffect, useRef, useState } from 'react'
+import { Box, Button, Modal, Stack, TextField, Typography } from '@mui/material'
+import { useEffect, useMemo, useRef, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 const modalStyle = {
   position: 'absolute' as const,
@@ -21,23 +15,25 @@ const modalStyle = {
 }
 
 export const Game_v2: React.FC = () => {
+  const navto = useNavigate()
   const [launched, setLaunched] = useState(false)
   const [ended, setEnded] = useState(false)
   const [gameOver, setGameOver] = useState(false)
 
   // state =============================
   const [frame, setFrame] = useState(0)
-  const [canvas ] = useState({
+  const [canvas] = useState({
     width: 900,
     height: 400,
   })
   const [paused, setPaused] = useState(true)
   const [player, setPlayer] = useState({
-    x: 200,
+    x: 100,
     y: 100,
-    width: 100,
-    height: 100,
+    width: 50,
+    height: 50,
     gravity: 0.3,
+    move: 30,
   })
   const [block, setBlock] = useState({
     x: canvas.width,
@@ -51,6 +47,56 @@ export const Game_v2: React.FC = () => {
   // coefficients =======================
   const speedCoef = 0.7
 
+  // level =============================
+  const optimize = (array: any[]) => {
+    return array.filter(({ x, w }) => x + w > 0)
+  }
+
+  const initialLevel = useMemo(() => {
+    const createBlocksPair = (top: number, down: number) => {
+      if (top === 0 || down === 0) {
+        return []
+      }
+
+      if (top >= canvas.height / 2 || down >= canvas.height / 2) {
+        return []
+      }
+
+      if (canvas.height - top - down < player.height + player.move * 2) {
+        return []
+      }
+
+      return [
+        { x: canvas.width, y: 0, w: block.width, h: top },
+        { x: canvas.width, y: canvas.height - down, w: block.width, h: down },
+      ]
+    }
+
+    return [
+      [100, 150],
+      [150, 100],
+      [50, 50],
+      [100, 200],
+      [75, 120],
+      [120, 50],
+      [140, 10],
+      [10, 140]
+    ].reduce((prev, [t, d]) => {
+      return [...prev, ...createBlocksPair(t, d)]
+    }, [] as any[])
+  }, [])
+
+  const updatedLevel = optimize(
+    initialLevel.map((b, i) => ({
+      ...b,
+      // выравниваем блоки друг над другом
+      x:
+        i % 2 === 0
+          ? block.x + block.width * i
+          : block.x + (block.width * i - block.width),
+    }))
+  )
+
   // engine =============================
   const drawFrame = (ctx: CanvasRenderingContext2D, frame: number) => {
     const speed = frame * speedCoef
@@ -60,52 +106,42 @@ export const Game_v2: React.FC = () => {
     // enemy block
     setBlock(block => ({ ...block, x: ctx.canvas.width - speed }))
 
-    const blocks = new Array(3)
-      .fill(null)
-      .map((_, i) => {
-        return {
-          // расстояние между блоками
-          x: block.x + 2 * i * block.width,
-          y: i === 1 ? 0 : block.y,
-          w: block.width,
-          h: block.height,
-        } // оптимизация количества блоков за левым краем канваса
-      })
-      .filter(block => block.x + block.w > 0)
-
     const getColIndex = () => {
-      return blocks.findIndex(block => {
-        const playerLeft = player.x
-        const playerRight = player.x + player.width
-        const blockLeft = block.x
-        const blockRight = block.x + block.w
+      // оптимизируем, т.к. далее этих блоков не уйдем
+      return updatedLevel
+        .filter((_b, i) => i < 2)
+        .findIndex(block => {
+          const playerLeft = player.x
+          const playerRight = player.x + player.width
+          const blockLeft = block.x
+          const blockRight = block.x + block.w
 
-        const playerTop = player.y
-        const playerBottom = player.y + player.height
-        const blockTop = block.y
-        const blockBottom = block.y + block.h
+          const playerTop = player.y
+          const playerBottom = player.y + player.height
+          const blockTop = block.y
+          const blockBottom = block.y + block.h
 
-        let intersectedVertically = false
+          let intersectedVertically = false
 
-        if (playerRight > blockLeft && playerRight < blockRight) {
-          intersectedVertically = true
-        }
+          if (playerRight > blockLeft && playerRight < blockRight) {
+            intersectedVertically = true
+          }
 
-        if (playerLeft > blockLeft && playerLeft < blockRight) {
-          intersectedVertically = true
-        }
+          if (playerLeft > blockLeft && playerLeft < blockRight) {
+            intersectedVertically = true
+          }
 
-        if (blockTop === 0) {
-          return playerTop < blockBottom && intersectedVertically
-        }
+          if (blockTop === 0) {
+            return playerTop < blockBottom && intersectedVertically
+          }
 
-        if (blockBottom === canvas.height) {
-          return playerBottom > blockTop && intersectedVertically
-        }
-      })
+          if (blockBottom === canvas.height) {
+            return playerBottom > blockTop && intersectedVertically
+          }
+        })
     }
 
-    blocks.forEach(({ x, y, w, h }, i) => {
+    updatedLevel.forEach(({ x, y, w, h }, i) => {
       ctx.fillStyle = i === getColIndex() ? '#821b1b' : '#00955c'
       ctx.fillRect(x, y, w, h)
     })
@@ -116,13 +152,13 @@ export const Game_v2: React.FC = () => {
 
     if (getColIndex() > -1) {
       setPaused(true)
-      
+
       setTimeout(() => {
         setGameOver(true)
       }, 700)
     }
 
-    if (blocks.length === 0) {
+    if (updatedLevel.length === 0) {
       setPaused(true)
       setEnded(true)
 
@@ -169,14 +205,16 @@ export const Game_v2: React.FC = () => {
           ref={canvasRef}
           width={canvas.width}
           height={canvas.height}
-          onClick={() => setPlayer(p => ({ ...p, y: p.y - 50 }))}
+          onClick={() => {
+            setPlayer(p => ({ ...p, y: p.y - player.move }))
+          }}
           onContextMenu={ev => {
             ev.preventDefault()
-            setPlayer(p => ({ ...p, y: p.y + 50 }))
+            setPaused(!paused)
           }}
         />
       </div>
-      <div style={{ display: 'flex', gap: 5, marginTop: 20 }}>
+      <Stack direction={'row'} spacing={2} mt={2}>
         <Button
           variant="contained"
           onClick={() => setPaused(!paused)}
@@ -189,7 +227,7 @@ export const Game_v2: React.FC = () => {
           sx={{ width: 100 }}>
           {'Reload'}
         </Button>
-      </div>
+      </Stack>
       {
         <Modal open={gameOver}>
           <Box sx={modalStyle}>
@@ -199,10 +237,9 @@ export const Game_v2: React.FC = () => {
               </Typography>
               <Typography variant="h4">Набрано: {frame} балла</Typography>
               <Stack direction={'row'} justifyContent={'center'} gap={2}>
-                <Button 
+                <Button
                   variant="contained"
-                  onClick={() => window.location.reload()}
-                >
+                  onClick={() => window.location.reload()}>
                   Повторить
                 </Button>
                 <Button variant="contained">Таблица лидеров</Button>
@@ -233,14 +270,19 @@ export const Game_v2: React.FC = () => {
         <Modal open={ended}>
           <Box sx={modalStyle}>
             <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-              <Stack gap={4} sx={{ textAlign: 'center'  }}>
-                <Typography variant='h2'>Поздравляем!</Typography>
-                <Typography variant='h4'>Вы прошли уровень!</Typography>
-                <Stack direction='row' gap={4}>
-                  <Button 
-                    variant='contained'>Следующий уровень</Button>
-                  <Button variant='contained'>Таблица лидеров</Button>
-                  <Button variant='contained'>Закончить игру</Button>
+              <Stack gap={4} sx={{ textAlign: 'center' }}>
+                <Typography variant="h2">Поздравляем!</Typography>
+                <Typography variant="h4">Вы прошли уровень!</Typography>
+                <Stack direction="row" gap={4}>
+                  <Button
+                    onClick={() => window.location.reload()}
+                    variant="contained">
+                    Следующий уровень
+                  </Button>
+                  <Button variant="contained">Таблица лидеров</Button>
+                  <Button onClick={() => navto('/')} variant="contained">
+                    Закончить игру
+                  </Button>
                 </Stack>
               </Stack>
             </Box>
