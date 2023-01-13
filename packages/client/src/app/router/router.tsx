@@ -1,7 +1,8 @@
 import { createBrowserRouter } from 'react-router-dom'
-import { NotFoundPage } from '../../pages/NotFoundPage'
-import { ExamplePage } from '../../pages/ExamplePage'
 import { GamePage } from '../../pages/GamePage'
+import { NotFoundPage } from '../../pages/NotFoundPage'
+import { SignInPage } from '../../pages/SignInPage'
+import { SignUpPage } from '../../pages/SignUpPage'
 
 export const router = createBrowserRouter([
   {
@@ -10,16 +11,12 @@ export const router = createBrowserRouter([
   },
   {
     path: '/',
-    element: <ExamplePage />,
+    element: <SignInPage />,
   },
   {
-    path: '/game',
-    element: <GamePage />
-  }
-  // {
-  //   path: '/sign-up',
-  //   element: <SignUpPage />,
-  // },
+    path: '/sign-up',
+    element: <SignUpPage />,
+  },
   // {
   //   path: '/profile',
   //   element: <ProfilePage />,
@@ -28,8 +25,8 @@ export const router = createBrowserRouter([
   //   path: '/leaderboard',
   //   element: <LeaderboardPage />,
   // },
-  // {
-  //   path: '/game',
-  //   element: <GamePage />,
-  // },
+  {
+    path: '/game',
+    element: <GamePage />,
+  },
 ])
