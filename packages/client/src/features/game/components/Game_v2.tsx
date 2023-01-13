@@ -1,90 +1,61 @@
 import { Box, Button, Modal, Stack, TextField, Typography } from '@mui/material'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import LinearProgress from '@mui/material/LinearProgress';
-
-const modalStyle = {
-  position: 'absolute' as const,
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  width: 600,
-  bgcolor: 'background.paper',
-  border: '2px solid #000',
-  boxShadow: 24,
-  p: 4,
-}
+import LinearProgress from '@mui/material/LinearProgress'
+import { createLevel, levels } from '../services/createLevel'
+import { Block, Canvas, Player } from '../types'
+import { ModalEnd } from './ModalEnd'
+import { ModalStart } from './ModalStart'
+import { ModalGameOver } from './ModalGameOver'
+import { Container } from '@mui/system'
 
 export const Game_v2: React.FC = () => {
-  const navto = useNavigate()
   const [launched, setLaunched] = useState(false)
   const [ended, setEnded] = useState(false)
   const [gameOver, setGameOver] = useState(false)
 
   // state =============================
   const [frame, setFrame] = useState(0)
-  const [canvas] = useState({
+  const [canvas] = useState<Canvas>({
     width: 900,
     height: 400,
   })
   const [paused, setPaused] = useState(true)
-  const [player, setPlayer] = useState({
+  const [player, setPlayer] = useState<Player>({
     x: 100,
     y: 100,
     width: 50,
     height: 50,
     gravity: 0.3,
     move: 30,
+    level: 0,
   })
-  const [block, setBlock] = useState({
+  const blockInitialState: Block = {
     x: canvas.width,
-    y: canvas.height - 120,
+    y: canvas.height,
     width: 100,
     height: 120,
-  })
+  }
+  const [block, setBlock] = useState<Block>(blockInitialState)
+  const [speedCoef, setSpeedCoef] = useState(1)
+
   // refs ===============================
   const canvasRef = useRef<HTMLCanvasElement>(null)
 
-  // coefficients =======================
-  const speedCoef = 0.7
-
   // level =============================
-  const optimize = (array: any[]) => {
-    return array.filter(({ x, w }) => x + w > 0)
+  const optimize = (array: Block[]) => {
+    return array.filter(({ x, width }) => x + width > 0)
   }
 
-  const initialLevel = useMemo(() => {
-    const createBlocksPair = (top: number, down: number) => {
-      if (top === 0 || down === 0) {
-        return []
-      }
-
-      if (top >= canvas.height / 2 || down >= canvas.height / 2) {
-        return []
-      }
-
-      if (canvas.height - top - down < player.height + player.move * 2) {
-        return []
-      }
-
-      return [
-        { x: canvas.width, y: 0, w: block.width, h: top },
-        { x: canvas.width, y: canvas.height - down, w: block.width, h: down },
-      ]
-    }
-
-    const level = new Array(50)
-      .fill(null)
-      .map(() => [Math.random() * (140 - 50) + 50, Math.random() * (140 - 50) + 50])
-      .reduce((prev, [t, d]) => {
-        return [...prev, ...createBlocksPair(t, d)]
-      }, [] as any[])
-
-      console.log('level', level)
-
-    return level
-  }, [])
-
+  const initialLevel = useMemo(
+    () =>
+      createLevel({
+        array: levels[player.level],
+        canvas,
+        block,
+      }),
+    [levels]
+  )
   const updatedLevel = optimize(
     initialLevel.map((b, i) => ({
       ...b,
@@ -113,12 +84,12 @@ export const Game_v2: React.FC = () => {
           const playerLeft = player.x
           const playerRight = player.x + player.width
           const blockLeft = block.x
-          const blockRight = block.x + block.w
+          const blockRight = block.x + block.width
 
           const playerTop = player.y
           const playerBottom = player.y + player.height
           const blockTop = block.y
-          const blockBottom = block.y + block.h
+          const blockBottom = block.y + block.height
 
           let intersectedVertically = false
 
@@ -140,9 +111,9 @@ export const Game_v2: React.FC = () => {
         })
     }
 
-    updatedLevel.forEach(({ x, y, w, h }, i) => {
+    updatedLevel.forEach(({ x, y, width, height }, i) => {
       ctx.fillStyle = i === getColIndex() ? '#821b1b' : '#00955c'
-      ctx.fillRect(x, y, w, h)
+      ctx.fillRect(x, y, width, height)
     })
 
     // player block
@@ -195,18 +166,34 @@ export const Game_v2: React.FC = () => {
     }
   }, [paused, frame])
 
-  const progress = Math.abs(100 - updatedLevel.length)
+  const isLastLevel = player.level === levels.length - 1
+
+  const goNextLevel = () => {
+    if (isLastLevel) return
+
+    setPlayer(p => ({ ...p, level: p.level + 1 }))
+    setFrame(0)
+    setEnded(false)
+    setLaunched(false)
+    setBlock(blockInitialState)
+  }
+
+  const levelLen = initialLevel.length / 2
+  const passedLen = updatedLevel.length / 2
 
   return (
-    <>
+    <Container maxWidth='lg'>
       <Stack direction={'row'} spacing={2}>
         <TextField label="frames" value={frame} sx={{ width: 100 }} />
-        <TextField label="progress" value={progress} InputProps={{ readOnly: true }} sx={{ width: 100 }} />
+        <TextField
+          label="progress"
+          value={`${(levelLen - passedLen)} / ${levelLen}`}
+          InputProps={{ readOnly: true }}
+          sx={{ width: 100 }}
+        />
+        <TextField label="level" value={player.level} sx={{ width: 100 }} />
       </Stack>
-      <Box sx={{ mt: 2, width: canvas.width}}>
-        <LinearProgress variant='determinate' value={progress} />
-      </Box>
-      <div style={{ marginTop: 20 }}>
+      <Box sx={{ mt: 2 }}>
         <canvas
           style={{ outline: '1px solid silver' }}
           ref={canvasRef}
@@ -220,7 +207,7 @@ export const Game_v2: React.FC = () => {
             setPaused(!paused)
           }}
         />
-      </div>
+      </Box>
       <Stack direction={'row'} spacing={2} mt={2}>
         <Button
           variant="contained"
@@ -234,68 +221,23 @@ export const Game_v2: React.FC = () => {
           sx={{ width: 100 }}>
           {'Reload'}
         </Button>
+        <Button
+          variant="contained"
+          onClick={() => setSpeedCoef(sc => (sc === 1 ? 2 : 1))}>
+          Booster {speedCoef === 1 ? 'Off' : 'On'}
+        </Button>
       </Stack>
-      {
-        <Modal open={gameOver}>
-          <Box sx={modalStyle}>
-            <Stack sx={{ textAlign: 'center' }} gap={2}>
-              <Typography variant="h2" sx={{ color: 'red' }}>
-                Game Over
-              </Typography>
-              <Typography variant="h4">Набрано: {frame} балла</Typography>
-              <Stack direction={'row'} justifyContent={'center'} gap={2}>
-                <Button
-                  variant="contained"
-                  onClick={() => window.location.reload()}>
-                  Повторить
-                </Button>
-                <Button variant="contained">Таблица лидеров</Button>
-                <Button variant="contained">Выйти</Button>
-              </Stack>
-            </Stack>
-          </Box>
-        </Modal>
-      }
-      {
-        <Modal open={!launched}>
-          <Box sx={modalStyle}>
-            <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-              <Button
-                variant="contained"
-                size="large"
-                onClick={() => {
-                  setLaunched(true)
-                  setPaused(false)
-                }}>
-                Начать
-              </Button>
-            </Box>
-          </Box>
-        </Modal>
-      }
-      {
-        <Modal open={ended}>
-          <Box sx={modalStyle}>
-            <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-              <Stack gap={4} sx={{ textAlign: 'center' }}>
-                <Typography variant="h2">Поздравляем!</Typography>
-                <Typography variant="h4">Вы прошли уровень!</Typography>
-                <Stack direction="row" gap={4}>
-                  <Button
-                    onClick={() => window.location.reload()}
-                    variant="contained">
-                    Следующий уровень
-                  </Button>
-                  <Button variant="contained">Таблица лидеров</Button>
-                  <Button onClick={() => navto('/')} variant="contained">
-                    Закончить игру
-                  </Button>
-                </Stack>
-              </Stack>
-            </Box>
-          </Box>
-        </Modal>
-      }
-    </>
+      <ModalGameOver gameOver={gameOver} frame={frame} />
+      <ModalStart
+        launched={launched}
+        setPaused={setPaused}
+        setLaunched={setLaunched}
+      />
+      <ModalEnd
+        ended={ended}
+        isLastLevel={isLastLevel}
+        goNextLevel={goNextLevel}
+      />
+    </Container>
   )
 }
