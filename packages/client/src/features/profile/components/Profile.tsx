@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { FormEvent, useState, useEffect } from 'react'
 import {
   Container,
   Box,
@@ -10,13 +10,48 @@ import {
   Modal,
 } from '@mui/material'
 import userAvatar from '../../../assets/img/userAvatar.jpg'
-import { Link as RouterLink } from 'react-router-dom'
+import { Link as RouterLink, useNavigate } from 'react-router-dom'
 import { ListChild } from './ListChild'
 import { Stack } from '@mui/system'
+import { avatarChange } from '../services/ChangeAvatar'
+import { logout } from '../services/LogOut'
+import { getUser } from '../services/GetUser'
 
 export const Profile: React.FC = () => {
   const [modal, setModal] = useState(false)
+  const navigate = useNavigate()
   const toggleModal = () => setModal(!modal)
+  const handleSubmit = (e: FormEvent) => {
+    e.preventDefault()
+    const form = new FormData(e.target as HTMLFormElement)
+    avatarChange(form).then(resp => {
+      if (resp.status === 200) {
+        toggleModal()
+        navigate('/profile')
+      } else {
+        // TODO: Добавить обработку ошибок и вывода пользователю
+      }
+    })
+  }
+  useEffect(() => {
+    getUser().then(response => {
+      console.log(response)
+      if (response.status !== 200) {
+        // TODO: Когда будет готова api авторизации и регистрации раскомментить следующий код
+        //navigate('/')
+      }
+    })
+  }, [])
+  const handleLogOut = () => {
+    logout().then(resp => {
+      if (resp.status === 200) {
+        navigate('/')
+      } else {
+        // TODO: Добавить обработку ошибок и вывода пользователю
+      }
+    })
+  }
+
   return (
     <>
       <Container
@@ -92,9 +127,8 @@ export const Profile: React.FC = () => {
                   display: 'block',
                 }}
                 color="error"
-                component={RouterLink}
                 underline="none"
-                to="/">
+                onClick={handleLogOut}>
                 Выйти
               </Link>
             </Box>
@@ -121,7 +155,7 @@ export const Profile: React.FC = () => {
           <Typography variant="h5" sx={{ fontWeight: 600, mt: 2 }}>
             Загрузите ваш аватар
           </Typography>
-          <form id="avatar-form">
+          <form id="avatar-form" onSubmit={handleSubmit}>
             <Input
               id="avatar"
               type="file"
@@ -131,7 +165,6 @@ export const Profile: React.FC = () => {
             <Box sx={{ mt: 4 }}>
               <Button
                 variant="contained"
-                onClick={toggleModal}
                 sx={{
                   backgroundColor: '#176acb',
                   textTransform: 'none',
@@ -139,7 +172,8 @@ export const Profile: React.FC = () => {
                   fontSize: 16,
                   p: 1,
                   width: 350,
-                }}>
+                }}
+                type="submit">
                 Сохранить
               </Button>
             </Box>
