@@ -1,34 +1,31 @@
-import { Avatar, List, ListItem, ListItemAvatar, ListItemText, Paper, Typography } from '@mui/material';
+import { Avatar, List, ListItem, ListItemAvatar, ListItemText, Paper } from '@mui/material';
 import { pink } from '@mui/material/colors';
 import { FC } from 'react';
 import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
 import WorkspacePremiumIcon from '@mui/icons-material/WorkspacePremium';
 import CelebrationIcon from '@mui/icons-material/Celebration';
-
-interface UsersListProps {
-    users: any
-}
+import { User, UsersListProps } from '../types';
 
 const UsersList: FC<UsersListProps> = ({ users }) => {
     return (
         <List
             sx={{ width: '100%', maxWidth: 750, bgcolor: 'background.paper' }}>
-            {users.map((user: any, index: number) =>
+            {users.map((user: User) =>
                 <Paper sx={{ padding: 0 }} elevation={2} key={user.id}>
                     <ListItem sx={{ mb: '5px', pl: '5px', pr: '5px' }}>
                         <ListItemText sx={{ textAlign: 'center', width: 50 }} >
                             <Paper elevation={1} sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', borderRadius: 10, width: 64, height: 64 }}>
-                                {user.id == 1 &&
+                                {user.place == 1 &&
                                     <EmojiEventsIcon sx={{ color: 'orange', width: 48, height: 48 }} />
                                 }
-                                {user.id == 2 &&
+                                {user.place == 2 &&
                                     <WorkspacePremiumIcon sx={{ color: 'silver', width: 48, height: 48 }} />
                                 }
-                                {user.id == 3 &&
+                                {user.place == 3 &&
                                     <CelebrationIcon sx={{ color: '#cd7f32', width: 48, height: 48 }} />
                                 }
-                                {user.id > 3 &&
-                                    user.id
+                                {user.place > 3 &&
+                                    user.place
                                 }
                             </Paper>
                         </ListItemText>

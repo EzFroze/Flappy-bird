@@ -1,10 +1,11 @@
 import { useMemo } from "react";
-import { SortOrder } from "../types";
+import { SortOrder, User, UsersFilter } from "../types";
 
-export const useSortedUsers = (users: any[], sort: string, order: SortOrder) => {
-  const sortedPosts: any[] = useMemo(() => {
+export const useSortedUsers = (users: User[], sort: keyof User, order: SortOrder) => {
+  const sortedUsers: User[] = useMemo(() => {
     if (sort) {
       return [...users].sort((a, b) => {
+
         if (a[sort] < b[sort]) {
           return order == SortOrder.AscendingOrder ? 1 : -1
         }
@@ -20,14 +21,14 @@ export const useSortedUsers = (users: any[], sort: string, order: SortOrder) => 
     return users;
   }, [sort, users, order]);
 
-  return sortedPosts;
+  return sortedUsers;
 };
 
-export const useUsers = (users: any[], sort: string, query: string, order: SortOrder) => {
-  const sortedUsers = useSortedUsers(users, sort, order);
+export const useUsers = (users: User[], filter: UsersFilter) => {
+  const sortedUsers = useSortedUsers(users, filter.sort, filter.order);
   const sortedAndSearchedUsers = useMemo(() => {
-    return sortedUsers.filter(user => user.name.toLowerCase().includes(query))
-  }, [query, sortedUsers]);
+    return sortedUsers.filter(user => user.name.toLowerCase().includes(filter.query.toLowerCase()))
+  }, [filter.query, sortedUsers]);
 
   return sortedAndSearchedUsers;
 };
