@@ -20,13 +20,15 @@ export const Password: React.FC = () => {
     const formData = new FormData(form)
     const data: any = {}
     formData.forEach((key, value) => (data[value] = key))
-    passChange(data).then(resp => {
-      if (resp.status === 200) {
-        navigate('/profile')
-      } else {
-        // TODO: Добавить обработку ошибок и вывода пользователю
-      }
-    })
+    passChange(data)
+      .then(resp => {
+        if (resp.status === 200) {
+          navigate('/profile')
+        } else {
+          // TODO: Добавить обработку ошибок и вывода пользователю
+        }
+      })
+      .catch(() => navigate('/500'))
   }
   return (
     <Container

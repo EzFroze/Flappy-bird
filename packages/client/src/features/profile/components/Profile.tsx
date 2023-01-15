@@ -24,32 +24,38 @@ export const Profile: React.FC = () => {
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault()
     const form = new FormData(e.target as HTMLFormElement)
-    avatarChange(form).then(resp => {
-      if (resp.status === 200) {
-        toggleModal()
-        navigate('/profile')
-      } else {
-        // TODO: Добавить обработку ошибок и вывода пользователю
-      }
-    })
+    avatarChange(form)
+      .then(resp => {
+        if (resp.status === 200) {
+          toggleModal()
+          navigate('/profile')
+        } else {
+          // TODO: Добавить обработку ошибок и вывода пользователю
+        }
+      })
+      .catch(() => navigate('/500'))
   }
   useEffect(() => {
-    getUser().then(response => {
-      console.log(response)
-      if (response.status !== 200) {
-        // TODO: Когда будет готова api авторизации и регистрации раскомментить следующий код
-        //navigate('/')
-      }
-    })
+    getUser()
+      .then(response => {
+        console.log(response)
+        if (response.status !== 200) {
+          // TODO: Когда будет готова api авторизации и регистрации раскомментить следующий код
+          //navigate('/')
+        }
+      })
+      .catch(() => navigate('/500'))
   }, [])
   const handleLogOut = () => {
-    logout().then(resp => {
-      if (resp.status === 200) {
-        navigate('/')
-      } else {
-        // TODO: Добавить обработку ошибок и вывода пользователю
-      }
-    })
+    logout()
+      .then(resp => {
+        if (resp.status === 200) {
+          navigate('/')
+        } else {
+          // TODO: Добавить обработку ошибок и вывода пользователю
+        }
+      })
+      .catch(() => navigate('/500'))
   }
 
   return (
