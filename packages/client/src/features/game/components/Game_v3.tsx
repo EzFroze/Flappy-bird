@@ -10,7 +10,7 @@ import {
 } from '@mui/material'
 import { Container } from '@mui/system'
 import { useEffect, useRef, useState } from 'react'
-import { GameStatus, Player, Position } from '../types'
+import { GameStatus, Player } from '../types'
 import { useLevels } from '../hooks/useLevels'
 
 export const Game_v3 = () => {
@@ -141,6 +141,24 @@ export const Game_v3 = () => {
     }
   }, [status.started])
 
+  const liftPlayerUp = () => {
+    playerRef.current.y -= playerRef.current.move
+  } 
+
+  useEffect(() => {
+    if (status.paused) return
+
+    const action = ({ key }: KeyboardEvent) => {
+      if ([' ', 'ArrowUp'].includes(key)) {
+        liftPlayerUp()
+      }
+    }
+
+    window.addEventListener('keyup', action)
+
+    return () => window.removeEventListener('keyup', action)
+  }, [status.paused])
+
   return (
     <Container maxWidth="lg" sx={{ display: 'flex', height: '100%' }}>
       <Box sx={{ margin: 'auto' }}>
@@ -153,9 +171,7 @@ export const Game_v3 = () => {
             <canvas
               {...canvasSize}
               ref={canvasRef}
-              onClick={() => {
-                playerRef.current.y -= playerRef.current.move
-              }}
+              onClick={liftPlayerUp}
               onContextMenu={ev => {
                 ev.preventDefault()
                 updateStatus({ paused: !status.paused })
