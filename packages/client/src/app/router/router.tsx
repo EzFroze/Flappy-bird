@@ -1,9 +1,17 @@
 import { createBrowserRouter } from 'react-router-dom'
 import { ExamplePage } from '../../pages/ExamplePage'
 import { NotFoundPage } from '../../pages/NotFoundPage'
+import { ExamplePage } from '../../pages/ExamplePage'
+import { ProfilePage } from '../../pages/ProfilePage'
+import { PasswordPage } from '../../pages/PasswordPage'
 import { SignInPage } from '../../pages/SignInPage'
 import { SignUpPage } from '../../pages/SignUpPage'
 import { RoutesEnum } from './types'
+import { ForumsPage } from '../../pages/ForumsPage'
+import { ForumPage } from '../../pages/ForumPage'
+import { ForumThreadPage } from '../../pages/ForumThreadPage'
+import { ForumCreateThreadPage } from '../../pages/ForumCreateThreadPage'
+import { actionPaths } from '../../features/forums/types'
 
 export const router = createBrowserRouter([
   {
