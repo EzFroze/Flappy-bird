@@ -1,12 +1,13 @@
 import React from 'react'
 import { NotFound } from '../features/notFound/components/NotFound'
+import { RoutesEnum } from '../app/router/routes'
 
 export const ServerErrorPage: React.FC = () => {
   return (
     <NotFound
       title="500"
       description="Кажется сервер перестал отвечать, скоро починим"
-      link="/"
+      link={RoutesEnum.SignIn}
       linkText="На главную"
     />
   )

@@ -1,6 +1,5 @@
 import { createBrowserRouter } from 'react-router-dom'
 import { NotFoundPage } from '../../pages/NotFoundPage'
-import { ExamplePage } from '../../pages/ExamplePage'
 import { ProfilePage } from '../../pages/ProfilePage'
 import { PasswordPage } from '../../pages/PasswordPage'
 import { SignInPage } from '../../pages/SignInPage'
@@ -11,47 +10,54 @@ import { ForumPage } from '../../pages/ForumPage'
 import { ForumThreadPage } from '../../pages/ForumThreadPage'
 import { ForumCreateThreadPage } from '../../pages/ForumCreateThreadPage'
 import { actionPaths } from '../../features/forums/types'
+import { RoutesEnum } from './routes'
 
 export const router = createBrowserRouter([
   {
-    path: '*',
+    path: RoutesEnum.NotFound,
     element: <NotFoundPage />,
   },
   {
-    path: '/',
+    path: RoutesEnum.SignIn,
     element: <SignInPage />,
+    errorElement: <NotFoundPage />,
   },
   {
-    path: '/sign-up',
+    path: RoutesEnum.SignUp,
     element: <SignUpPage />,
   },
   {
-    path: '/500',
+    path: RoutesEnum.ServerError,
     element: <ServerErrorPage />,
   },
   {
-    path: '/profile',
+    path: RoutesEnum.Profile,
     element: <ProfilePage />,
   },
   {
-    path: '/password',
+    path: RoutesEnum.Password,
     element: <PasswordPage />,
   },
   {
-    path: '/forums',
+    path: RoutesEnum.Forums,
     element: <ForumsPage />,
-    children: [{
-      path: ':forum',
-      element: <ForumPage />,
-      children: [{
-        path: ':thread',
-        element: <ForumThreadPage />
-      }, {
-        path: actionPaths.createThread,
-        element: <ForumCreateThreadPage />
-      }]
-    }]
-  }
+    children: [
+      {
+        path: ':forum',
+        element: <ForumPage />,
+        children: [
+          {
+            path: ':thread',
+            element: <ForumThreadPage />,
+          },
+          {
+            path: actionPaths.createThread,
+            element: <ForumCreateThreadPage />,
+          },
+        ],
+      },
+    ],
+  },
   // {
   //   path: '/sign-up',
   //   element: <SignUpPage />,

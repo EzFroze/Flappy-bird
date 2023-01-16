@@ -13,6 +13,7 @@ import userAvatar from '../../../assets/img/userAvatar.jpg'
 import { Link as RouterLink } from 'react-router-dom'
 import { ListChild } from './ListChild'
 import { Stack } from '@mui/system'
+import { RoutesEnum } from '../../../app/router/routes'
 
 export const Profile: React.FC = () => {
   const [modal, setModal] = useState(false)
@@ -82,7 +83,7 @@ export const Profile: React.FC = () => {
                 }}
                 component={RouterLink}
                 underline="none"
-                to="/password">
+                to={RoutesEnum.Password}>
                 Изменить пароль
               </Link>
               <Link
@@ -94,7 +95,7 @@ export const Profile: React.FC = () => {
                 color="error"
                 component={RouterLink}
                 underline="none"
-                to="/">
+                to={RoutesEnum.SignIn}>
                 Выйти
               </Link>
             </Box>

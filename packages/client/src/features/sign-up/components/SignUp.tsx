@@ -15,6 +15,7 @@ import {
 import { SignUpData } from '../types'
 import { Input } from '../../input/components/Input'
 import { PasswordInput } from '../../passwordInput/components/PasswordInput'
+import { RoutesEnum } from '../../../app/router/routes'
 
 export const SignUp: React.FC = () => {
   const {
@@ -113,7 +114,7 @@ export const SignUp: React.FC = () => {
           <MuiLink
             color="#fff"
             component={RouterLink}
-            to={'/'}
+            to={RoutesEnum.SignIn}
             type="button"
             variant="button"
             underline="none"

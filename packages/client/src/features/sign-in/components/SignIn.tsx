@@ -1,7 +1,6 @@
 import React from 'react'
 import { useForm } from 'react-hook-form'
 import {
-  createTheme,
   Container,
   Box,
   Button,
@@ -19,6 +18,7 @@ import {
   validatePassword,
 } from '../../input/services/validation'
 import { SignInData } from '../types'
+import { RoutesEnum } from '../../../app/router/routes'
 
 export const SignIn: React.FC = () => {
   const {
@@ -162,7 +162,7 @@ export const SignIn: React.FC = () => {
           <MuiLink
             color="#fff"
             component={RouterLink}
-            to={'/sign-up'}
+            to={RoutesEnum.SignUp}
             type="button"
             variant="button"
             underline="none"

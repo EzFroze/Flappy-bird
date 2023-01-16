@@ -1,4 +1,5 @@
 import React from 'react'
+import { RoutesEnum } from '../app/router/routes'
 import { NotFound } from '../features/notFound/components/NotFound'
 
 export const NotFoundPage: React.FC = () => {
@@ -6,7 +7,7 @@ export const NotFoundPage: React.FC = () => {
     <NotFound
       title="404"
       description="Не туда попали"
-      link="/"
+      link={RoutesEnum.SignIn}
       linkText="Назад на главную"
     />
   )
