@@ -1,6 +1,7 @@
 import { createBrowserRouter } from 'react-router-dom'
 import { NotFoundPage } from '../../pages/NotFoundPage'
 import { ExamplePage } from '../../pages/ExamplePage'
+import { LeaderboardPage } from '../../pages/LeaderboardPage'
 import { ProfilePage } from '../../pages/ProfilePage'
 import { PasswordPage } from '../../pages/PasswordPage'
 import { SignInPage } from '../../pages/SignInPage'
@@ -46,19 +47,11 @@ export const router = createBrowserRouter([
         element: <ForumCreateThreadPage />
       }]
     }]
-  }
-  // {
-  //   path: '/sign-up',
-  //   element: <SignUpPage />,
-  // },
-  // {
-  //   path: '/profile',
-  //   element: <ProfilePage />,
-  // },
-  // {
-  //   path: '/leaderboard',
-  //   element: <LeaderboardPage />,
-  // },
+  },
+  {
+    path: '/leaderboard',
+    element: <LeaderboardPage />,
+  },
   // {
   //   path: '/game',
   //   element: <GamePage />,
