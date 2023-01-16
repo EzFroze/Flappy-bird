@@ -1,5 +1,7 @@
 import { createBrowserRouter } from 'react-router-dom'
 import { NotFoundPage } from '../../pages/NotFoundPage'
+import { ExamplePage } from '../../pages/ExamplePage'
+import { LeaderboardPage } from '../../pages/LeaderboardPage'
 import { ProfilePage } from '../../pages/ProfilePage'
 import { PasswordPage } from '../../pages/PasswordPage'
 import { SignInPage } from '../../pages/SignInPage'
@@ -41,29 +43,25 @@ export const router = createBrowserRouter([
   {
     path: RoutesEnum.Forums,
     element: <ForumsPage />,
-    children: [
-      {
-        path: ':forum',
-        element: <ForumPage />,
-        children: [
-          {
-            path: ':thread',
-            element: <ForumThreadPage />,
-          },
-          {
-            path: actionPaths.createThread,
-            element: <ForumCreateThreadPage />,
-          },
-        ],
-      },
-    ],
+    children: [{
+      path: ':forum',
+      element: <ForumPage />,
+      children: [{
+        path: ':thread',
+        element: <ForumThreadPage />
+      }, {
+        path: actionPaths.createThread,
+        element: <ForumCreateThreadPage />
+      }]
+    }]
   },
-  // {
-  //   path: '/leaderboard',
-  //   element: <LeaderboardPage />,
-  // },
+  {
+    path: '/leaderboard',
+    element: <LeaderboardPage />,
+  },
   // {
   //   path: '/game',
   //   element: <GamePage />,
   // },
 ])
+
