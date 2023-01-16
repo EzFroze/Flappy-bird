@@ -4,6 +4,6 @@ export enum RoutesEnum {
   Profile = '/profile',
   Password = '/password',
   Forums = '/forums',
-  ServerError = '/500',
-  NotFound = '/404',
+  ServerError = '/server-error',
+  NotFound = '/not-found',
 }

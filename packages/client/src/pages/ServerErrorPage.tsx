@@ -1,5 +1,5 @@
 import React from 'react'
-import { NotFound } from '../features/notFound/components/NotFound'
+import { NotFound } from '../features/not-found/components/NotFound'
 import { RoutesEnum } from '../app/router/routes'
 
 export const ServerErrorPage: React.FC = () => {
