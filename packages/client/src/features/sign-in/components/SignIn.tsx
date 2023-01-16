@@ -12,11 +12,13 @@ import { useNavigate, Link as RouterLink } from 'react-router-dom'
 import {
   validatePassword,
   validateLogin,
-} from '../../input/services/validation'
+} from '../../../app/validation/validation'
 import { SignInData } from '../types'
-import { Input } from '../../input/components/Input'
-import { PasswordInput } from '../../passwordInput/components/PasswordInput'
-import { signin, getUser } from '../../../app/api/authApi'
+import { Input } from '../../../components/input/components/Input'
+import { PasswordInput } from '../../../components/passwordInput/components/PasswordInput'
+import { signin } from '../services/SignIn'
+import { getUser } from '../../profile/services/GetUser'
+import { useServerError } from '../../../hooks/useServerEror'
 
 export const SignIn: React.FC = () => {
   const navigate = useNavigate()
@@ -44,12 +46,10 @@ export const SignIn: React.FC = () => {
   }
 
   const onSubmit = (data: SignInData) => {
-    console.log(data)
     signin(data)
       .then(response => {
-        console.log(response)
         if (response.status === 200) {
-          navigate('/example')
+          navigate('/game')
         } else {
           return response.json()
         }
@@ -57,18 +57,13 @@ export const SignIn: React.FC = () => {
       .then(result => {
         setServerError(`⚠ ${result.reason}`)
       })
-      .catch(handleError)
-  }
-
-  const handleError = (e: Error) => {
-    setServerError(`⚠ ${e.message || 'Неизвестная ошибка'}`)
+      .catch(useServerError)
   }
 
   useEffect(() => {
     getUser().then(response => {
-      console.log(response)
       if (response.status === 200) {
-        navigate('/example')
+        navigate('/game')
       }
     })
   }, [])

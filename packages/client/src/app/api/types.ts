@@ -17,5 +17,5 @@ export type Options = {
 
 export type RequestOptions = {
   method: Method
-  body?: string
+  body?: string | FormData
 }

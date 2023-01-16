@@ -3,34 +3,64 @@ import { ExamplePage } from '../../pages/ExamplePage'
 import { NotFoundPage } from '../../pages/NotFoundPage'
 import { SignInPage } from '../../pages/SignInPage'
 import { SignUpPage } from '../../pages/SignUpPage'
+import { RoutesEnum } from './types'
 
 export const router = createBrowserRouter([
   {
-    path: '*',
+    path: RoutesEnum.NotFound,
     element: <NotFoundPage />,
   },
   {
-    path: '/',
+    path: RoutesEnum.SignIn,
     element: <SignInPage />,
+    errorElement: <NotFoundPage />,
   },
   {
-    path: '/sign-up',
+    path: RoutesEnum.SignUp,
     element: <SignUpPage />,
   },
   {
-    path: '/example',
+    path: RoutesEnum.Example,
     element: <ExamplePage />,
   },
-  // {
-  //   path: '/profile',
-  //   element: <ProfilePage />,
-  // },
-  // {
-  //   path: '/leaderboard',
-  //   element: <LeaderboardPage />,
-  // },
-  // {
-  //   path: '/game',
-  //   element: <GamePage />,
-  // },
+  /*{
+    path: RoutesEnum.ServerError,
+    element: <ServerErrorPage />,
+  },
+  {
+    path: RoutesEnum.Profile,
+    element: <ProfilePage />,
+  },
+  {
+    path: RoutesEnum.Password,
+    element: <PasswordPage />,
+  },
+  {
+    path: RoutesEnum.Forums,
+    element: <ForumsPage />,
+    children: [
+      {
+        path: ':forum',
+        element: <ForumPage />,
+        children: [
+          {
+            path: ':thread',
+            element: <ForumThreadPage />,
+          },
+          {
+            path: actionPaths.createThread,
+            element: <ForumCreateThreadPage />,
+          },
+        ],
+      },
+    ],
+  },
+  {
+  path:  RoutesEnum.Leaderboard,
+  element: <LeaderboardPage />,
+  },
+  {path: RoutesEnum.Game,
+   element: <GamePage />,
+  },
+  */
 ])

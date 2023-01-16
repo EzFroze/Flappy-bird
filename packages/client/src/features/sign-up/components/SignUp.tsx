@@ -9,17 +9,19 @@ import {
   Link as MuiLink,
 } from '@mui/material'
 import { useNavigate, Link as RouterLink } from 'react-router-dom'
-import { Input } from '../../input/components/Input'
-import { PasswordInput } from '../../passwordInput/components/PasswordInput'
+import { Input } from '../../../components/input/components/Input'
+import { PasswordInput } from '../../../components/passwordInput/components/PasswordInput'
 import {
   validateName,
   validateEmail,
   validateLogin,
   validatePhone,
   validatePassword,
-} from '../../input/services/validation'
+} from '../../../app/validation/validation'
 import { SignUpData } from '../types'
-import { signup, getUser } from '../../../app/api/authApi'
+import { signup } from '../services/SignUp'
+import { getUser } from '../../profile/services/GetUser'
+import { useServerError } from '../../../hooks/useServerEror'
 
 export const SignUp: React.FC = () => {
   const navigate = useNavigate()
@@ -53,10 +55,8 @@ export const SignUp: React.FC = () => {
   }
 
   const onSubmit = (data: SignUpData) => {
-    console.log(data)
     signup(data)
       .then(response => {
-        console.log(response)
         if (response.status === 200) {
           navigate('/example')
         } else {
@@ -66,18 +66,13 @@ export const SignUp: React.FC = () => {
       .then(result => {
         setServerError(`⚠ ${result.reason}`)
       })
-      .catch(handleError)
-  }
-
-  const handleError = (e: Error) => {
-    setServerError(`⚠ ${e.message || 'Неизвестная ошибка'}`)
+      .catch(useServerError)
   }
 
   useEffect(() => {
     getUser().then(response => {
-      console.log(response)
       if (response.status === 200) {
-        navigate('/example')
+        navigate('/game')
       }
     })
   }, [])
