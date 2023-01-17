@@ -3,4 +3,3 @@ export const fetchURL = (link: string) => {
     setTimeout(() => resolve(console.log(`api call`)), 500)
   );
 }
-// Проверка того что отрабатывает линтер
