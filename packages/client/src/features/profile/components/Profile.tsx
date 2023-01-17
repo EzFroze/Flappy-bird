@@ -16,6 +16,7 @@ import { Stack } from '@mui/system'
 import { avatarChange } from '../services/ChangeAvatar'
 import { logout } from '../services/LogOut'
 import { getUser } from '../services/GetUser'
+import { RoutesEnum } from '../../../app/router/types'
 
 export const Profile: React.FC = () => {
   const [modal, setModal] = useState(false)
@@ -122,7 +123,7 @@ export const Profile: React.FC = () => {
                 }}
                 component={RouterLink}
                 underline="none"
-                to="/password">
+                to={RoutesEnum.Password}>
                 Изменить пароль
               </Link>
               <Link

@@ -16,12 +16,12 @@ import { PasswordInput } from '../../../components/passwordInput/components/Pass
 import { signin } from '../services/SignIn'
 import { getUser } from '../../profile/services/GetUser'
 import { useServerError } from '../../../hooks/useServerError'
+import { RoutesEnum } from '../../../app/router/types'
 
 export const SignIn: React.FC = () => {
   const navigate = useNavigate()
   const {
     control,
-    watch,
     handleSubmit,
     formState: { errors },
   } = useForm({
@@ -139,7 +139,7 @@ export const SignIn: React.FC = () => {
           <MuiLink
             color="#fff"
             component={RouterLink}
-            to={'/sign-up'}
+            to={RoutesEnum.SignUp}
             type="button"
             variant="button"
             underline="none"
