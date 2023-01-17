@@ -38,7 +38,6 @@ export const Profile: React.FC = () => {
   useEffect(() => {
     getUser()
       .then(response => {
-        console.log(response)
         if (response.status !== 200) {
           // TODO: Когда будет готова api авторизации и регистрации раскомментить следующий код
           //navigate('/')
