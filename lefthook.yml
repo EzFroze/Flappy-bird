@@ -3,3 +3,6 @@ pre-commit:
     lint:
       glob: '*.{ts,tsx}'
       run: yarn eslint {staged_files}
+    format:
+      glob: '*.{ts,tsx}'
+      run: yarn format

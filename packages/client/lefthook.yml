@@ -1,8 +1,0 @@
-pre-commit:
-  commands:
-    frontend-lint:
-      glob: '**/*.{ts,tsx}'
-      run: cd packages/client && yarn lint
-    frontend-pretty:
-      glob: '**/*.{ts,tsx}'
-      run: prettier --write {staged_files}
