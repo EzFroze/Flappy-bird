@@ -1,8 +1,5 @@
 pre-commit:
   commands:
-    frontend-lint:
-      glob: '**/*.{ts,tsx}'
-      run: cd packages/client && yarn lint
-    frontend-pretty:
-      glob: '**/*.{ts,tsx}'
-      run: cd packages/client && yarn format
+    lint:
+      glob: '*.{ts,tsx}'
+      run: yarn eslint {staged_files}
