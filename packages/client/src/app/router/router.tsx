@@ -37,7 +37,6 @@ export const router = createBrowserRouter([
     element: <ServerErrorPage />,
   },
   {
-    path: RoutesEnum.Profile,
     path: RoutesEnum.ServerError,
     element: <ServerErrorPage />,
   },
@@ -70,8 +69,8 @@ export const router = createBrowserRouter([
     ],
   },
   {
-  path:  RoutesEnum.Leaderboard,
-  element: <LeaderboardPage />,
+    path: RoutesEnum.Leaderboard,
+    element: <LeaderboardPage />,
   },
   // {path: RoutesEnum.Game,
   //  element: <GamePage />,
