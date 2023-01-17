@@ -1,7 +1,5 @@
-import { ForumList } from "../features/forums/components/ForumList"
+import { ForumList } from '../features/forums/components/ForumList'
 
 export const ForumsPage: React.FC = () => {
-  return (
-    <ForumList />
-  )
+  return <ForumList />
 }

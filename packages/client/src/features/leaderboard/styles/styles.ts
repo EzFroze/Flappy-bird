@@ -1,4 +1,4 @@
-import { SxProps } from "@mui/material";
+import { SxProps } from '@mui/material'
 
 export const styles: { [key: string]: SxProps } = {
   startContainer: {
@@ -17,7 +17,7 @@ export const styles: { [key: string]: SxProps } = {
     width: '750px',
     display: 'flex',
     justifyContent: 'flex-start',
-    padding: '2px'
+    padding: '2px',
   },
   container: {
     display: 'flex',
@@ -25,4 +25,4 @@ export const styles: { [key: string]: SxProps } = {
     justifyContent: 'center',
     alignItems: 'center',
   },
-};
+}

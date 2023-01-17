@@ -56,7 +56,7 @@ export const Forum: React.FC = () => {
 
   return (
     <>
-      {(thread || pathname.includes(actionPaths.createThread)) ? (
+      {thread || pathname.includes(actionPaths.createThread) ? (
         <ForumThreadOutlet />
       ) : (
         <Container>
