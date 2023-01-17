@@ -6,13 +6,13 @@ import { ProfilePage } from '../../pages/ProfilePage'
 import { PasswordPage } from '../../pages/PasswordPage'
 import { SignInPage } from '../../pages/SignInPage'
 import { SignUpPage } from '../../pages/SignUpPage'
+import { RoutesEnum } from './types'
 import { ServerErrorPage } from '../../pages/ServerErrorPage'
 import { ForumsPage } from '../../pages/ForumsPage'
 import { ForumPage } from '../../pages/ForumPage'
 import { ForumThreadPage } from '../../pages/ForumThreadPage'
 import { ForumCreateThreadPage } from '../../pages/ForumCreateThreadPage'
 import { actionPaths } from '../../features/forums/types'
-import { RoutesEnum } from './routes'
 
 export const router = createBrowserRouter([
   {
@@ -29,6 +29,15 @@ export const router = createBrowserRouter([
     element: <SignUpPage />,
   },
   {
+    path: RoutesEnum.Example,
+    element: <ExamplePage />,
+  },
+  {
+    path: RoutesEnum.ServerError,
+    element: <ServerErrorPage />,
+  },
+  {
+    path: RoutesEnum.Profile,
     path: RoutesEnum.ServerError,
     element: <ServerErrorPage />,
   },
@@ -43,25 +52,28 @@ export const router = createBrowserRouter([
   {
     path: RoutesEnum.Forums,
     element: <ForumsPage />,
-    children: [{
-      path: ':forum',
-      element: <ForumPage />,
-      children: [{
-        path: ':thread',
-        element: <ForumThreadPage />
-      }, {
-        path: actionPaths.createThread,
-        element: <ForumCreateThreadPage />
-      }]
-    }]
+    children: [
+      {
+        path: ':forum',
+        element: <ForumPage />,
+        children: [
+          {
+            path: ':thread',
+            element: <ForumThreadPage />,
+          },
+          {
+            path: actionPaths.createThread,
+            element: <ForumCreateThreadPage />,
+          },
+        ],
+      },
+    ],
   },
   {
-    path: '/leaderboard',
-    element: <LeaderboardPage />,
+  path:  RoutesEnum.Leaderboard,
+  element: <LeaderboardPage />,
   },
-  // {
-  //   path: '/game',
-  //   element: <GamePage />,
+  // {path: RoutesEnum.Game,
+  //  element: <GamePage />,
   // },
 ])
-

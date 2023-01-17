@@ -1,25 +1,33 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import {
+  FormHelperText,
   Container,
   Box,
   Button,
   Typography,
   Link as MuiLink,
 } from '@mui/material'
-import { Link as RouterLink } from 'react-router-dom'
+import { useNavigate, Link as RouterLink } from 'react-router-dom'
+import { Input } from '../../../components/input/components/Input'
+import { PasswordInput } from '../../../components/passwordInput/components/PasswordInput'
 import {
-  validatePassword,
+  validateName,
+  validateEmail,
   validateLogin,
-} from '../../input/services/validation'
+  validatePhone,
+  validatePassword,
+} from '../../../utils/validation'
 import { SignUpData } from '../types'
-import { Input } from '../../input/components/Input'
-import { PasswordInput } from '../../passwordInput/components/PasswordInput'
-import { RoutesEnum } from '../../../app/router/routes'
+import { signup } from '../services/SignUp'
+import { getUser } from '../../profile/services/GetUser'
+import { useServerError } from '../../../hooks/useServerError'
 
 export const SignUp: React.FC = () => {
+  const navigate = useNavigate()
   const {
     control,
+    watch,
     handleSubmit,
     formState: { errors },
   } = useForm({
@@ -36,6 +44,7 @@ export const SignUp: React.FC = () => {
   })
 
   const [showPassword, setShowPassword] = React.useState(false)
+  const [serverError, setServerError] = React.useState('')
 
   const handleClickShowPassword = () => setShowPassword(show => !show)
 
@@ -45,7 +54,28 @@ export const SignUp: React.FC = () => {
     event.preventDefault()
   }
 
-  const onSubmit = (data: SignUpData) => console.log(data)
+  const onSubmit = (data: SignUpData) => {
+    signup(data)
+      .then(response => {
+        if (response.status === 200) {
+          navigate('/example')
+        } else {
+          return response.json()
+        }
+      })
+      .then(result => {
+        setServerError(`⚠ ${result.reason}`)
+      })
+      .catch(useServerError)
+  }
+
+  useEffect(() => {
+    getUser().then(response => {
+      if (response.status === 200) {
+        navigate('/game')
+      }
+    })
+  }, [])
 
   return (
     <Container
@@ -74,10 +104,37 @@ export const SignUp: React.FC = () => {
           }}
           color="black"
           align="center">
-          {'Enter to your account'}
+          {'Create account'}
         </Typography>
-
+        <FormHelperText
+          sx={{
+            color: 'red',
+            fontSize: 16,
+          }}>
+          {serverError}
+        </FormHelperText>
         <form onSubmit={handleSubmit(onSubmit)}>
+          <Input
+            name="email"
+            control={control}
+            rules={validateEmail}
+            errors={errors}
+            label="Введите Email"
+          />
+          <Input
+            name="first_name"
+            control={control}
+            rules={validateName}
+            errors={errors}
+            label="Введите Имя"
+          />
+          <Input
+            name="second_name"
+            control={control}
+            rules={validateName}
+            errors={errors}
+            label="Введите Фамилию"
+          />
           <Input
             name="login"
             control={control}
@@ -85,12 +142,36 @@ export const SignUp: React.FC = () => {
             errors={errors}
             label="Введите Логин"
           />
+          <Input
+            name="phone"
+            control={control}
+            rules={validatePhone}
+            errors={errors}
+            label="Введите Телефон"
+          />
           <PasswordInput
             name="password"
             control={control}
             rules={validatePassword}
             errors={errors}
             label="Введите Пароль"
+            handleShow={showPassword}
+            handleClick={handleClickShowPassword}
+            handleMouseDown={handleMouseDownPassword}
+          />
+          <PasswordInput
+            name="confirm_password"
+            control={control}
+            rules={{
+              required: '⚠ Поле не может быть пустым',
+              validate: (value: string) => {
+                if (watch('password') != value) {
+                  return '⚠ Пароли не совпадают'
+                }
+              },
+            }}
+            errors={errors}
+            label="Повторите Пароль"
             handleShow={showPassword}
             handleClick={handleClickShowPassword}
             handleMouseDown={handleMouseDownPassword}
@@ -109,12 +190,12 @@ export const SignUp: React.FC = () => {
                 background: '#1976d2',
               },
             }}>
-            Войти
+            Создать аккаунт
           </Button>
           <MuiLink
             color="#fff"
             component={RouterLink}
-            to={RoutesEnum.SignIn}
+            to={'/'}
             type="button"
             variant="button"
             underline="none"
@@ -133,7 +214,7 @@ export const SignUp: React.FC = () => {
                 background: '#1976d2',
               },
             }}>
-            Зарегистрироваться
+            Войти
           </MuiLink>
         </form>
       </Box>

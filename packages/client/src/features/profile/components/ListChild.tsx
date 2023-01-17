@@ -2,7 +2,13 @@ import React from 'react'
 import { ListItem, ListItemText, Divider } from '@mui/material'
 import { Lists } from '../types'
 
-export const ListChild: React.FC<Lists> = ({ label, text, disabled }) => {
+export const ListChild: React.FC<Lists> = ({
+  label,
+  name,
+  text,
+  disabled,
+  handleChange,
+}) => {
   return (
     <>
       <ListItem sx={{ px: '0' }}>
@@ -10,12 +16,14 @@ export const ListChild: React.FC<Lists> = ({ label, text, disabled }) => {
         <input
           style={{
             backgroundColor: 'transparent',
-            border: '0',
+            border: 0,
             color: 'white',
             textAlign: 'right',
             fontSize: '1rem',
+            height: 33,
           }}
-          name={label}
+          name={name}
+          onChange={handleChange}
           value={text}
           disabled={disabled}
         />
