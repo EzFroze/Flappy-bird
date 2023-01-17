@@ -1,5 +1,4 @@
 import { createBrowserRouter } from 'react-router-dom'
-import { ExamplePage } from '../../pages/ExamplePage'
 import { NotFoundPage } from '../../pages/NotFoundPage'
 import { ExamplePage } from '../../pages/ExamplePage'
 import { LeaderboardPage } from '../../pages/LeaderboardPage'
@@ -8,6 +7,7 @@ import { PasswordPage } from '../../pages/PasswordPage'
 import { SignInPage } from '../../pages/SignInPage'
 import { SignUpPage } from '../../pages/SignUpPage'
 import { RoutesEnum } from './types'
+import { ServerErrorPage } from '../../pages/ServerErrorPage'
 import { ForumsPage } from '../../pages/ForumsPage'
 import { ForumPage } from '../../pages/ForumPage'
 import { ForumThreadPage } from '../../pages/ForumThreadPage'
@@ -32,7 +32,11 @@ export const router = createBrowserRouter([
     path: RoutesEnum.Example,
     element: <ExamplePage />,
   },
-  /*{
+  {
+    path: RoutesEnum.ServerError,
+    element: <ServerErrorPage />,
+  },
+  {
     path: RoutesEnum.ServerError,
     element: <ServerErrorPage />,
   },
@@ -65,11 +69,10 @@ export const router = createBrowserRouter([
     ],
   },
   {
-  path:  RoutesEnum.Leaderboard,
-  element: <LeaderboardPage />,
+    path: RoutesEnum.Leaderboard,
+    element: <LeaderboardPage />,
   },
-  {path: RoutesEnum.Game,
-   element: <GamePage />,
-  },
-  */
+  // {path: RoutesEnum.Game,
+  //  element: <GamePage />,
+  // },
 ])

@@ -22,6 +22,7 @@ import { SignUpData } from '../types'
 import { signup } from '../services/SignUp'
 import { getUser } from '../../profile/services/GetUser'
 import { useServerError } from '../../../hooks/useServerError'
+import { RoutesEnum } from '../../../app/router/types'
 
 export const SignUp: React.FC = () => {
   const navigate = useNavigate()
@@ -195,7 +196,7 @@ export const SignUp: React.FC = () => {
           <MuiLink
             color="#fff"
             component={RouterLink}
-            to={'/'}
+            to={RoutesEnum.SignIn}
             type="button"
             variant="button"
             underline="none"
