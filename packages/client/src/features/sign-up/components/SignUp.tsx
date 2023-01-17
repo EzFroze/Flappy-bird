@@ -17,11 +17,11 @@ import {
   validateLogin,
   validatePhone,
   validatePassword,
-} from '../../../app/validation/validation'
+} from '../../../utils/validation'
 import { SignUpData } from '../types'
 import { signup } from '../services/SignUp'
 import { getUser } from '../../profile/services/GetUser'
-import { useServerError } from '../../../hooks/useServerEror'
+import { useServerError } from '../../../hooks/useServerError'
 
 export const SignUp: React.FC = () => {
   const navigate = useNavigate()

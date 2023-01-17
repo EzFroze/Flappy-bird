@@ -9,16 +9,13 @@ import {
   FormHelperText,
 } from '@mui/material'
 import { useNavigate, Link as RouterLink } from 'react-router-dom'
-import {
-  validatePassword,
-  validateLogin,
-} from '../../../app/validation/validation'
+import { validatePassword, validateLogin } from '../../../utils/validation'
 import { SignInData } from '../types'
 import { Input } from '../../../components/input/components/Input'
 import { PasswordInput } from '../../../components/passwordInput/components/PasswordInput'
 import { signin } from '../services/SignIn'
 import { getUser } from '../../profile/services/GetUser'
-import { useServerError } from '../../../hooks/useServerEror'
+import { useServerError } from '../../../hooks/useServerError'
 
 export const SignIn: React.FC = () => {
   const navigate = useNavigate()
