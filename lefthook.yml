@@ -1,10 +1,6 @@
 pre-commit:
-  parallel: true
   commands:
     frontend-lint:
-      run: yarn lint
+      run: cd packages/client && yarn lint
     frontend-pretty:
-      run: yarn format
-    lint:
-      glob: '*.{ts,tsx}'
-      run: yarn eslint {staged_files}
+      run: cd packages/client && yarn format
