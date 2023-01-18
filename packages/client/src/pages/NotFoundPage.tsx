@@ -1,5 +1,14 @@
+import React from 'react'
+import { RoutesEnum } from '../app/router/types'
+import { NotFound } from '../features/not-found/components/NotFound'
+
 export const NotFoundPage: React.FC = () => {
   return (
-    <h1>Страница не найдена</h1>
+    <NotFound
+      title="404"
+      description="Не туда попали"
+      link={RoutesEnum.SignIn}
+      linkText="Назад на главную"
+    />
   )
 }
