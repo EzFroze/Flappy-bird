@@ -12,13 +12,17 @@ import { Container } from '@mui/system'
 import { useEffect, useRef, useState } from 'react'
 import { GameStatus, Player } from '../types'
 import { useLevels } from '../hooks/useLevels'
+import { getCollision } from '../utils/getCollision'
+import { levels } from '../data'
 
 export const Game_v3 = () => {
   const canvasSize = { width: 800, height: 400 }
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const frameId = useRef<any>()
-  const { blocks, setLevel, isLastLevel, restartLevel, levels, level } =
-    useLevels(canvasSize)
+  const { blocks, setLevel, isLastLevel, restartLevel, level } = useLevels(
+    canvasSize,
+    levels
+  )
   const playerY = canvasSize.height / 2 - 75
   const playerRef = useRef<Player>({
     x: 20,
@@ -32,9 +36,9 @@ export const Game_v3 = () => {
     ended: false,
     overed: false,
     paused: false,
-    speed: 4,
+    speed: 2,
     progress: 0,
-    gravity: 1,
+    gravity: 0.5,
   })
   const updateStatus = (obj: Partial<Record<keyof GameStatus, any>>) => {
     setStatus(status => ({ ...status, ...obj }))
@@ -63,39 +67,11 @@ export const Game_v3 = () => {
     }
 
     // collision
-    const collision = blocks.current
-      .filter((_b, i) => i < 4)
-      .find(block => {
-        const player = playerRef.current
-
-        const playerLeft = player.x
-        const playerRight = player.x + player.w
-        const blockLeft = block.x
-        const blockRight = block.x + block.w
-
-        const playerTop = player.y
-        const playerBottom = player.y + player.h
-        const blockTop = block.y
-        const blockBottom = block.y + block.h
-
-        let intersectedVertically = false
-
-        if (playerRight > blockLeft && playerRight < blockRight) {
-          intersectedVertically = true
-        }
-
-        if (playerLeft > blockLeft && playerLeft < blockRight) {
-          intersectedVertically = true
-        }
-
-        if (blockTop === 0) {
-          return playerTop < blockBottom && intersectedVertically
-        }
-
-        if (blockBottom === canvasSize.height) {
-          return playerBottom > blockTop && intersectedVertically
-        }
-      })
+    const collision = getCollision(
+      blocks.current,
+      playerRef.current,
+      canvasSize
+    )
 
     if (collision) {
       updateStatus({ paused: true, overed: true })
@@ -143,7 +119,7 @@ export const Game_v3 = () => {
 
   const liftPlayerUp = () => {
     playerRef.current.y -= playerRef.current.move
-  } 
+  }
 
   useEffect(() => {
     if (status.paused) return

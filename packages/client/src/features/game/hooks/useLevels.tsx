@@ -1,21 +1,8 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { Canvas, Position } from '../types'
 
-export const useLevels = (canvasSize: Canvas) => {
+export const useLevels = (canvasSize: Canvas, levels: number[][][]) => {
   const [level, setLevel] = useState(0)
-
-  const levels = useMemo(() => [
-    [
-      [150, 100],
-      [150, 100],
-      [100, 100],
-      [150, 100],
-    ],
-    [
-      [100, 100],
-      [100, 100],
-    ],
-  ], [])
 
   const createLevel = useCallback(() => {
     return levels[level]
@@ -51,6 +38,5 @@ export const useLevels = (canvasSize: Canvas) => {
     level,
     setLevel,
     restartLevel,
-    levels,
   } as const
 }
