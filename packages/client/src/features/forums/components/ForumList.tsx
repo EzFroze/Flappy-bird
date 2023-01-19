@@ -69,9 +69,7 @@ export const ForumList: React.FC = () => {
                     component={RouterLink}
                     to={link}>
                     <Paper elevation={2}>
-                      <ListItemButton sx={{ p: 3 }}>
-                        {title}
-                      </ListItemButton>
+                      <ListItemButton sx={{ p: 3 }}>{title}</ListItemButton>
                     </Paper>
                   </Link>
                 </Grid>

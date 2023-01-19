@@ -15,8 +15,8 @@ export const ForumSendMessage: React.FC<{ submitButtonTitle?: string }> = ({
         variant="outlined"
         sx={{ width: '100%' }}
       />
-      <Button variant={'contained'} startIcon={<Send /> } sx={{ mt: 2 }}>
-          {submitButtonTitle || 'Отправить'}
+      <Button variant={'contained'} startIcon={<Send />} sx={{ mt: 2 }}>
+        {submitButtonTitle || 'Отправить'}
       </Button>
     </Paper>
   )
