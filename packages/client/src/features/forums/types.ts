@@ -3,11 +3,11 @@ export enum ForumsNames {
   technology = 'technology',
   politics = 'politics',
   art = 'art',
-  recycle = 'recycle'
+  recycle = 'recycle',
 }
 
 export const actionPaths = {
-  createThread: 'createThread'
+  createThread: 'createThread',
 } as const
 
 export const ForumsNamesRu = {
@@ -15,5 +15,5 @@ export const ForumsNamesRu = {
   [ForumsNames.technology]: 'Технологии',
   [ForumsNames.politics]: 'Политика',
   [ForumsNames.art]: 'Творчество',
-  [ForumsNames.recycle]: 'Recycle Bin'
+  [ForumsNames.recycle]: 'Recycle Bin',
 } as const
