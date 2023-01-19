@@ -1,4 +1,5 @@
 import { createBrowserRouter } from 'react-router-dom'
+import { GamePage } from '../../pages/GamePage'
 import { NotFoundPage } from '../../pages/NotFoundPage'
 import { ExamplePage } from '../../pages/ExamplePage'
 import { LeaderboardPage } from '../../pages/LeaderboardPage'
@@ -72,7 +73,8 @@ export const router = createBrowserRouter([
     path: RoutesEnum.Leaderboard,
     element: <LeaderboardPage />,
   },
-  // {path: RoutesEnum.Game,
-  //  element: <GamePage />,
-  // },
+  {
+    path: RoutesEnum.Game,
+    element: <GamePage />,
+  },
 ])
