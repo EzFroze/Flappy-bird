@@ -6,12 +6,7 @@ export const Dialogs: React.FC<{
   updateStatus: React.Dispatch<React.SetStateAction<GameStatus>>
   restorePlayer: () => void
   restartLevel: () => void
-}> = ({
-  status,
-  updateStatus,
-  restorePlayer,
-  restartLevel
-}) => {
+}> = ({ status, updateStatus, restorePlayer, restartLevel }) => {
   return (
     <>
       <GameDialog

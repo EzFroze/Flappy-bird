@@ -13,10 +13,10 @@ export const useCanvas = () => {
     const { width } = document.body.getBoundingClientRect()
 
     canvasElement.current.width = width * 0.95
-    canvasElement.current.height = width * 0.95 / 1.78
+    canvasElement.current.height = (width * 0.95) / 1.78
 
     canvas.width = width * 0.95
-    canvas.height = width * 0.95 / 1.78
+    canvas.height = (width * 0.95) / 1.78
   }
 
   useLayoutEffect(() => {
@@ -31,6 +31,6 @@ export const useCanvas = () => {
 
   return {
     canvasElement,
-    canvas
+    canvas,
   } as const
 }

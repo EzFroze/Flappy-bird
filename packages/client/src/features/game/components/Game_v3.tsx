@@ -10,7 +10,7 @@ import { useCanvas } from '../hooks/useCanvas'
 
 export const Game_v3 = () => {
   const fullscreen = useFullscreen()
-  const [ frame, setFrame ] = useState(0)
+  const [frame, setFrame] = useState(0)
   const [status, setStatus] = useState<GameStatus>('start')
   const { canvasElement, canvas } = useCanvas()
   const frameId = useRef(0)
@@ -25,9 +25,12 @@ export const Game_v3 = () => {
     gravity: 0.5,
   })
   const { blocks, createLevel } = useBlocks({
-    canvas, x: playerRef.current.speed, frame, status
+    canvas,
+    x: playerRef.current.speed,
+    frame,
+    status,
   })
-  
+
   useEffect(() => {
     playerRef.current = {
       ...playerRef.current,

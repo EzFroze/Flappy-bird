@@ -11,10 +11,7 @@ export const GameDialog: React.FC<{
     <Dialog open={open}>
       <DialogTitle>{title}</DialogTitle>
       <DialogActions>
-        <Button
-          onClick={onClick}>
-          {buttonTitle}
-        </Button>
+        <Button onClick={onClick}>{buttonTitle}</Button>
       </DialogActions>
     </Dialog>
   )

@@ -7,14 +7,14 @@ export const useFullscreen = () => {
 
   useEffect(() => {
     const exit = () => {
-      setEnabled((Boolean(document.fullscreenElement))) 
+      setEnabled(Boolean(document.fullscreenElement))
     }
 
-      document.addEventListener('fullscreenchange', exit)
+    document.addEventListener('fullscreenchange', exit)
 
-      return () => {
-        document.removeEventListener('fullscreenchange', exit)
-      }
+    return () => {
+      document.removeEventListener('fullscreenchange', exit)
+    }
   }, [])
 
   useEffect(() => {
