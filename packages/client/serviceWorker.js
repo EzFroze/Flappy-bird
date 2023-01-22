@@ -1,16 +1,18 @@
-const staticCacheName = 'flappy-bird-cache-v2'
-const fetchCacheName = 'flappy-bird-fetch-cache-v2'
-
+const staticCacheName = 'flappy-bird-cache-v3'
+const fetchCacheName = 'flappy-bird-fetch-cache-v3'
 const URLS = ['/src/index.css', '/src/main.tsx', '/index.html']
 
 self.addEventListener('install', async event => {
   const cache = await caches.open(staticCacheName)
+
   await cache.addAll(URLS)
 })
 
 self.addEventListener('activate', async event => {
   self.clients.claim()
+
   const cacheNames = await caches.keys()
+
   await Promise.all(
     cacheNames
       .filter(name => name !== staticCacheName)
@@ -20,27 +22,28 @@ self.addEventListener('activate', async event => {
 })
 
 self.addEventListener('fetch', async event => {
-  event.respondWith(
-    (async () => {
-      const cachedResponse = await caches.match(event.request)
-      if (cachedResponse) {
-        return cachedResponse
-      }
-      const response = await fetch(event.request)
-      if (!response || response.status !== 200 || response.type !== 'basic') {
-        return response
-      }
-      if (event.request.url.match('^(http|https)://')) {
-        const responseToCache = response.clone()
-        const cache = await caches.open(fetchCacheName)
-        await cache.put(event.request, responseToCache)
-      }
-      return response
-    })()
-  )
+  event.respondWith(cacheFirst(event.request))
 })
 
 async function cacheFirst(request) {
-  const cached = await caches.match(request)
-  return cached ?? (await fetch(request))
+  const cachedResponse = await caches.match(request)
+
+  if (cachedResponse) {
+    return cachedResponse
+  }
+
+  const response = await fetch(request)
+
+  if (!response || response.status !== 200 || response.type !== 'basic') {
+    return response
+  }
+
+  if (request.url.match('^(http|https)://')) {
+    const responseToCache = response.clone()
+    const cache = await caches.open(fetchCacheName)
+
+    await cache.put(request, responseToCache)
+  }
+
+  return response
 }
