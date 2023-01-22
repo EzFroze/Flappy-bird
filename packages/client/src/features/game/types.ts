@@ -12,14 +12,9 @@ export type Position = {
 
 export type Player = {
   move: number
-} & Position
-
-export type GameStatus = {
-  started: boolean
-  ended: boolean
-  overed: boolean
-  paused: boolean
   speed: number
   progress: number
   gravity: number
-}
+} & Position
+
+export type GameStatus = 'start' | 'run' | 'pause' | 'finish' | 'gameover'

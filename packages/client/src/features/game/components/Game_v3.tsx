@@ -1,87 +1,69 @@
-import {
-  Box,
-  Button,
-  Dialog,
-  DialogActions,
-  DialogTitle,
-  Paper,
-  Stack,
-  TextField,
-} from '@mui/material'
-import { Container } from '@mui/system'
+import { Box, IconButton, Paper, Stack, TextField } from '@mui/material'
 import { useEffect, useRef, useState } from 'react'
 import { GameStatus, Player } from '../types'
-import { useLevels } from '../hooks/useLevels'
+import { useBlocks } from '../hooks/useBlocks'
 import { getCollision } from '../utils/getCollision'
-import { levels } from '../data'
+import { OpenInFull, CloseFullscreen } from '@mui/icons-material'
+import { useFullscreen } from '../../../hooks/useFullscreen'
+import { Dialogs } from './Dialogs'
+import { useCanvas } from '../hooks/useCanvas'
 
 export const Game_v3 = () => {
-  const canvasSize = { width: 800, height: 400 }
-  const canvasRef = useRef<HTMLCanvasElement>(null)
-  const frameId = useRef<any>()
-  const { blocks, setLevel, isLastLevel, restartLevel, level } = useLevels(
-    canvasSize,
-    levels
-  )
-  const playerY = canvasSize.height / 2 - 75
+  const fullscreen = useFullscreen()
+  const [ frame, setFrame ] = useState(0)
+  const [status, setStatus] = useState<GameStatus>('start')
+  const { canvasElement, canvas } = useCanvas()
+  const frameId = useRef(0)
   const playerRef = useRef<Player>({
-    x: 20,
-    y: playerY,
-    h: 50,
-    w: 50,
-    move: 20,
-  })
-  const [status, setStatus] = useState<GameStatus>({
-    started: false,
-    ended: false,
-    overed: false,
-    paused: false,
+    x: 0,
+    y: 0,
+    h: canvas.width / 10,
+    w: canvas.width / 10,
+    move: canvas.width / 20,
     speed: 2,
     progress: 0,
     gravity: 0.5,
   })
-  const updateStatus = (obj: Partial<Record<keyof GameStatus, any>>) => {
-    setStatus(status => ({ ...status, ...obj }))
-  }
+  const { blocks, createLevel } = useBlocks({
+    canvas, x: playerRef.current.speed, frame, status
+  })
+  
+  useEffect(() => {
+    playerRef.current = {
+      ...playerRef.current,
+      x: playerRef.current.w,
+      y: playerRef.current.w,
+      h: canvas.width / 20,
+      w: canvas.width / 20,
+      move: canvas.width / 80,
+    }
+  }, [canvas])
 
   const renderFrame = () => {
-    if (canvasRef.current === null) return
+    setFrame(f => f + 1)
 
-    blocks.current = blocks.current
-      .map(block => {
-        return {
-          ...block,
-          x: block.x - status.speed,
-        }
-      })
-      .filter(({ x, w }) => x + w > 0)
-
-    playerRef.current.y += status.gravity
-
-    updateStatus({
-      progress: `${blocks.current.length / 2} / ${levels[level].length}`,
-    })
+    playerRef.current.y += playerRef.current.gravity
 
     if (blocks.current.length === 0) {
-      updateStatus({ ended: true, paused: true })
+      setStatus('finish')
     }
 
-    // collision
-    const collision = getCollision(
-      blocks.current,
-      playerRef.current,
-      canvasSize
-    )
+    const collision = getCollision(blocks.current, playerRef.current, {
+      width: canvas.width,
+      height: canvas.height,
+    })
 
     if (collision) {
-      updateStatus({ paused: true, overed: true })
+      setStatus('gameover')
     }
 
-    const ctx = canvasRef.current.getContext('2d')
+    if (canvasElement.current === null) return
+
+    const ctx = canvasElement.current.getContext('2d')
 
     if (ctx === null) return
 
-    ctx.clearRect(0, 0, canvasSize.width, canvasSize.height)
+    ctx.clearRect(0, 0, canvas.width, canvas.height)
 
     blocks.current.forEach(({ x, y, w, h }) => {
       ctx.fillStyle = '#1bab6d'
@@ -100,30 +82,24 @@ export const Game_v3 = () => {
   }
 
   const restorePlayer = () => {
-    playerRef.current.y = playerY
+    if (canvas === null) return
+
+    playerRef.current.y = 0
   }
 
   useEffect(() => {
-    if (status.paused) return
+    if (status !== 'run') return
 
     frameId.current = requestAnimationFrame(tick)
 
     return () => cancelAnimationFrame(frameId.current)
-  }, [status.paused])
-
-  useEffect(() => {
-    if (!status.started) {
-      updateStatus({ paused: true })
-    }
-  }, [status.started])
+  }, [status])
 
   const liftPlayerUp = () => {
     playerRef.current.y -= playerRef.current.move
   }
 
   useEffect(() => {
-    if (status.paused) return
-
     const action = ({ key }: KeyboardEvent) => {
       if ([' ', 'ArrowUp'].includes(key)) {
         liftPlayerUp()
@@ -133,67 +109,51 @@ export const Game_v3 = () => {
     window.addEventListener('keyup', action)
 
     return () => window.removeEventListener('keyup', action)
-  }, [status.paused])
+  }, [])
 
   return (
-    <Container maxWidth="lg" sx={{ display: 'flex', height: '100%' }}>
-      <Box sx={{ margin: 'auto' }}>
-        <Stack direction={'row'} spacing={2} mt={2}>
-          <TextField value={status.progress} label={'progress'} />
-          <TextField value={level} label={'level'} />
-        </Stack>
+    <Box sx={{ display: 'flex', height: '100%' }}>
+      <Box
+        sx={{
+          margin: 'auto',
+          p: '10px',
+        }}>
         <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-          <Paper sx={{ mt: 2, width: canvasSize.width }}>
+          <Paper
+            sx={{
+              mt: fullscreen.enabled ? undefined : 2,
+              width: canvas?.width,
+            }}>
             <canvas
-              {...canvasSize}
-              ref={canvasRef}
+              ref={canvasElement}
               onClick={liftPlayerUp}
               onContextMenu={ev => {
                 ev.preventDefault()
-                updateStatus({ paused: !status.paused })
+                setStatus(s => (s === 'pause' ? 'run' : 'pause'))
               }}
             />
           </Paper>
         </Box>
       </Box>
-      <Dialog open={!status.started}>
-        <Button
-          onClick={() => {
-            updateStatus({ paused: false, started: true })
-          }}>
-          Старт
-        </Button>
-      </Dialog>
-      <Dialog open={status.ended} sx={{ p: 4 }}>
-        <DialogTitle variant="h4">
-          Вы прошли {isLastLevel ? 'игру' : 'уровень'}!
-        </DialogTitle>
-        <DialogActions>
-          <Button
-            onClick={() => {
-              updateStatus({ ended: false, started: false })
-              setTimeout(() => {
-                setLevel(level => (isLastLevel ? 0 : level + 1))
-              }, 200)
-              restorePlayer()
-            }}>
-            {isLastLevel ? 'Начать заново' : 'Следующий уровень'}
-          </Button>
-        </DialogActions>
-      </Dialog>
-      <Dialog open={status.overed}>
-        <DialogTitle>Игра окончена!</DialogTitle>
-        <DialogActions>
-          <Button
-            onClick={() => {
-              updateStatus({ paused: false, overed: false })
-              restartLevel()
-              restorePlayer()
-            }}>
-            Начать заново
-          </Button>
-        </DialogActions>
-      </Dialog>
-    </Container>
+      <Dialogs
+        status={status}
+        updateStatus={setStatus}
+        restorePlayer={restorePlayer}
+        restartLevel={createLevel}
+      />
+      <Box sx={{ position: 'absolute', right: 100, top: 50 }}>
+        <IconButton sx={{ height: 54, width: 54 }} onClick={fullscreen.toggle}>
+          {fullscreen.enabled ? <CloseFullscreen /> : <OpenInFull />}
+        </IconButton>
+      </Box>
+      <Box sx={{ position: 'absolute', left: 100, top: 50 }}>
+        <TextField
+          defaultValue={status}
+          InputProps={{
+            readOnly: true,
+          }}
+        />
+      </Box>
+    </Box>
   )
 }
