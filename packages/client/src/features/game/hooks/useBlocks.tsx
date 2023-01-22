@@ -55,7 +55,7 @@ export const useBlocks = ({
     if (status !== 'run') return
 
     blocks.current = blocks.current
-      .map((block) => {
+      .map(block => {
         return {
           ...block,
           x: block.x - x,

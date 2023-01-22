@@ -138,11 +138,6 @@ export const Game_v3 = () => {
     )
     ctx.globalAlpha = 1
 
-    if (['pause', 'gameover'].includes(status)) {
-      backgroundPosition.current.first = backgroundPosition.current.first
-      backgroundPosition.current.second = backgroundPosition.current.second
-    }
-
     if (['run', 'start', 'finish'].includes(status)) {
       // бесконечная прокрутка
       backgroundPosition.current.first -= 1
@@ -159,9 +154,8 @@ export const Game_v3 = () => {
     if (status === 'gameover') {
       if (
         Math.round(playerRef.current.y) >=
-        height - 10 - playerRef.current.h
+        height - 20 - playerRef.current.h
       ) {
-        playerRef.current.y = playerRef.current.y
         bird.src = wingDownFrame
       } else {
         playerRef.current.y += 2

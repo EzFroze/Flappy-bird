@@ -22,5 +22,8 @@ export const renderGround = (
   ctx.fillRect(0, height - 20, width, 20)
   ctx.fillStyle = '#000000'
   ctx.lineWidth = 1
-  ctx.strokeRect(0, height - 20, width, 20)
+  ctx.strokeRect(0, height - 30, width, 30)
+  ctx.fillStyle = '#50C878'
+  ctx.fillRect(0, height - 30, width, 10)
+
 }
