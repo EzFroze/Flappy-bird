@@ -10,15 +10,26 @@ export const Dialogs: React.FC<{
   return (
     <>
       <GameDialog
+        open={status === 'screenChanged'}
+        title="Разрешение экрана изменилось"
+        buttonTitle="Начать заново"
+        onClick={() => {
+          updateStatus('start')
+          restorePlayer()
+          restartLevel()
+        }}
+      />
+      <GameDialog
         open={status === 'start'}
         title="Начать игру?"
         buttonTitle="Старт"
         onClick={() => {
           updateStatus('run')
+          restorePlayer()
         }}
       />
       <GameDialog
-        open={status === 'pause'}
+        open={/* status === 'pause' */ false}
         title="Продолжить?"
         buttonTitle="Вперед"
         onClick={() => {

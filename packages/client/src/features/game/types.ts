@@ -15,6 +15,13 @@ export type Player = {
   speed: number
   progress: number
   gravity: number
+  wave: number
 } & Position
 
-export type GameStatus = 'start' | 'run' | 'pause' | 'finish' | 'gameover'
+export type GameStatus =
+  | 'start'
+  | 'run'
+  | 'pause'
+  | 'finish'
+  | 'gameover'
+  | 'screenChanged'

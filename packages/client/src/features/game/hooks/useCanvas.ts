@@ -1,25 +1,21 @@
-import { useEffect, useLayoutEffect, useRef, useState } from 'react'
+import { useEffect, useRef } from 'react'
 import { useFullscreen } from '../../../hooks/useFullscreen'
-import { Canvas } from '../types'
 
 export const useCanvas = () => {
   const fullscreen = useFullscreen()
-  const canvasElement = useRef<HTMLCanvasElement>(null)
-  const { current: canvas } = useRef<Canvas>({ width: 0, height: 0 })
+  const canvas = useRef<HTMLCanvasElement | null>(null)
 
   const updateCanvasSize = () => {
-    if (canvasElement.current === null) return
+    console.log('useCanvas changed')
+    if (canvas.current === null) return
 
     const { width } = document.body.getBoundingClientRect()
 
-    canvasElement.current.width = width * 0.95
-    canvasElement.current.height = (width * 0.95) / 1.78
-
-    canvas.width = width * 0.95
-    canvas.height = (width * 0.95) / 1.78
+    canvas.current.width = width * 0.95
+    canvas.current.height = (width * 0.95) / 1.78
   }
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     updateCanvasSize()
 
     window.addEventListener('resize', updateCanvasSize)
@@ -29,8 +25,5 @@ export const useCanvas = () => {
     }
   }, [fullscreen.enabled])
 
-  return {
-    canvasElement,
-    canvas,
-  } as const
+  return canvas
 }

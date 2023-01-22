@@ -1,21 +1,24 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef } from 'react'
 import { level } from '../data'
-import { Canvas, GameStatus, Position } from '../types'
+import { GameStatus, Position } from '../types'
 
 export const useBlocks = ({
   canvas,
   x,
   frame,
+  status,
 }: {
-  canvas: Canvas
+  canvas: HTMLCanvasElement | null
   x: number
   frame: number
   status: GameStatus
 }) => {
   const blocks = useRef<Position[]>([])
   const createLevel = useCallback(() => {
+    if (!canvas) return
+
     return (blocks.current = level
-      .map(([t, d], i) => {
+      .map(([t, d]) => {
         const width = canvas.width / 20
 
         return [
@@ -23,14 +26,14 @@ export const useBlocks = ({
             // top
             x: canvas.width,
             y: 0,
-            h: 100 * t,
+            h: (canvas.width / 100) * t,
             w: width,
           },
           {
             // down
             x: canvas.width - width * 2,
-            y: canvas.height - 100 * d,
-            h: 100 * d,
+            y: canvas.height - (canvas.width / 100) * d,
+            h: (canvas.width / 100) * d,
             w: width,
           },
         ]
@@ -49,15 +52,17 @@ export const useBlocks = ({
   }, [canvas])
 
   useEffect(() => {
+    if (status !== 'run') return
+
     blocks.current = blocks.current
-      .map((block, i) => {
+      .map((block) => {
         return {
           ...block,
           x: block.x - x,
         }
       })
       .filter(({ x, w }) => x + w > 0)
-  }, [frame])
+  }, [frame, status])
 
   return {
     blocks,

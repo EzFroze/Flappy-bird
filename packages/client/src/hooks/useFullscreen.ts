@@ -3,7 +3,9 @@ import { useEffect, useState } from 'react'
 export const useFullscreen = () => {
   const [enabled, setEnabled] = useState<boolean>(false)
 
-  const toggle = () => setEnabled(e => !e)
+  const toggle = () => {
+    setEnabled(e => !e)
+  }
 
   useEffect(() => {
     const exit = () => {
