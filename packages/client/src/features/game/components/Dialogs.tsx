@@ -6,7 +6,8 @@ export const Dialogs: React.FC<{
   updateStatus: React.Dispatch<React.SetStateAction<GameStatus>>
   restorePlayer: () => void
   restartLevel: () => void
-}> = ({ status, updateStatus, restorePlayer, restartLevel }) => {
+  progress: number
+}> = ({ status, updateStatus, restorePlayer, restartLevel, progress }) => {
   return (
     <>
       <GameDialog
@@ -29,7 +30,7 @@ export const Dialogs: React.FC<{
         }}
       />
       <GameDialog
-        open={/* status === 'pause' */ false}
+        open={status === 'pause'}
         title="Продолжить?"
         buttonTitle="Вперед"
         onClick={() => {
@@ -48,7 +49,7 @@ export const Dialogs: React.FC<{
       />
       <GameDialog
         open={status === 'gameover'}
-        title="Игра окончена!"
+        title={`Игра окончена! Ваш прогресс: ${progress}`}
         buttonTitle="Начать заново"
         onClick={() => {
           updateStatus('start')

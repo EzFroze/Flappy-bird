@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { level } from '../data'
 import { GameStatus, Position } from '../types'
 
@@ -13,9 +13,10 @@ export const useBlocks = ({
   frame: number
   status: GameStatus
 }) => {
+  const [ initialBlocksLength, setInitialBlocksLength ] = useState(0)
   const blocks = useRef<Position[]>([])
   const createLevel = useCallback(() => {
-    if (!canvas) return
+    if (!canvas) return []
 
     return (blocks.current = level
       .map(([t, d]) => {
@@ -48,7 +49,11 @@ export const useBlocks = ({
   }, [canvas])
 
   useEffect(() => {
-    createLevel()
+    setInitialBlocksLength
+  }, [])
+
+  useEffect(() => {
+    setInitialBlocksLength(createLevel().length)
   }, [canvas])
 
   useEffect(() => {
@@ -67,5 +72,6 @@ export const useBlocks = ({
   return {
     blocks,
     createLevel,
+    initialBlocksLength
   } as const
 }
