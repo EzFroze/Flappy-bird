@@ -12,11 +12,15 @@ export const getUser = async (): Promise<Response> => {
 
   if ('serviceWorker' in navigator && response.status === 200) {
     navigator.serviceWorker.register('/serviceWorker.js')
-  } else {
-    navigator.serviceWorker.getRegistrations().then(function (registrations) {
-      registrations.map(registration => registration.unregister())
-    })
+  } else if ('serviceWorker' in navigator && response.status !== 200) {
+    unregisterSW()
   }
 
   return response
+}
+
+export const unregisterSW = () => {
+  navigator.serviceWorker.getRegistrations().then(function (registrations) {
+    registrations.map(registration => registration.unregister())
+  })
 }

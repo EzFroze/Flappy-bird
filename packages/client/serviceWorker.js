@@ -15,8 +15,7 @@ self.addEventListener('activate', async event => {
 
   await Promise.all(
     cacheNames
-      .filter(name => name !== staticCacheName)
-      .filter(name => name !== fetchCacheName)
+      .filter(name => name !== staticCacheName || name !== fetchCacheName)
       .map(name => caches.delete(name))
   )
 })

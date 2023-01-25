@@ -1,5 +1,6 @@
 import { BASE_URL, baseOptions } from '../../../app/api/variables'
 import { RequestOptions, Method } from '../../../app/api/types'
+import { unregisterSW } from './GetUser'
 
 export const logout = async (): Promise<Response> => {
   const requestOptions: RequestOptions = {
@@ -10,9 +11,7 @@ export const logout = async (): Promise<Response> => {
   await Promise.all(cacheNames.map(name => caches.delete(name)))
 
   if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.getRegistrations().then(function (registrations) {
-      registrations.map(registration => registration.unregister())
-    })
+    unregisterSW()
   }
 
   return fetch(`${BASE_URL}/auth/logout`, {
