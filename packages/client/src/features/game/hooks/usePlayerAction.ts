@@ -1,7 +1,11 @@
-import { useCallback } from "react"
-import { GameStatus, Player } from "../types"
+import { useCallback } from 'react'
+import { GameStatus, Player } from '../types'
 
-export const usePlayerAction = (canvas: HTMLCanvasElement | null, player: Player, status: GameStatus) => {
+export const usePlayerAction = (
+  canvas: HTMLCanvasElement | null,
+  player: Player,
+  status: GameStatus
+) => {
   const lift = useCallback(() => {
     if (status !== GameStatus.run) return
 
@@ -17,6 +21,6 @@ export const usePlayerAction = (canvas: HTMLCanvasElement | null, player: Player
 
   return {
     lift,
-    restore
+    restore,
   }
 }

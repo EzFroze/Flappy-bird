@@ -7,7 +7,13 @@ import { OpenInFull, CloseFullscreen } from '@mui/icons-material'
 import { useFullscreen } from '../../../hooks/useFullscreen'
 import { Dialogs } from './Dialogs'
 import { useCanvas } from '../hooks/useCanvas'
-import { renderBirdFall, renderBirdWave, renderBlock, renderGround, renderInfo } from '../utils/worldRender'
+import {
+  renderBirdFall,
+  renderBirdWave,
+  renderBlock,
+  renderGround,
+  renderInfo,
+} from '../utils/worldRender'
 import { useBackground } from '../hooks/useBackground'
 import { useControls } from '../hooks/useControls'
 import { usePlayerAction } from '../hooks/usePlayerAction'
@@ -31,7 +37,11 @@ export const Game_v3 = () => {
     wave: 0,
   })
   const { togglePause } = useControls(playerRef.current, status, setStatus)
-  const playerAction = usePlayerAction(canvas.current, playerRef.current, status)
+  const playerAction = usePlayerAction(
+    canvas.current,
+    playerRef.current,
+    status
+  )
   const { blocks, createLevel, initialBlocksLength } = useBlocks({
     canvas: canvas.current,
     x: playerRef.current.speed,
@@ -114,8 +124,7 @@ export const Game_v3 = () => {
     ctx.clearRect(0, 0, width, height)
 
     renderBackground(ctx, canvas.current, status)
-    
-    
+
     if (status === GameStatus.screenChanged) return
 
     if (status === GameStatus.gameover) {

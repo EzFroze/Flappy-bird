@@ -21,13 +21,13 @@ export const Dialogs: React.FC<{
         {
           open: status === GameStatus.screenChanged,
           title: 'Разрешение экрана изменилось',
-          buttonTitle: "Начать заново",
+          buttonTitle: 'Начать заново',
           onClick: restart,
         },
         {
           open: status === GameStatus.start,
-          title: "Начать игру?",
-          buttonTitle: "Старт",
+          title: 'Начать игру?',
+          buttonTitle: 'Старт',
           onClick: () => {
             updateStatus(GameStatus.run)
             restorePlayer()
@@ -35,8 +35,8 @@ export const Dialogs: React.FC<{
         },
         {
           open: status === GameStatus.pause,
-          title: "Продолжить?",
-          buttonTitle: "Вперед",
+          title: 'Продолжить?',
+          buttonTitle: 'Вперед',
           onClick: () => {
             updateStatus(GameStatus.run)
           },
@@ -49,11 +49,13 @@ export const Dialogs: React.FC<{
         },
         {
           open: status === GameStatus.gameover,
-          title:`Игра окончена! Ваш прогресс: ${progress}`,
-          buttonTitle: "Начать заново",
+          title: `Игра окончена! Ваш прогресс: ${progress}`,
+          buttonTitle: 'Начать заново',
           onClick: restart,
         },
-      ].map((dialog) => <GameDialog {...dialog} />)}
+      ].map(dialog => (
+        <GameDialog {...dialog} />
+      ))}
     </>
   )
 }

@@ -19,10 +19,10 @@ export type Player = {
 } & Position
 
 export enum GameStatus {
-  start  = 'start',
-  run  = 'run',
-  pause  = 'pause',
-  finish  = 'finish',
+  start = 'start',
+  run = 'run',
+  pause = 'pause',
+  finish = 'finish',
   gameover = 'gameover',
-  screenChanged  = 'screenChanged'
+  screenChanged = 'screenChanged',
 }

@@ -76,7 +76,10 @@ export const renderBirdFall = (
   ctx.globalAlpha = 1
 }
 
-export const renderBirdWave = (ctx: CanvasRenderingContext2D, player: Player) => {
+export const renderBirdWave = (
+  ctx: CanvasRenderingContext2D,
+  player: Player
+) => {
   const bird = new Image()
 
   if (Math.ceil(player.wave) % 2 === 0) {

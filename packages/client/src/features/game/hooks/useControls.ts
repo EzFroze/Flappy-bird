@@ -21,14 +21,12 @@ export const useControls = (
     return () => window.removeEventListener('keyup', action)
   }, [status])
 
-  const togglePause = (
-    ev: React.MouseEvent<HTMLCanvasElement, MouseEvent>
-  ) => {
+  const togglePause = (ev: React.MouseEvent<HTMLCanvasElement, MouseEvent>) => {
     ev.preventDefault()
     setStatus(s => (s === GameStatus.pause ? GameStatus.run : GameStatus.pause))
   }
 
   return {
-    togglePause
+    togglePause,
   }
 }
