@@ -41,7 +41,7 @@ export const Profile: React.FC = () => {
       .then(response => {
         if (response.status !== 200) {
           // TODO: Когда будет готова api авторизации и регистрации раскомментить следующий код
-          //navigate('/')
+          navigate('/')
         }
       })
       .catch(() => navigate('/500'))
