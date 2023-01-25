@@ -1,5 +1,7 @@
 import { brown, green } from '@mui/material/colors'
-import { GameStatus, Player, Position } from '../types'
+import { Player, Position } from '../types'
+import wingUpFrame from '/bird/frame-1.png'
+import wingDownFrame from '/bird/frame-2.png'
 
 export const renderBlock = (
   ctx: CanvasRenderingContext2D,
@@ -36,10 +38,10 @@ export const renderInfo = ({
   ctx,
   blocks,
   initialBlocksLength,
-  player
-} : {
-  ctx: CanvasRenderingContext2D,
-  blocks: Position[],
+  player,
+}: {
+  ctx: CanvasRenderingContext2D
+  blocks: Position[]
   initialBlocksLength: number
   player: Player
 }) => {
@@ -53,4 +55,35 @@ export const renderInfo = ({
   ctx.fillStyle = 'white'
   ctx.font = '24px monospace'
   ctx.fillText(`${progress} / ${startBlocks}`, 50, 50)
+}
+
+export const renderBirdFall = (
+  ctx: CanvasRenderingContext2D,
+  player: Player,
+  height: number
+) => {
+  const bird = new Image()
+
+  if (Math.round(player.y) >= height - 20 - player.h) {
+    bird.src = wingDownFrame
+  } else {
+    player.y += 2
+    bird.src = wingUpFrame
+  }
+
+  ctx.globalAlpha = 0.7
+  ctx.drawImage(bird, player.x, player.y, player.w, player.h)
+  ctx.globalAlpha = 1
+}
+
+export const renderBirdWave = (ctx: CanvasRenderingContext2D, player: Player) => {
+  const bird = new Image()
+
+  if (Math.ceil(player.wave) % 2 === 0) {
+    bird.src = wingUpFrame
+  } else {
+    bird.src = wingDownFrame
+  }
+
+  ctx.drawImage(bird, player.x, player.y, player.w, player.h)
 }

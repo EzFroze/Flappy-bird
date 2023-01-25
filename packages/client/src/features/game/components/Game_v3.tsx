@@ -7,16 +7,15 @@ import { OpenInFull, CloseFullscreen } from '@mui/icons-material'
 import { useFullscreen } from '../../../hooks/useFullscreen'
 import { Dialogs } from './Dialogs'
 import { useCanvas } from '../hooks/useCanvas'
-import { renderBlock, renderGround, renderInfo } from '../utils/worldRender'
-import wingUpFrame from '/bird/frame-1.png'
-import wingDownFrame from '/bird/frame-2.png'
+import { renderBirdFall, renderBirdWave, renderBlock, renderGround, renderInfo } from '../utils/worldRender'
 import { useBackground } from '../hooks/useBackground'
-
+import { useControls } from '../hooks/useControls'
+import { usePlayerAction } from '../hooks/usePlayerAction'
 
 export const Game_v3 = () => {
   const fullscreen = useFullscreen()
   const [frame, setFrame] = useState(0)
-  const [status, setStatus] = useState<GameStatus>('start')
+  const [status, setStatus] = useState(GameStatus.start)
   const canvas = useCanvas()
   const frameId = useRef(0)
   const { backgroundPosition, renderBackground } = useBackground()
@@ -31,6 +30,8 @@ export const Game_v3 = () => {
     gravity: 1,
     wave: 0,
   })
+  const { togglePause } = useControls(playerRef.current, status, setStatus)
+  const playerAction = usePlayerAction(canvas.current, playerRef.current, status)
   const { blocks, createLevel, initialBlocksLength } = useBlocks({
     canvas: canvas.current,
     x: playerRef.current.speed,
@@ -55,16 +56,16 @@ export const Game_v3 = () => {
       h: coef,
       w: coef,
       move: fullscreen.enabled ? coef / 2 : coef / 1.5,
-      speed: coef / 30
+      speed: coef / 30,
     }
 
-    if (status !== 'start') {
-      setStatus('screenChanged')
+    if (status !== GameStatus.start) {
+      setStatus(GameStatus.screenChanged)
     }
   }, [canvas.current?.width, fullscreen.enabled])
 
   useEffect(() => {
-    if (status === 'pause') return
+    if (status === GameStatus.pause) return
 
     const id = setInterval(() => {
       playerRef.current.wave += 1
@@ -84,16 +85,16 @@ export const Game_v3 = () => {
 
     setFrame(f => f + 1)
 
-    if (status === 'run') {
+    if (status === GameStatus.run) {
       playerRef.current.y += playerRef.current.gravity
       playerRef.current.x = width / 10
     }
 
-    if (blocks.current.length === 0 && status !== 'start') {
-      setStatus('finish')
+    if (blocks.current.length === 0 && status !== GameStatus.start) {
+      setStatus(GameStatus.finish)
     }
 
-    if (status === 'finish') {
+    if (status === GameStatus.finish) {
       playerRef.current.x += 1
     }
 
@@ -103,70 +104,44 @@ export const Game_v3 = () => {
     })
 
     if (collision) {
-      setStatus('gameover')
+      setStatus(GameStatus.gameover)
     }
 
-    const { x: px, y: py, h: ph, w: pw } = playerRef.current
     const ctx = canvas.current.getContext('2d')
-    const bird = new Image()
 
     if (ctx === null) return
 
     ctx.clearRect(0, 0, width, height)
 
     renderBackground(ctx, canvas.current, status)
+    
+    
+    if (status === GameStatus.screenChanged) return
 
-    if (status === 'screenChanged') return
+    if (status === GameStatus.gameover) {
+      renderBirdFall(ctx, playerRef.current, height)
+    }
 
-    if (status === 'gameover') {
-      if (
-        Math.round(playerRef.current.y) >=
-        height - 20 - playerRef.current.h
-      ) {
-        bird.src = wingDownFrame
-      } else {
-        playerRef.current.y += 2
-        bird.src = wingUpFrame
-      }
-
-      ctx.globalAlpha = 0.7
-      ctx.drawImage(bird, px, py, pw, ph)
-      ctx.globalAlpha = 1
+    if (status !== GameStatus.gameover) {
+      renderBirdWave(ctx, playerRef.current)
     }
 
     blocks.current.forEach(({ x, y, w, h }) => {
       renderBlock(ctx, x, y, w, h)
     })
 
-    if (status !== 'gameover') {
-      if (Math.ceil(playerRef.current.wave) % 2 === 0) {
-        bird.src = wingUpFrame
-      } else {
-        bird.src = wingDownFrame
-      }
-
-      ctx.drawImage(bird, px, py, pw, ph)
-    }
-
     renderGround(ctx, width, height)
 
-    if (status !== 'start') {
+    if (status !== GameStatus.start) {
       renderInfo({
         ctx,
         blocks: blocks.current,
         initialBlocksLength,
-        player: playerRef.current
+        player: playerRef.current,
       })
     }
 
     frameId.current = requestAnimationFrame(renderFrame)
-  }
-
-  const restorePlayer = () => {
-    if (canvas.current === null) return
-
-    playerRef.current.y = canvas.current.height / 15
-    playerRef.current.x = canvas.current.width / 15
   }
 
   // RENDER ========================
@@ -176,46 +151,24 @@ export const Game_v3 = () => {
     return () => cancelAnimationFrame(frameId.current)
   }, [status])
 
-  const liftPlayerUp = () => {
-    if (status !== 'run') return
-
-    playerRef.current.y -= playerRef.current.move
-  }
-
-  // KEYBOARD ========================
-  useEffect(() => {
-    const action = ({ key }: KeyboardEvent) => {
-      if (key === 'ArrowUp') {
-        liftPlayerUp()
-      }
-    }
-
-    window.addEventListener('keyup', action)
-
-    return () => window.removeEventListener('keyup', action)
-  }, [status])
-
   return (
     <Box sx={{ display: 'flex', height: '100%' }}>
       <Box sx={{ margin: 'auto', p: 1 }}>
         <canvas
           style={{ outline: '1px solid black' }}
           ref={canvas}
-          onClick={liftPlayerUp}
-          onContextMenu={ev => {
-            ev.preventDefault()
-            setStatus(s => (s === 'pause' ? 'run' : 'pause'))
-          }}
+          onClick={playerAction.lift}
+          onContextMenu={togglePause}
         />
       </Box>
       <Dialogs
         status={status}
         updateStatus={setStatus}
-        restorePlayer={restorePlayer}
+        restorePlayer={playerAction.restore}
         restartLevel={createLevel}
         progress={playerRef.current.progress}
       />
-      <Box sx={{ position: 'absolute', right: 50, top: 50 }}>
+      <Box sx={{ position: 'absolute', right: 5, top: 5 }}>
         <IconButton sx={{ height: 54, width: 54 }} onClick={fullscreen.toggle}>
           {fullscreen.enabled ? <CloseFullscreen /> : <OpenInFull />}
         </IconButton>

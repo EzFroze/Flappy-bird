@@ -13,7 +13,7 @@ export const useBlocks = ({
   frame: number
   status: GameStatus
 }) => {
-  const [ initialBlocksLength, setInitialBlocksLength ] = useState(0)
+  const [initialBlocksLength, setInitialBlocksLength] = useState(0)
   const blocks = useRef<Position[]>([])
   const createLevel = useCallback(() => {
     if (!canvas) return []
@@ -72,6 +72,6 @@ export const useBlocks = ({
   return {
     blocks,
     createLevel,
-    initialBlocksLength
+    initialBlocksLength,
   } as const
 }

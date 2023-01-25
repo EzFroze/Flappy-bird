@@ -18,10 +18,11 @@ export type Player = {
   wave: number
 } & Position
 
-export type GameStatus =
-  | 'start'
-  | 'run'
-  | 'pause'
-  | 'finish'
-  | 'gameover'
-  | 'screenChanged'
+export enum GameStatus {
+  start  = 'start',
+  run  = 'run',
+  pause  = 'pause',
+  finish  = 'finish',
+  gameover = 'gameover',
+  screenChanged  = 'screenChanged'
+}
