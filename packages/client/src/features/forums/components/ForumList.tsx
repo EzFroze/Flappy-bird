@@ -8,6 +8,10 @@ import {
   Outlet as ForumOutlet,
   useParams,
 } from 'react-router-dom'
+import { getUser } from '../../profile/services/authSlice'
+import { RoutesEnum } from '../../../app/router/types'
+import { useStore } from '../../../app/store/hooks'
+import { useLogOutRoute } from '../../../hooks/useLogOutRoute'
 
 const forumThemes = [
   { title: 'Развитие портала', link: ForumsNames.evolution },
@@ -39,6 +43,10 @@ const topicsDataStyles = {
 
 export const ForumList: React.FC = () => {
   const { forum } = useParams()
+
+  const user = useStore(getUser)
+
+  useLogOutRoute(RoutesEnum.SignIn, user)
 
   return (
     // TODO: посмотреть почему height 100vh не дотягивает до самого низа

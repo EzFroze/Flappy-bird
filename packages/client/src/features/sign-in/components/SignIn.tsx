@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { useForm } from 'react-hook-form'
 import {
   Container,
@@ -8,18 +8,17 @@ import {
   Link as MuiLink,
   FormHelperText,
 } from '@mui/material'
-import { useNavigate, Link as RouterLink } from 'react-router-dom'
+import { Link as RouterLink } from 'react-router-dom'
 import { validatePassword, validateLogin } from '../../../utils/validation'
-import { SignInData } from '../types'
 import { Input } from '../../../components/input/components/Input'
 import { PasswordInput } from '../../../components/passwordInput/components/PasswordInput'
-import { signin } from '../services/SignIn'
-import { getUser } from '../../profile/services/GetUser'
-import { useServerError } from '../../../hooks/useServerError'
 import { RoutesEnum } from '../../../app/router/types'
+import { useStore } from '../../../app/store/hooks'
+import { getUser } from '../../profile/services/authSlice'
+import { useSubmit } from '../hooks/useSignInSubmit'
+import { useValidationRoute } from '../../../hooks/useValidationRoute'
 
 export const SignIn: React.FC = () => {
-  const navigate = useNavigate()
   const {
     control,
     handleSubmit,
@@ -32,8 +31,9 @@ export const SignIn: React.FC = () => {
     mode: 'onChange',
   })
 
+  const user = useStore(getUser)
+
   const [showPassword, setShowPassword] = React.useState(false)
-  const [serverError, setServerError] = React.useState('')
 
   const handleClickShowPassword = () => setShowPassword(show => !show)
 
@@ -43,28 +43,9 @@ export const SignIn: React.FC = () => {
     event.preventDefault()
   }
 
-  const onSubmit = (data: SignInData) => {
-    signin(data)
-      .then(response => {
-        if (response.status === 200) {
-          navigate('/game')
-        } else {
-          return response.json()
-        }
-      })
-      .then(result => {
-        setServerError(`⚠ ${result.reason}`)
-      })
-      .catch(useServerError)
-  }
+  const { onSubmit, serverError } = useSubmit()
 
-  useEffect(() => {
-    getUser().then(response => {
-      if (response.status === 200) {
-        navigate('/game')
-      }
-    })
-  }, [])
+  useValidationRoute(RoutesEnum.Game, user)
 
   return (
     <Container

@@ -8,6 +8,10 @@ import { useUsers } from '../hooks/useUsers'
 import { FetchUsersType, SortOrder, User, UsersFilter } from '../types'
 import { ColumnHeader } from './ColumnHeader'
 import { styles } from '../styles/styles'
+import { getUser } from '../../profile/services/authSlice'
+import { RoutesEnum } from '../../../app/router/types'
+import { useStore } from '../../../app/store/hooks'
+import { useLogOutRoute } from '../../../hooks/useLogOutRoute'
 
 export const Leaderboard: FC = () => {
   const [users, setUsers] = useState([])
@@ -40,6 +44,10 @@ export const Leaderboard: FC = () => {
       date: SortOrder.DescendingOrder,
     }
   }, [])
+
+  const user = useStore(getUser)
+
+  useLogOutRoute(RoutesEnum.SignIn, user)
 
   useEffect(() => {
     ;(fetchUsers as FetchUsersType)(usersInPage, page)

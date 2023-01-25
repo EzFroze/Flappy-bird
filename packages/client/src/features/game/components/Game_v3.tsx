@@ -14,6 +14,10 @@ import { GameStatus, Player } from '../types'
 import { useLevels } from '../hooks/useLevels'
 import { getCollision } from '../utils/getCollision'
 import { levels } from '../data'
+import { getUser } from '../../profile/services/authSlice'
+import { RoutesEnum } from '../../../app/router/types'
+import { useStore } from '../../../app/store/hooks'
+import { useLogOutRoute } from '../../../hooks/useLogOutRoute'
 
 export const Game_v3 = () => {
   const canvasSize = { width: 800, height: 400 }
@@ -120,6 +124,10 @@ export const Game_v3 = () => {
   const liftPlayerUp = () => {
     playerRef.current.y -= playerRef.current.move
   }
+
+  const user = useStore(getUser)
+
+  useLogOutRoute(RoutesEnum.SignIn, user)
 
   useEffect(() => {
     if (status.paused) return
