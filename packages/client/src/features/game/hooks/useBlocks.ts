@@ -49,10 +49,6 @@ export const useBlocks = ({
   }, [canvas])
 
   useEffect(() => {
-    setInitialBlocksLength
-  }, [])
-
-  useEffect(() => {
     setInitialBlocksLength(createLevel().length)
   }, [canvas])
 

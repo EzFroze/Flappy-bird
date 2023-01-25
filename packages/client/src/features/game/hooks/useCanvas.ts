@@ -6,7 +6,6 @@ export const useCanvas = () => {
   const canvas = useRef<HTMLCanvasElement | null>(null)
 
   const updateCanvasSize = () => {
-    console.log('useCanvas changed')
     if (canvas.current === null) return
 
     const { width } = document.body.getBoundingClientRect()
