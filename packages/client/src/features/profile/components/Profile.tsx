@@ -18,7 +18,6 @@ import { logout } from '../services/LogOut'
 import { getUser, clearUser } from '../services/authSlice'
 import { RoutesEnum } from '../../../app/router/types'
 import { useStore, useSet } from '../../../app/store/hooks'
-import { useLogOutRoute } from '../../../hooks/useLogOutRoute'
 
 export const Profile: React.FC = () => {
   const set = useSet()
@@ -50,8 +49,6 @@ export const Profile: React.FC = () => {
       })
       .catch(() => navigate(RoutesEnum.ServerError))
   }
-
-  useLogOutRoute(RoutesEnum.SignIn, user)
 
   return (
     <>
