@@ -1,5 +1,5 @@
-import { useCallback } from 'react'
-import { GameStatus } from '../types'
+import { useCallback, useMemo } from 'react'
+import { DialogProps, GameStatus } from '../types'
 import { GameDialog } from './GameDialog'
 
 export const Dialogs: React.FC<{
@@ -15,47 +15,48 @@ export const Dialogs: React.FC<{
     restartLevel()
   }, [updateStatus, restorePlayer, restartLevel])
 
+  const dialogs: Record<string, DialogProps> = useMemo(
+    () => ({
+      [GameStatus.screenChanged]: {
+        open: true,
+        title: 'Разрешение экрана изменилось',
+        buttonTitle: 'Начать заново',
+        onClick: restart,
+      },
+      [GameStatus.start]: {
+        open: true,
+        title: 'Начать игру?',
+        buttonTitle: 'Старт',
+        onClick: () => {
+          updateStatus(GameStatus.run)
+          restorePlayer()
+        },
+      },
+      [GameStatus.pause]: {
+        open: true,
+        title: 'Продолжить?',
+        buttonTitle: 'Вперед',
+        onClick: () => {
+          updateStatus(GameStatus.run)
+        },
+      },
+      [GameStatus.finish]: {
+        open: true,
+        title: `Вы прошли игру!`,
+        buttonTitle: 'Начать заново',
+        onClick: restart,
+      },
+      [GameStatus.gameover]: {
+        open: true,
+        title: `Игра окончена! Ваш прогресс: ${progress}`,
+        buttonTitle: 'Начать заново',
+        onClick: restart,
+      },
+    }),
+    [status, progress, restart]
+  )
+
   return (
-    <>
-      {[
-        {
-          open: status === GameStatus.screenChanged,
-          title: 'Разрешение экрана изменилось',
-          buttonTitle: 'Начать заново',
-          onClick: restart,
-        },
-        {
-          open: status === GameStatus.start,
-          title: 'Начать игру?',
-          buttonTitle: 'Старт',
-          onClick: () => {
-            updateStatus(GameStatus.run)
-            restorePlayer()
-          },
-        },
-        {
-          open: status === GameStatus.pause,
-          title: 'Продолжить?',
-          buttonTitle: 'Вперед',
-          onClick: () => {
-            updateStatus(GameStatus.run)
-          },
-        },
-        {
-          open: status === GameStatus.finish,
-          title: `Вы прошли игру!`,
-          buttonTitle: 'Начать заново',
-          onClick: restart,
-        },
-        {
-          open: status === GameStatus.gameover,
-          title: `Игра окончена! Ваш прогресс: ${progress}`,
-          buttonTitle: 'Начать заново',
-          onClick: restart,
-        },
-      ].map(dialog => (
-        <GameDialog {...dialog} />
-      ))}
-    </>
+    <GameDialog {...dialogs[status] }/>
   )
 }

@@ -26,3 +26,10 @@ export enum GameStatus {
   gameover = 'gameover',
   screenChanged = 'screenChanged',
 }
+
+export type DialogProps = {
+  open: boolean,
+  title: string,
+  buttonTitle: string,
+  onClick: () => void,
+}
