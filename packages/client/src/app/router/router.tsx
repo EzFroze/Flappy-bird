@@ -60,11 +60,7 @@ export const router = createBrowserRouter([
   },
   {
     path: RoutesEnum.Forums,
-    element: (
-      <RequireAuth>
-        <ForumsPage />
-      </RequireAuth>
-    ),
+    element: <ForumsPage />,
     children: [
       {
         path: ':forum',
@@ -84,18 +80,10 @@ export const router = createBrowserRouter([
   },
   {
     path: RoutesEnum.Leaderboard,
-    element: (
-      <RequireAuth>
-        <LeaderboardPage />
-      </RequireAuth>
-    ),
+    element: <LeaderboardPage />,
   },
   {
     path: RoutesEnum.Game,
-    element: (
-      <RequireAuth>
-        <GamePage />
-      </RequireAuth>
-    ),
+    element: <GamePage />,
   },
 ])
