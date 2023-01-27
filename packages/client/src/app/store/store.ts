@@ -3,7 +3,7 @@ import exampleReducer from '../../features/example/services/exampleSlice'
 
 export const store = configureStore({
   reducer: {
-    example: exampleReducer
+    example: exampleReducer,
   },
 })
 

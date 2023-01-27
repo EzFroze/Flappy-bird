@@ -9,8 +9,9 @@ export const exampleApi = {
   },
 }
 
-export const fetchExampleData = createAsyncThunk('example/fetchData', async () => {
-  return exampleApi.fetchData()
-})
-
-
+export const fetchExampleData = createAsyncThunk(
+  'example/fetchData',
+  async () => {
+    return exampleApi.fetchData()
+  }
+)
