@@ -2,23 +2,28 @@ import { enableFetchMocks } from 'jest-fetch-mock'
 enableFetchMocks()
 
 import userEvent from '@testing-library/user-event'
-import { render, screen, waitFor } from "@testing-library/react";
+import { render, screen, waitFor } from '@testing-library/react'
 
-import { ForumList  } from '../components/ForumList'
+import { ForumList } from '../components/ForumList'
 import { ForumSendMessage } from '../components/ForumSendMessage'
 import { NewForumThread } from '../components/NewForumThread'
-import { Forum } from '../components/Forum';
-import { BrowserRouter, MemoryRouter } from 'react-router-dom';
+import { Forum } from '../components/Forum'
+import { BrowserRouter, MemoryRouter } from 'react-router-dom'
 
 const themes = [
-  'Развитие портала', 
-  'Технологии', 
-  'Политика', 
-  'Творчество', 
-  'Recycle Bin'
+  'Развитие портала',
+  'Технологии',
+  'Политика',
+  'Творчество',
+  'Recycle Bin',
 ]
 const titles = ['Форумы', 'Темы', 'Ответы']
-const headers = ['Название темы', 'Последнее сообщение', 'Ответов', 'Просмотров']
+const headers = [
+  'Название темы',
+  'Последнее сообщение',
+  'Ответов',
+  'Просмотров',
+]
 
 const beDefined = (text: string) => expect(screen.getByText(text)).toBeDefined()
 
@@ -30,7 +35,7 @@ describe('forums', () => {
     })
     test('has custom title', () => {
       render(<ForumSendMessage submitButtonTitle="Another label" />)
-      beDefined("Another label")
+      beDefined('Another label')
     })
   })
 
@@ -38,7 +43,7 @@ describe('forums', () => {
     beforeEach(() => {
       render(
         <MemoryRouter initialEntries={['/forums']}>
-            <ForumList />
+          <ForumList />
         </MemoryRouter>
       )
     })
@@ -52,10 +57,13 @@ describe('forums', () => {
     })
 
     test('navigates to selected forum', () => {
-      userEvent.setup().click(screen.getByTestId(`selected-forum-0`)).then(() => {
-        beDefined('Развитие портала')
-        headers.forEach(header => beDefined(header))
-      })
+      userEvent
+        .setup()
+        .click(screen.getByTestId(`selected-forum-0`))
+        .then(() => {
+          beDefined('Развитие портала')
+          headers.forEach(header => beDefined(header))
+        })
     })
   })
 
@@ -63,7 +71,7 @@ describe('forums', () => {
     test('has headers', () => {
       render(<Forum />, { wrapper: BrowserRouter })
 
-      headers.forEach((header) => beDefined(header))
+      headers.forEach(header => beDefined(header))
     })
     test('should have pages', () => {
       render(<Forum />, { wrapper: BrowserRouter })
@@ -76,18 +84,18 @@ describe('forums', () => {
 
       render(
         <MemoryRouter initialEntries={[route]}>
-            <Forum />
+          <Forum />
         </MemoryRouter>
       )
 
-      waitFor(() => screen.getByTestId("link-create-thread")).then(() => {
-        userEvent.setup().click(screen.getByTestId("link-create-thread"))
+      waitFor(() => screen.getByTestId('link-create-thread')).then(() => {
+        userEvent
+          .setup()
+          .click(screen.getByTestId('link-create-thread'))
           .then(() => {
-            [
-              'Название темы', 
-              'Новое сообщение', 
-              'Создать'
-            ].forEach(text => beDefined(text))
+            ;['Название темы', 'Новое сообщение', 'Создать'].forEach(text =>
+              beDefined(text)
+            )
           })
       })
     })

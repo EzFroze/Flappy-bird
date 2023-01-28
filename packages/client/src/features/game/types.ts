@@ -28,8 +28,8 @@ export enum GameStatus {
 }
 
 export type DialogProps = {
-  open: boolean,
-  title: string,
-  buttonTitle: string,
-  onClick: () => void,
+  open: boolean
+  title: string
+  buttonTitle: string
+  onClick: () => void
 }

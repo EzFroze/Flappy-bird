@@ -1,4 +1,4 @@
-import { ForumsNames } from "./types"
+import { ForumsNames } from './types'
 
 export const headers = [
   { name: 'Название темы', width: 'auto' },

@@ -59,8 +59,8 @@ export const ForumList: React.FC = () => {
                     component={RouterLink}
                     to={link}>
                     <Paper elevation={2}>
-                      <ListItemButton 
-                        data-testid={`selected-forum-${i}`} 
+                      <ListItemButton
+                        data-testid={`selected-forum-${i}`}
                         sx={{ p: 3 }}>
                         {title}
                       </ListItemButton>
