@@ -48,11 +48,11 @@ describe('forums', () => {
       )
     })
 
-    test('have titles', async () => {
+    test('have titles', () => {
       titles.forEach(title => beDefined(title))
     })
 
-    test('have themes', async () => {
+    test('have themes', () => {
       themes.forEach(theme => beDefined(theme))
     })
 
