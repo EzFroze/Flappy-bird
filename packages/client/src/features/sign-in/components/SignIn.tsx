@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import {
   Container,
@@ -32,8 +32,8 @@ export const SignIn: React.FC = () => {
     mode: 'onChange',
   })
 
-  const [showPassword, setShowPassword] = React.useState(false)
-  const [serverError, setServerError] = React.useState('')
+  const [showPassword, setShowPassword] = useState(false)
+  const [serverError, setServerError] = useState('')
 
   const handleClickShowPassword = () => setShowPassword(show => !show)
 
