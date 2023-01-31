@@ -1,10 +1,4 @@
-import React, {
-  FunctionComponent,
-  PropsWithChildren,
-  ReactElement,
-  ReactNode,
-  useEffect,
-} from 'react'
+import { PropsWithChildren, ReactNode, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { getUser } from '../../features/profile/services/authSlice'
 import { RoutesEnum } from '../../app/router/types'
