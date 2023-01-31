@@ -15,7 +15,7 @@ import { PasswordInput } from '../../../components/passwordInput/components/Pass
 import { RoutesEnum } from '../../../app/router/types'
 import { useStore } from '../../../app/store/hooks'
 import { getUser } from '../../profile/services/authSlice'
-import { useSubmit } from '../hooks/useSignInSubmit'
+import { useSignInSubmit } from '../hooks/useSignInSubmit'
 import { useValidationRoute } from '../../../hooks/useValidationRoute'
 
 export const SignIn: React.FC = () => {
@@ -43,7 +43,7 @@ export const SignIn: React.FC = () => {
     event.preventDefault()
   }
 
-  const { onSubmit, serverError } = useSubmit()
+  const { onSubmit, serverError } = useSignInSubmit()
 
   useValidationRoute(RoutesEnum.Game, user)
 

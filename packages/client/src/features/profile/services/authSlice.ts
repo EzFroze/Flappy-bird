@@ -1,15 +1,15 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { fetchGetUser } from './GetUser'
 import { RootState } from '../../../app/store/store'
-import { SignUpData } from '../../sign-up/types'
+import { UserData } from '../types'
 
 export const authSlice = createSlice({
   name: 'user',
   initialState: {
-    data: undefined as undefined | SignUpData,
+    data: undefined,
     status: 'idle',
     error: '',
-  },
+  } as UserData,
   reducers: {
     clearUser(state) {
       state.data = undefined

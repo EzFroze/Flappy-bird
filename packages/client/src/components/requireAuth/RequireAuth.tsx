@@ -1,12 +1,17 @@
-import React, { useEffect } from 'react'
-import { useLocation, useNavigate } from 'react-router-dom'
+import React, {
+  FunctionComponent,
+  PropsWithChildren,
+  ReactElement,
+  ReactNode,
+  useEffect,
+} from 'react'
+import { useNavigate } from 'react-router-dom'
 import { getUser } from '../../features/profile/services/authSlice'
 import { RoutesEnum } from '../../app/router/types'
 import { useStore, useSet } from '../../app/store/hooks'
 import { fetchGetUser } from '../../features/profile/services/GetUser'
-import { Children } from './types'
 
-export const RequireAuth: React.FC<Children> = ({ children }) => {
+export const RequireAuth = ({ children }: PropsWithChildren): ReactNode => {
   const user = useStore(getUser)
   const set = useSet()
   const navigate = useNavigate()

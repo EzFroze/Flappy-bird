@@ -4,7 +4,7 @@ import { useSet } from '../../../app/store/hooks'
 import { fetchGetUser } from '../../profile/services/GetUser'
 import { useServerError } from '../../../hooks/useServerError'
 
-export const useSubmit = () => {
+export const useSignUpSubmit = () => {
   const set = useSet()
   const { serverError, setError } = useServerError()
   const onSubmit = (data: SignUpData) => {
