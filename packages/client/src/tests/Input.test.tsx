@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { render, screen, fireEvent } from '@testing-library/react'
 import { Input } from '../components/input/components/Input'
 import { useForm } from 'react-hook-form'
