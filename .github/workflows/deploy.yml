@@ -19,10 +19,18 @@ jobs:
         name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
       -
-        name: Build and push
+        name: Build client and push
         uses: docker/build-push-action@v3
         with:
           context: .
-          file: ./docker-compose.yml
+          file: ./Dockerfile.client
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/clockbox:latest
+      -
+        name: Build server and push
+        uses: docker/build-push-action@v3
+        with:
+          context: .
+          file: ./Dockerfile.server
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/clockbox:latest
