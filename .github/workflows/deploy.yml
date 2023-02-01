@@ -22,5 +22,5 @@ jobs:
             cd ~/Flappy-bird/
             git pull origin main
             cp .env.sample .env
-            mkdir tmp/pgdata
+            mkdir -p tmp/pgdata
             docker compose up --build -d
