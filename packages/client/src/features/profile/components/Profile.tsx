@@ -15,10 +15,13 @@ import { ListChild } from './ListChild'
 import { Stack } from '@mui/system'
 import { avatarChange } from '../services/ChangeAvatar'
 import { logout } from '../services/LogOut'
-import { getUser } from '../services/GetUser'
+import { getUser, clearUser } from '../services/authSlice'
 import { RoutesEnum } from '../../../app/router/types'
+import { useStore, useSet } from '../../../app/store/hooks'
 
 export const Profile: React.FC = () => {
+  const set = useSet()
+  const user = useStore(getUser)
   const [modal, setModal] = useState(false)
   const navigate = useNavigate()
   const toggleModal = () => setModal(!modal)
@@ -34,28 +37,17 @@ export const Profile: React.FC = () => {
           // TODO: Добавить обработку ошибок и вывода пользователю
         }
       })
-      .catch(() => navigate('/500'))
+      .catch(() => navigate(RoutesEnum.ServerError))
   }
-  useEffect(() => {
-    getUser()
-      .then(response => {
-        if (response.status !== 200) {
-          // TODO: Когда будет готова api авторизации и регистрации раскомментить следующий код
-          navigate('/')
-        }
-      })
-      .catch(() => navigate('/500'))
-  }, [])
+
   const handleLogOut = () => {
     logout()
       .then(resp => {
         if (resp.status === 200) {
-          navigate('/')
-        } else {
-          // TODO: Добавить обработку ошибок и вывода пользователю
+          set(clearUser())
         }
       })
-      .catch(() => navigate('/500'))
+      .catch(() => navigate(RoutesEnum.ServerError))
   }
 
   return (
@@ -97,11 +89,31 @@ export const Profile: React.FC = () => {
               {'Name'}
             </Typography>
             <Stack color="white" spacing={1} component="nav">
-              <ListChild label="Почта" text="ard@mail.ru" disabled={true} />
-              <ListChild label="Имя" text="Иван" disabled={true} />
-              <ListChild label="Фамилия" text="Иванов" disabled={true} />
-              <ListChild label="Логин" text="Иван" disabled={true} />
-              <ListChild label="Телефон" text="+79998887766" disabled={true} />
+              <ListChild
+                label="Почта"
+                text={user.data?.email}
+                disabled={true}
+              />
+              <ListChild
+                label="Имя"
+                text={user.data?.first_name}
+                disabled={true}
+              />
+              <ListChild
+                label="Фамилия"
+                text={user.data?.second_name}
+                disabled={true}
+              />
+              <ListChild
+                label="Логин"
+                text={user.data?.login}
+                disabled={true}
+              />
+              <ListChild
+                label="Телефон"
+                text={user.data?.phone}
+                disabled={true}
+              />
             </Stack>
             <Box mt={4} color="#176acb" fontWeight={600} fontSize={16}>
               <Link
