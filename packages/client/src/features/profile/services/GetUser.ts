@@ -23,6 +23,12 @@ export const getUser = {
   },
 }
 
+export const unregisterSW = () => {
+  navigator.serviceWorker.getRegistrations().then(function (registrations) {
+    registrations.map(registration => registration.unregister())
+  })
+}
+
 export const fetchGetUser = createAsyncThunk('user', async () => {
   return getUser.fetchData()
 })
