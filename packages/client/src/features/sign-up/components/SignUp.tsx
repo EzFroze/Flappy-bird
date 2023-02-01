@@ -8,7 +8,7 @@ import {
   Typography,
   Link as MuiLink,
 } from '@mui/material'
-import { useNavigate, Link as RouterLink } from 'react-router-dom'
+import { Link as RouterLink } from 'react-router-dom'
 import { Input } from '../../../components/input/components/Input'
 import { PasswordInput } from '../../../components/passwordInput/components/PasswordInput'
 import {
@@ -18,14 +18,13 @@ import {
   validatePhone,
   validatePassword,
 } from '../../../utils/validation'
-import { SignUpData } from '../types'
-import { signup } from '../services/SignUp'
-import { getUser } from '../../profile/services/GetUser'
-import { useServerError } from '../../../hooks/useServerError'
 import { RoutesEnum } from '../../../app/router/types'
+import { useStore } from '../../../app/store/hooks'
+import { getUser } from '../../profile/services/authSlice'
+import { useSignUpSubmit } from '../hooks/useSignUpSubmit'
+import { useValidationRoute } from '../../../hooks/useValidationRoute'
 
 export const SignUp: React.FC = () => {
-  const navigate = useNavigate()
   const {
     control,
     watch,
@@ -44,8 +43,9 @@ export const SignUp: React.FC = () => {
     mode: 'onChange',
   })
 
+  const user = useStore(getUser)
+
   const [showPassword, setShowPassword] = React.useState(false)
-  const [serverError, setServerError] = React.useState('')
 
   const handleClickShowPassword = () => setShowPassword(show => !show)
 
@@ -55,28 +55,9 @@ export const SignUp: React.FC = () => {
     event.preventDefault()
   }
 
-  const onSubmit = (data: SignUpData) => {
-    signup(data)
-      .then(response => {
-        if (response.status === 200) {
-          navigate('/example')
-        } else {
-          return response.json()
-        }
-      })
-      .then(result => {
-        setServerError(`⚠ ${result.reason}`)
-      })
-      .catch(useServerError)
-  }
+  const { onSubmit, serverError } = useSignUpSubmit()
 
-  useEffect(() => {
-    getUser().then(response => {
-      if (response.status === 200) {
-        navigate('/game')
-      }
-    })
-  }, [])
+  useValidationRoute(RoutesEnum.Game, user)
 
   return (
     <Container

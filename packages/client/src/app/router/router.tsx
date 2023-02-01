@@ -14,6 +14,7 @@ import { ForumPage } from '../../pages/ForumPage'
 import { ForumThreadPage } from '../../pages/ForumThreadPage'
 import { ForumCreateThreadPage } from '../../pages/ForumCreateThreadPage'
 import { actionPaths } from '../../features/forums/types'
+import { RequireAuth } from '../../components/requireAuth/RequireAuth'
 
 export const router = createBrowserRouter([
   {
@@ -43,11 +44,19 @@ export const router = createBrowserRouter([
   },
   {
     path: RoutesEnum.Profile,
-    element: <ProfilePage />,
+    element: (
+      <RequireAuth>
+        <ProfilePage />
+      </RequireAuth>
+    ),
   },
   {
     path: RoutesEnum.Password,
-    element: <PasswordPage />,
+    element: (
+      <RequireAuth>
+        <PasswordPage />
+      </RequireAuth>
+    ),
   },
   {
     path: RoutesEnum.Forums,
