@@ -2,22 +2,12 @@ import Paper from '@mui/material/Paper'
 import Grid from '@mui/material/Grid'
 import Typography from '@mui/material/Typography'
 import { Container, Link, ListItemButton } from '@mui/material'
-import { ForumsNames } from '../types'
 import {
   Link as RouterLink,
   Outlet as ForumOutlet,
   useParams,
 } from 'react-router-dom'
-
-const forumThemes = [
-  { title: 'Развитие портала', link: ForumsNames.evolution },
-  { title: 'Технологии', link: ForumsNames.technology },
-  { title: 'Политика', link: ForumsNames.politics },
-  { title: 'Творчество', link: ForumsNames.art },
-  { title: 'Recycle Bin', link: ForumsNames.recycle },
-]
-
-const titles = ['Форумы', 'Темы', 'Ответы']
+import { forumThemes, titles } from '../data'
 
 const titlesStyles = {
   elevation: 0,
@@ -69,7 +59,11 @@ export const ForumList: React.FC = () => {
                     component={RouterLink}
                     to={link}>
                     <Paper elevation={2}>
-                      <ListItemButton sx={{ p: 3 }}>{title}</ListItemButton>
+                      <ListItemButton
+                        data-testid={`selected-forum-${i}`}
+                        sx={{ p: 3 }}>
+                        {title}
+                      </ListItemButton>
                     </Paper>
                   </Link>
                 </Grid>

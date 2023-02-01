@@ -56,7 +56,5 @@ export const Dialogs: React.FC<{
     [status, progress, restart]
   )
 
-  return (
-    <GameDialog {...dialogs[status] }/>
-  )
+  return <GameDialog {...dialogs[status]} />
 }

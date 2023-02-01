@@ -25,13 +25,8 @@ import {
 } from 'react-router-dom'
 import { actionPaths, ForumsNames, ForumsNamesRu } from '../types'
 import { Link as RouterLink } from 'react-router-dom'
+import { headers } from '../data'
 
-const headersMockData = [
-  { name: 'Название темы', width: 'auto' },
-  { name: 'Последнее сообщение', width: 200 },
-  { name: 'Ответов', width: 50 },
-  { name: 'Просмотров', width: 50 },
-]
 const rowsMockData = new Array(10).fill(null).map((_, i) => ({
   name: `Thread ${i}`,
   user: {
@@ -64,6 +59,7 @@ export const Forum: React.FC = () => {
           <Grid container spacing={2} sx={{ mt: 2 }}>
             <Grid item xs={3}>
               <Link
+                data-test="link-create-thread"
                 underline="none"
                 to={actionPaths.createThread}
                 component={RouterLink}>
@@ -87,7 +83,7 @@ export const Forum: React.FC = () => {
             <Table>
               <TableHead>
                 <TableRow>
-                  {headersMockData.map((title, i) => (
+                  {headers.map((title, i) => (
                     <TableCell sx={{ width: title.width }} key={i * 1000}>
                       {title.name}
                     </TableCell>
