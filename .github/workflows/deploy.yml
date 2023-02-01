@@ -20,7 +20,8 @@ jobs:
           port: ${{ secrets.PORT }}
           script: |
             cd ~/Flappy-bird/
-            git pull origin main
+            git pull origin BAP-61
+            git checkout origin BAP-61
             cp .env.sample .env
             mkdir -p tmp/pgdata
             docker compose up --build -d
