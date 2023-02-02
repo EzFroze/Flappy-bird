@@ -1,6 +1,8 @@
-name: Deploy code on server
+name: Deploy production on server
 
-on: [push]
+on:
+  push:
+    branches: [ "main" ]
 
 permissions:
   contents: read
@@ -20,8 +22,6 @@ jobs:
           port: ${{ secrets.PORT }}
           script: |
             cd ~/Flappy-bird/
-            git pull origin BAP-61
-            git checkout origin/BAP-61
-            cp .env.sample .env
+            git pull origin main
             mkdir -p tmp/pgdata
             docker compose up --build -d
