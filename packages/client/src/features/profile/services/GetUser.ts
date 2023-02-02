@@ -1,22 +1,40 @@
 import { BASE_URL, baseOptions } from '../../../app/api/variables'
 import { RequestOptions, Method } from '../../../app/api/types'
+import { createAsyncThunk } from '@reduxjs/toolkit'
 
-export const getUser = async (): Promise<Response> => {
-  const requestOptions: RequestOptions = {
-    method: Method.GET,
-  }
-  const response = await fetch(`${BASE_URL}/auth/user`, {
-    ...requestOptions,
-    ...baseOptions,
-  })
+export const getUser = {
+  fetchData: () => {
+    const requestOptions: RequestOptions = {
+      method: Method.GET,
+    }
 
-  if ('serviceWorker' in navigator && response.status === 200) {
-    navigator.serviceWorker.register('/serviceWorker.js')
-  } else if ('serviceWorker' in navigator && response.status !== 200) {
-    unregisterSW()
-  }
+    const res = fetch(`${BASE_URL}/auth/user`, {
+      ...requestOptions,
+      ...baseOptions,
+    }).then(response => {
+      if (response.status === 200) {
+        if ('serviceWorker' in navigator) {
+          navigator.serviceWorker.register('/serviceWorker.js')
+        }
+        return response.json()
+      } else if (response.status !== 200) {
+        if ('serviceWorker' in navigator) {
+          unregisterSW()
+        }
+        reject()
+      }
+    })
 
-  return response
+    return res
+  },
+}
+
+export const fetchGetUser = createAsyncThunk('user', async () => {
+  return getUser.fetchData()
+})
+
+function reject() {
+  throw new Error('Пользователь не зарегистрирован')
 }
 
 export const unregisterSW = () => {
