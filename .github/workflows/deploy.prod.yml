@@ -1,0 +1,28 @@
+name: Deploy production on server
+
+on:
+  push:
+    branches: [ "main" ]
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    name: deploy
+
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy code on the remote server
+        uses: appleboy/ssh-action@v0.1.6
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.KEY }}
+          port: ${{ secrets.PORT }}
+          script: |
+            cd ~/Flappy-bird/
+            git pull origin main
+            cp .env.sample .env
+            mkdir -p tmp/pgdata
+            docker compose up --build -d

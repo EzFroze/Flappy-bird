@@ -2,7 +2,7 @@
   "name": "client-server-template-with-vite",
   "private": true,
   "scripts": {
-    "bootstrap": "yarn && node init.js && lerna clean && yarn && lerna bootstrap",
+    "bootstrap": "yarn && node init.js && lerna clean --yes && yarn && lerna bootstrap",
     "build": "lerna run build",
     "dev:client": "lerna run dev  --scope=client",
     "dev:server": "lerna run dev --scope=server",
@@ -22,11 +22,5 @@
   "devDependencies": {
     "@evilmartians/lefthook": "^1.1.1",
     "lerna": "^5.4.3"
-  },
-  "dependencies": {
-    "@emotion/react": "^11.10.5",
-    "@emotion/styled": "^11.10.5",
-    "@mui/icons-material": "^5.11.0",
-    "@mui/material": "^5.11.3"
   }
 }
