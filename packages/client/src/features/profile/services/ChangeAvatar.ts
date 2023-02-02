@@ -8,5 +8,6 @@ export const avatarChange = (data: FormData): Promise<Response> => {
   }
   return fetch(`${BASE_URL}/user/profile/avatar`, {
     ...requestOptions,
+    credentials: 'include',
   })
 }

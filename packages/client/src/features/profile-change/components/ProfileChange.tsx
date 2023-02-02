@@ -5,36 +5,35 @@ import {
   Avatar,
   Typography,
   Input,
-  Link,
   Button,
   Modal,
 } from '@mui/material'
 import userAvatar from '../../../assets/img/userAvatar.jpg'
-import { Link as RouterLink, useNavigate } from 'react-router-dom'
-import { ListChild } from './ListChild'
+import { useNavigate } from 'react-router-dom'
+import { ListChild } from '../../profile/components/ListChild'
 import { Stack } from '@mui/system'
-import { avatarChange } from '../services/ChangeAvatar'
-import { logout } from '../services/LogOut'
-import { getUser, clearUser } from '../services/authSlice'
+import { avatarChange } from '../../profile/services/ChangeAvatar'
+import { getUser } from '../../profile/services/authSlice'
 import { RoutesEnum } from '../../../app/router/types'
 import { useStore, useSet } from '../../../app/store/hooks'
 import { BASE_URL } from '../../../app/api/variables'
-import { fetchGetUser } from '../services/GetUser'
+import { profileChange } from '../services/ProfileChange'
+import { fetchGetUser } from '../../profile/services/GetUser'
 
-export const Profile: React.FC = () => {
+export const ProfileChange: React.FC = () => {
   const set = useSet()
   const user = useStore(getUser)
   const [modal, setModal] = useState(false)
   const navigate = useNavigate()
   const toggleModal = () => setModal(!modal)
-  const handleSubmit = (e: FormEvent) => {
+  const handleSubmitAvatar = (e: FormEvent) => {
     e.preventDefault()
     const form = new FormData(e.target as HTMLFormElement)
     avatarChange(form)
       .then(resp => {
         if (resp.status === 200) {
           toggleModal()
-          navigate('/profile')
+          navigate('/profile-change')
           set(fetchGetUser())
         } else {
           // TODO: Добавить обработку ошибок и вывода пользователю
@@ -42,12 +41,18 @@ export const Profile: React.FC = () => {
       })
       .catch(() => navigate(RoutesEnum.ServerError))
   }
-
-  const handleLogOut = () => {
-    logout()
+  const handleSubmit = (e: FormEvent) => {
+    e.preventDefault()
+    const form = new FormData(e.target as HTMLFormElement)
+    const formData: any = {}
+    form.forEach((val, key) => (formData[key] = val))
+    profileChange(formData)
       .then(resp => {
         if (resp.status === 200) {
-          set(clearUser())
+          navigate('/profile')
+          set(fetchGetUser())
+        } else {
+          // TODO: Добавить обработку ошибок и вывода пользователю
         }
       })
       .catch(() => navigate(RoutesEnum.ServerError))
@@ -61,12 +66,12 @@ export const Profile: React.FC = () => {
         sx={{
           backgroundColor: '#131517',
           height: '100vh',
-          pt: 3,
+          pt: 6,
         }}>
         <Box
           sx={{
             width: 885,
-            height: 750,
+            height: 690,
             backgroundColor: '#212329',
             m: '0 auto',
             borderRadius: 3,
@@ -95,63 +100,47 @@ export const Profile: React.FC = () => {
               align="center">
               {user.data?.first_name}
             </Typography>
-            <Stack color="white" spacing={1} component="nav">
-              <ListChild label="Почта" defaultVal={user.data?.email} />
-              <ListChild label="Имя" defaultVal={user.data?.first_name} />
-              <ListChild
-                label="Имя в игре"
-                defaultVal={user.data?.display_name}
-              />
-              <ListChild label="Фамилия" defaultVal={user.data?.second_name} />
-              <ListChild label="Логин" defaultVal={user.data?.login} />
-              <ListChild label="Телефон" defaultVal={user.data?.phone} />
-            </Stack>
-            <Box mt={4} color="#176acb" fontWeight={600} fontSize={16}>
-              <Link
-                mb={1}
-                sx={{
-                  fontFamily: "'Open Sans', sans-serif",
-                  display: 'block',
-                  cursor: 'pointer',
-                }}
-                underline="none"
-                onClick={toggleModal}>
-                Изменить аватар
-              </Link>
-              <Link
-                mb={1}
-                sx={{
-                  fontFamily: "'Open Sans', sans-serif",
-                  display: 'block',
-                }}
-                component={RouterLink}
-                underline="none"
-                to={RoutesEnum.Password}>
-                Изменить пароль
-              </Link>
-              <Link
-                mb={1}
-                sx={{
-                  fontFamily: "'Open Sans', sans-serif",
-                  display: 'block',
-                }}
-                component={RouterLink}
-                underline="none"
-                to={RoutesEnum.ProfileChange}>
-                Изменить данные
-              </Link>
-              <Link
-                mb={1}
-                sx={{
-                  fontFamily: "'Open Sans', sans-serif",
-                  display: 'block',
-                }}
-                color="error"
-                underline="none"
-                onClick={handleLogOut}>
-                Выйти
-              </Link>
-            </Box>
+            <form id="profileChange" onSubmit={handleSubmit}>
+              <Stack color="white" spacing={1} component="nav">
+                <ListChild label="Почта" name="email" text={user.data?.email} />
+                <ListChild
+                  label="Имя"
+                  name="first_name"
+                  text={user.data?.first_name}
+                />
+                <ListChild
+                  label="Имя в игре"
+                  name="display_name"
+                  text={user.data?.display_name}
+                />
+                <ListChild
+                  label="Фамилия"
+                  name="second_name"
+                  text={user.data?.second_name}
+                />
+                <ListChild label="Логин" name="login" text={user.data?.login} />
+                <ListChild
+                  label="Телефон"
+                  name="phone"
+                  text={user.data?.phone}
+                />
+              </Stack>
+              <Box sx={{ mt: '2rem', ml: '16rem' }}>
+                <Button
+                  variant="contained"
+                  sx={{
+                    backgroundColor: '#176acb',
+                    textTransform: 'none',
+                    fontWeight: 700,
+                    fontSize: 16,
+                    p: 1,
+                    width: 350,
+                  }}
+                  type="submit">
+                  Сохранить
+                </Button>
+              </Box>
+            </form>
           </Container>
         </Box>
       </Container>
@@ -175,7 +164,7 @@ export const Profile: React.FC = () => {
           <Typography variant="h5" sx={{ fontWeight: 600, mt: 2 }}>
             Загрузите ваш аватар
           </Typography>
-          <form id="avatar-form" onSubmit={handleSubmit}>
+          <form id="avatar-form" onSubmit={handleSubmitAvatar}>
             <Input
               id="avatar"
               type="file"

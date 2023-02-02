@@ -3,8 +3,8 @@ export interface Lists {
   label: string
   text?: string
   name?: string
-  handleChange?: () => void
-  disabled: boolean
+  handleChange?: (e: any) => void
+  defaultVal?: string
 }
 
 export interface UserData {
