@@ -8,8 +8,8 @@ export const exampleSlice = createSlice({
   initialState: {
     input: 'example default value',
     select: 0,
-    data: [],
-    status: 'idle',
+    data: [], 
+    status: 'idle'
   } as ExampleInitialState,
   reducers: {
     exampleInput(state, { payload }: PayloadAction<string>) {
@@ -21,25 +21,24 @@ export const exampleSlice = createSlice({
     clearExample(state) {
       state.input = ''
       state.select = 0
-    },
+    }
   },
   extraReducers(builder) {
     builder.addCase(fetchExampleData.fulfilled, (state, { payload }) => {
       state.status = 'success'
       state.data = payload
     }),
-      builder.addCase(fetchExampleData.pending, state => {
-        state.status = 'pending'
-      }),
-      builder.addCase(fetchExampleData.rejected, state => {
-        state.status = 'error'
-      })
+    builder.addCase(fetchExampleData.pending, (state) => {
+      state.status = 'pending'
+    }),
+    builder.addCase(fetchExampleData.rejected, (state) => {
+      state.status = 'error'
+    })
   },
 })
 
 export const getExampleInput = (state: RootState) => state.example.input
 
-export const { exampleInput, exampleSelect, clearExample } =
-  exampleSlice.actions
+export const { exampleInput, exampleSelect, clearExample } = exampleSlice.actions
 
 export default exampleSlice.reducer

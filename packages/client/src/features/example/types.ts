@@ -7,7 +7,7 @@ export type ExampleType = {
 }
 
 export type ExampleInitialState = {
-  input: string
+  input: string,
   select: number
   data: Example[]
   status: 'idle' | 'pending' | 'success' | 'error'

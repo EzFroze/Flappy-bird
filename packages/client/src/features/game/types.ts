@@ -12,24 +12,14 @@ export type Position = {
 
 export type Player = {
   move: number
+} & Position
+
+export type GameStatus = {
+  started: boolean
+  ended: boolean
+  overed: boolean
+  paused: boolean
   speed: number
   progress: number
   gravity: number
-  wave: number
-} & Position
-
-export enum GameStatus {
-  start = 'start',
-  run = 'run',
-  pause = 'pause',
-  finish = 'finish',
-  gameover = 'gameover',
-  screenChanged = 'screenChanged',
-}
-
-export type DialogProps = {
-  open: boolean
-  title: string
-  buttonTitle: string
-  onClick: () => void
 }

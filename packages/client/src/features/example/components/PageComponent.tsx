@@ -40,7 +40,8 @@ export const PageComponent: React.FC = () => {
             onChange={ev => set(exampleInput(ev.target.value))}
             helperText={`store: ${inputValue}`}
           />
-          <FormControl disabled={status === 'pending'}>
+          <FormControl
+            disabled={status === 'pending'}>
             <InputLabel id="select-label">
               {status === 'pending' ? 'loading...' : 'data'}
             </InputLabel>
@@ -52,11 +53,7 @@ export const PageComponent: React.FC = () => {
               onChange={ev => set(exampleSelect(ev.target.value))}>
               {data.map(({ id }) => (
                 <MenuItem key={id} value={id}>
-                  {id}
-                  {id}
-                  {id}
-                  {id}
-                  {id}
+                  {id}{id}{id}{id}{id}
                 </MenuItem>
               ))}
             </Select>
