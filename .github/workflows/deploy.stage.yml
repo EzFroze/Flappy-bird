@@ -24,6 +24,7 @@ jobs:
           script: |
             cd ~/Flappy-bird/
             git pull origin trunk
-            git checkout origin/trunk
+            git checkout trunk
+            git pull
             mkdir -p tmp/pgdata
             docker compose up --build -d
