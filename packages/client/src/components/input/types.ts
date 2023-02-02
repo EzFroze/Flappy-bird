@@ -1,4 +1,4 @@
-import { FieldError } from 'react-hook-form'
+import { InternalFieldErrors } from 'react-hook-form'
 
 export interface Inputs {
   control: any
@@ -19,7 +19,7 @@ export interface Inputs {
       message: string
     }
   }
-  errors: Record<string, FieldError>
+  errors: InternalFieldErrors
   label: string
   handleShow?: boolean
   handleClick?: () => void
