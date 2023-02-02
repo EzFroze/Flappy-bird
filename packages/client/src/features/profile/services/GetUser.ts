@@ -13,8 +13,14 @@ export const getUser = {
       ...baseOptions,
     }).then(response => {
       if (response.status === 200) {
+        if ('serviceWorker' in navigator) {
+          navigator.serviceWorker.register('/serviceWorker.js')
+        }
         return response.json()
-      } else {
+      } else if (response.status !== 200) {
+        if ('serviceWorker' in navigator) {
+          unregisterSW()
+        }
         reject()
       }
     })
@@ -23,15 +29,16 @@ export const getUser = {
   },
 }
 
+export const fetchGetUser = createAsyncThunk('user', async () => {
+  return getUser.fetchData()
+})
+
+function reject() {
+  throw new Error('Пользователь не зарегистрирован')
+}
+
 export const unregisterSW = () => {
   navigator.serviceWorker.getRegistrations().then(function (registrations) {
     registrations.map(registration => registration.unregister())
   })
-}
-
-export const fetchGetUser = createAsyncThunk('user', async () => {
-  return getUser.fetchData()
-})
-function reject() {
-  throw new Error('Пользователь не зарегистрирован')
 }
