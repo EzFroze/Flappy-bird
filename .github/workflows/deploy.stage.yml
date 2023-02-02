@@ -1,9 +1,8 @@
 name: Deploy stage on server
 
-#on:
-#  push:
-#    branches: [ "trunk" ]
-on: [push]
+on:
+  push:
+    branches: [ "trunk" ]
 
 permissions:
   contents: read
