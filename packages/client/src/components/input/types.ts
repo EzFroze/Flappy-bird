@@ -1,4 +1,4 @@
-import { InternalFieldErrors } from 'react-hook-form'
+import { DeepMap, FieldValues, FieldError } from 'react-hook-form'
 
 export interface Inputs {
   control: any
@@ -19,7 +19,7 @@ export interface Inputs {
       message: string
     }
   }
-  errors: InternalFieldErrors
+  errors: DeepMap<FieldValues, FieldError>
   label: string
   handleShow?: boolean
   handleClick?: () => void
