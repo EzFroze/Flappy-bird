@@ -11,9 +11,14 @@ import { ListChild } from '../../profile/components/ListChild'
 import userAvatar from '../../../assets/img/userAvatar.jpg'
 import { passChange } from '../services/ChangePassServ'
 import { useNavigate } from 'react-router-dom'
+import { useStore } from '../../../app/store/hooks'
+import { getUser } from '../../profile/services/authSlice'
+import { BASE_URL } from '../../../app/api/variables'
+import { RoutesEnum } from '../../../app/router/types'
 
 export const Password: React.FC = () => {
   const navigate = useNavigate()
+  const user = useStore(getUser)
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault()
     const form = e.target as HTMLFormElement
@@ -23,7 +28,7 @@ export const Password: React.FC = () => {
     passChange(data)
       .then(resp => {
         if (resp.status === 200) {
-          navigate('/profile')
+          navigate(RoutesEnum.Profile)
         } else {
           // TODO: Добавить обработку ошибок и вывода пользователю
         }
@@ -52,8 +57,12 @@ export const Password: React.FC = () => {
             p: 2,
           }}>
           <Avatar
-            alt="Remy Sharp"
-            src={userAvatar}
+            alt="User Avatar"
+            src={
+              user.data?.avatar
+                ? `${BASE_URL}/resources/${user.data?.avatar}`
+                : userAvatar
+            }
             sx={{ width: 120, height: 120, m: 'auto' }}
           />
           <Typography
@@ -64,21 +73,13 @@ export const Password: React.FC = () => {
             }}
             color="white"
             align="center">
-            {'Name'}
+            {user.data?.first_name}
           </Typography>
           <form id="passChange" onSubmit={handleSubmit}>
             <Stack color="white" spacing={1} component="nav">
-              <ListChild
-                label="Старый пароль"
-                name="oldPassword"
-                disabled={false}
-              />
-              <ListChild
-                label="Новый пароль"
-                name="newPassword"
-                disabled={false}
-              />
-              <ListChild label="Подтвердите пароль" disabled={false} />
+              <ListChild label="Старый пароль" name="oldPassword" />
+              <ListChild label="Новый пароль" name="newPassword" />
+              <ListChild label="Подтвердите пароль" />
             </Stack>
             <Box sx={{ mt: '4rem', ml: '13rem' }}>
               <Button
