@@ -44,9 +44,7 @@ export const ProfileChange: React.FC = () => {
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault()
     const form = new FormData(e.target as HTMLFormElement)
-    const formData: any = {}
-    form.forEach((val, key) => (formData[key] = val))
-    profileChange(formData)
+    profileChange(Object.fromEntries(form.entries()) as any)
       .then(resp => {
         if (resp.status === 200) {
           navigate('/profile')
@@ -76,7 +74,7 @@ export const ProfileChange: React.FC = () => {
             m: '0 auto',
             borderRadius: 3,
           }}>
-          <Container
+          <Box
             sx={{
               p: 3,
             }}>
@@ -141,7 +139,7 @@ export const ProfileChange: React.FC = () => {
                 </Button>
               </Box>
             </form>
-          </Container>
+          </Box>
         </Box>
       </Container>
       <Modal
