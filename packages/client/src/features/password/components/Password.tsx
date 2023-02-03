@@ -14,6 +14,7 @@ import { useNavigate } from 'react-router-dom'
 import { useStore } from '../../../app/store/hooks'
 import { getUser } from '../../profile/services/authSlice'
 import { BASE_URL } from '../../../app/api/variables'
+import { RoutesEnum } from '../../../app/router/types'
 
 export const Password: React.FC = () => {
   const navigate = useNavigate()
@@ -27,7 +28,7 @@ export const Password: React.FC = () => {
     passChange(data)
       .then(resp => {
         if (resp.status === 200) {
-          navigate('/profile')
+          navigate(RoutesEnum.Profile)
         } else {
           // TODO: Добавить обработку ошибок и вывода пользователю
         }

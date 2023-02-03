@@ -33,7 +33,7 @@ export const ProfileChange: React.FC = () => {
       .then(resp => {
         if (resp.status === 200) {
           toggleModal()
-          navigate('/profile-change')
+          navigate(RoutesEnum.ProfileChange)
           set(fetchGetUser())
         } else {
           // TODO: Добавить обработку ошибок и вывода пользователю
