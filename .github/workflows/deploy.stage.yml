@@ -1,0 +1,30 @@
+name: Deploy stage on server
+
+on:
+  push:
+    branches: [ "trunk" ]
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    name: deploy
+
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy code on the remote server
+        uses: appleboy/ssh-action@v0.1.6
+        with:
+          host: ${{ secrets.HOST_STG }}
+          username: ${{ secrets.USERNAME_STG }}
+          key: ${{ secrets.KEY_STG }}
+          port: ${{ secrets.PORT_STG }}
+          script: |
+            cd ~/Flappy-bird/
+            git pull origin trunk
+            git checkout trunk
+            git pull
+            cp .env.sample .env
+            mkdir -p tmp/pgdata
+            sudo docker compose up --build -d

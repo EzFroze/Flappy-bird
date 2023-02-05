@@ -5,4 +5,6 @@ export interface SignUpData {
   login: string
   phone: string
   password: string
+  avatar?: string
+  display_name?: string
 }

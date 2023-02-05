@@ -15,6 +15,7 @@ import { ForumThreadPage } from '../../pages/ForumThreadPage'
 import { ForumCreateThreadPage } from '../../pages/ForumCreateThreadPage'
 import { actionPaths } from '../../features/forums/types'
 import { RequireAuth } from '../../components/requireAuth/RequireAuth'
+import { ProfileChangePage } from '../../pages/ProfileChangePage'
 
 export const router = createBrowserRouter([
   {
@@ -47,6 +48,14 @@ export const router = createBrowserRouter([
     element: (
       <RequireAuth>
         <ProfilePage />
+      </RequireAuth>
+    ),
+  },
+  {
+    path: RoutesEnum.ProfileChange,
+    element: (
+      <RequireAuth>
+        <ProfileChangePage />
       </RequireAuth>
     ),
   },
