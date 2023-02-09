@@ -6,7 +6,8 @@ import { RouterProvider } from 'react-router-dom'
 import { store } from './app/store/store'
 import { Provider } from 'react-redux'
 
-ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
+ReactDOM.hydrateRoot(
+  (document.getElementById('root') as HTMLElement),
   <React.StrictMode>
     <Provider store={store}>
       <RouterProvider router={router} />

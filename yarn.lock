@@ -1571,7 +1571,7 @@
   dependencies:
     "@babel/runtime" "^7.20.6"
 
-"@mui/material@^5.11.1", "@mui/material@^5.11.3":
+"@mui/material@^5.11.1":
   version "5.11.7"
   resolved "https://registry.yarnpkg.com/@mui/material/-/material-5.11.7.tgz#d460c7239013a57cc2aa3d2bbe14ba875b29d7cb"
   integrity sha512-wDv7Pc6kMe9jeWkmCLt4JChd1lPc2u23JQHpB35L2VwQowpNFoDfIwqi0sYCnZTMKlRc7lza8LqwSwHl2G52Rw==
@@ -2227,6 +2227,11 @@
   version "18.11.18"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-18.11.18.tgz#8dfb97f0da23c2293e554c5a50d61ef134d7697f"
   integrity sha512-DHQpWGjyQKSHj3ebjFI/wRKcqQcdR+MoFBygntYOZytCqNfkd2ZC4ARDJ2DQqhjH5p85Nnd3jhUJIXrszFX/JA==
+
+"@types/node@^18.11.17":
+  version "18.13.0"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-18.13.0.tgz#0400d1e6ce87e9d3032c19eb6c58205b0d3f7850"
+  integrity sha512-gC3TazRzGoOnoKAhUx+Q0t8S9Tzs74z7m0ipwGpSqQrleP14hKxP4/JUeEQcD3W1/aIpnWl8pHowI7WokuZpXg==
 
 "@types/normalize-package-data@^2.4.0":
   version "2.4.1"
