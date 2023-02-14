@@ -51,10 +51,6 @@ export const SignIn: React.FC = () => {
 
   useValidationRoute(RoutesEnum.Game, user)
 
-  /*const params = Object.fromEntries(
-    new URLSearchParams(window.location.search).entries()
-  )*/
-
   const [searchParams] = useSearchParams()
 
   const handleOAuth = () => {
@@ -129,7 +125,7 @@ export const SignIn: React.FC = () => {
               background: '#1976d2',
             },
           }}>
-          Войти с Yandex
+          Войти с Яндекс ID
         </Button>
         <form onSubmit={handleSubmit(onSubmit)}>
           <Input

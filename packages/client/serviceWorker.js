@@ -1,4 +1,4 @@
-/*const staticCacheName = 'flappy-bird-cache-v3'
+const staticCacheName = 'flappy-bird-cache-v3'
 const fetchCacheName = 'flappy-bird-fetch-cache-v3'
 const URLS = ['/src/index.css', '/src/main.tsx', '/index.html']
 
@@ -46,4 +46,3 @@ async function cacheFirst(request) {
 
   return response
 }
-*/
