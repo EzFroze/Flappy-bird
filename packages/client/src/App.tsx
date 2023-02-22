@@ -16,6 +16,7 @@ import {
   ServerErrorPage,
   SignInPage,
   SignUpPage,
+  ExamplePage,
 } from './pages'
 
 export const App = () => {
@@ -34,6 +35,7 @@ export const App = () => {
       <Routes>
         <Route index element={<SignInPage />} />
         <Route path="*" element={<NotFoundPage />} />
+        <Route path={RoutesEnum.Example} element={<ExamplePage />} />
         <Route path={RoutesEnum.SignUp} element={<SignUpPage />} />
         <Route path={RoutesEnum.ServerError} element={<ServerErrorPage />} />
         <Route
