@@ -5,6 +5,7 @@ import { actionPaths } from './features/forums/types'
 import {
   ForumCreateThreadPage,
   ForumsPage,
+  ForumPage,
   ForumThreadPage,
   GamePage,
   LeaderboardPage,
@@ -16,7 +17,6 @@ import {
   SignInPage,
   SignUpPage,
 } from './pages'
-import { ForumPage } from './pages/ForumPage'
 
 export const App = () => {
   return (

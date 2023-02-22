@@ -1,17 +1,15 @@
-import { Routes, Route, Link } from 'react-router-dom'
+import ReactDOM from "react-dom/client";
+import { Provider } from "react-redux";
+import { BrowserRouter } from "react-router-dom";
 
-export const App = () => {
-  return (
-    <>
-      <Link to="/">Home</Link>
-      <Link to="/asjkldsajkl">NotFound</Link>
-      <Link to="/other">Other</Link>
-      <hr />
-      <Routes>
-        <Route index element={<div>Home page</div>} />
-        <Route path="/other" element={<div>Other page</div>} />
-        <Route path="*" element={<div>Not found page</div>} />
-      </Routes>
-    </>
-  )
-}
+import { App } from "./App";
+import { store } from "./app/store/store";
+
+ReactDOM.hydrateRoot(
+  document.getElementById("app") as HTMLElement,
+  <Provider store={store}>
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
+  </Provider>
+);
