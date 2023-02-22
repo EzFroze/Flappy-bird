@@ -28,12 +28,12 @@ export const exampleSlice = createSlice({
       state.status = 'success'
       state.data = payload
     }),
-    builder.addCase(fetchExampleData.pending, state => {
-      state.status = 'pending'
-    }),
-    builder.addCase(fetchExampleData.rejected, state => {
-      state.status = 'error'
-    })
+      builder.addCase(fetchExampleData.pending, state => {
+        state.status = 'pending'
+      }),
+      builder.addCase(fetchExampleData.rejected, state => {
+        state.status = 'error'
+      })
   },
 })
 

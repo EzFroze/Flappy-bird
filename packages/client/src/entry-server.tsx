@@ -15,6 +15,5 @@ export const render = ({ path }: IRenderProps) => {
         <App />
       </StaticRouter>
     </Provider>
-
   )
 }
