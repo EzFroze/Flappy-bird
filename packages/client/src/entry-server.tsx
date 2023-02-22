@@ -1,9 +1,9 @@
-import ReactDOMServer from "react-dom/server";
-import { StaticRouter } from "react-router-dom/server";
-import { App } from "./App";
+import ReactDOMServer from 'react-dom/server'
+import { StaticRouter } from 'react-router-dom/server'
+import { App } from './App'
 
 interface IRenderProps {
-  path: string;
+  path: string
 }
 
 export const render = ({ path }: IRenderProps) => {
@@ -11,6 +11,5 @@ export const render = ({ path }: IRenderProps) => {
     <StaticRouter location={path}>
       <App />
     </StaticRouter>
-  );
-};
-
+  )
+}
