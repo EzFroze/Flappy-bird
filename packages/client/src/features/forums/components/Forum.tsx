@@ -27,7 +27,7 @@ import { actionPaths, ForumsNames, ForumsNamesRu } from '../types'
 import { Link as RouterLink } from 'react-router-dom'
 import { headers } from '../data'
 
-const rowsMockData = new Array(10).fill(null).map((_, i) => ({
+const rowsMockData = new Array(3).fill(null).map((_, i) => ({
   name: `Thread ${i}`,
   user: {
     name: 'user name',
@@ -72,7 +72,7 @@ export const Forum: React.FC = () => {
             <Grid item xs={7}>
               <Stack direction="row" justifyContent="flex-end">
                 <Chip label="Страницы" />
-                <Pagination count={10} />
+                <Pagination count={Math.ceil(rowsMockData.length / 10)} />
               </Stack>
             </Grid>
           </Grid>
