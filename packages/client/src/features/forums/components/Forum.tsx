@@ -47,15 +47,13 @@ export const Forum: React.FC = () => {
   const { forum, thread } = useParams()
   const { pathname } = useLocation()
 
-  const forumName = forum as ForumsNames
-
   return (
     <>
       {thread || pathname.includes(actionPaths.createThread) ? (
         <ForumThreadOutlet />
       ) : (
-        <Container>
-          <Typography variant="h3">{ForumsNamesRu[forumName]}</Typography>
+        <Container maxWidth="lg" sx={{ pt: 2 }}>
+          <Typography variant="h3">Форум</Typography>
           <Grid container spacing={2} sx={{ mt: 2 }}>
             <Grid item xs={3}>
               <Link

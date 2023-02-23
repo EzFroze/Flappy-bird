@@ -68,22 +68,16 @@ export const router = createBrowserRouter([
     ),
   },
   {
-    path: RoutesEnum.Forums,
-    element: <ForumsPage />,
+    path: 'forum',
+    element: <ForumPage />,
     children: [
       {
-        path: ':forum',
-        element: <ForumPage />,
-        children: [
-          {
-            path: ':thread',
-            element: <ForumThreadPage />,
-          },
-          {
-            path: actionPaths.createThread,
-            element: <ForumCreateThreadPage />,
-          },
-        ],
+        path: ':thread',
+        element: <ForumThreadPage />,
+      },
+      {
+        path: actionPaths.createThread,
+        element: <ForumCreateThreadPage />,
       },
     ],
   },

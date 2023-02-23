@@ -46,7 +46,7 @@ export const ForumThread: React.FC = () => {
   const forumName = forum as ForumsNames
 
   return (
-    <Container maxWidth="lg">
+    <Container maxWidth="lg" sx={{ pt: 2 }}>
       <Typography variant="subtitle1">{ForumsNamesRu[forumName]}</Typography>
       <Typography variant="h3">Thread Topic {thread}</Typography>
       {[1].map((_, i) => (

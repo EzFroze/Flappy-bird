@@ -9,10 +9,8 @@ export const NewForumThread: React.FC = () => {
   const forumName = forum as ForumsNames
 
   return (
-    <Container maxWidth="lg">
-      {forumName !== undefined && (
-        <Typography variant="h3">{ForumsNamesRu[forumName]}</Typography>
-      )}
+    <Container maxWidth="lg" sx={{ pt: 2 }}>
+      <Typography variant="h3">Новая тема</Typography>
       <Paper sx={{ mt: 2, p: 2 }}>
         <TextField label="Название темы" sx={{ width: '100%' }} />
       </Paper>
