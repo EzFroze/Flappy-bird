@@ -1,13 +1,17 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm"
+import type { User } from "../users/usersModel"//"features/users/usersModel"
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm"
 
 export interface Comment {
-  body: string
+  id?: number
+  message: string
   datetime?: Date
   postId: number
+  userId: number
   reactions?: {
     type: number,
     count: number
   }[]
+  user: User | null
 }
 
 @Entity('comments')
@@ -16,7 +20,7 @@ export class CommentModel implements Comment {
   id!: number
 
   @Column('text')
-  body: string = ''
+  message: string = ''
 
   @Column({ type: 'timestamptz', nullable: true })
   datetime: Date = new Date()
@@ -27,6 +31,12 @@ export class CommentModel implements Comment {
   @Column('integer')
   postId!: number
 
+  @Column('integer')
+  userId!: number
+
   @Column({ type: 'simple-json', nullable: true })
   reactions: { type: number; count: number }[] = []
+
+  @Column({ type: 'simple-json', nullable: true })
+  user: User | null = null
 }

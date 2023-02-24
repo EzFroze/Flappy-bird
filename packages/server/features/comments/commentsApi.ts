@@ -1,21 +1,38 @@
 import { UserModel } from "../../features/users/usersModel"
 import { AppDataSource } from "../../app/data-source"
 import { Comment, CommentModel } from "./commentsModel"
-import fetch from 'node-fetch';
 
 const comments = AppDataSource.getRepository(CommentModel)
+const users = AppDataSource.getRepository(UserModel)
 
 export const createComment = async (data: Comment) => {
-  let comment = new CommentModel()
+  let user = await users.findOneBy({ id: data.userId })
 
-  const response = await fetch('https://api.github.com/users/github');
-  const obj = await response.json();
-  
-  console.log(obj);
-  
-  await comments.save({ ...comment, ...data })
+  if (!user && data.user) {
+    const newUser = new UserModel()
 
-  console.log("Post has been saved. Post id is", comment.id)
+    newUser.id = data.user?.id
+    newUser.login = data.user?.login
+    newUser.avatar = data.user?.avatar
+    newUser.display_name = data.user?.display_name
+
+    user = await users.save(newUser)
+  }
+
+  const comment = new CommentModel()
+
+  comment.message = data.message
+  comment.datetime = new Date()
+  comment.postId = data.postId
+  comment.userId = data.userId
+  comment.reactions = []
+  comment.user = user
+
+  const newComment = await comments.save(comment)
+
+  console.log("Comment has been saved. Comment id is", comment.id)
+
+  return newComment
 }
 
 export const findComments = async () => {

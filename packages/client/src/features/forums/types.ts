@@ -39,3 +39,16 @@ export interface Topic {
   userId: number
   comments: number
 }
+
+export interface Comment {
+  id?: number
+  message: string
+  datetime?: Date
+  postId: number
+  userId: number
+  reactions?: {
+    type: number,
+    count: number
+  }[]
+  user?: User
+}

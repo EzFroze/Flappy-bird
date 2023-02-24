@@ -37,7 +37,7 @@ export const updateUser = async (id: number, data: User) => {
 export const findUsers = async () => {
   const users = await repo.find()
 
-  console.log("All users from the db: ", users)
+  //console.log("All users from the db: ", users)
 
   return users
 }

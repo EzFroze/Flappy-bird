@@ -8,7 +8,8 @@ import 'reflect-metadata'
 import { AppDataSource } from './app/data-source'
 import { createUser, findUserById, findUsers, updateUser } from './features/users/usersApi'
 import { createPost, findPosts, findPostById } from './features/posts/postsApi'
-import { findPostsByUserId } from './features/posts/postsApi'
+import type { Comment } from './features/comments/commentsModel'
+import { createComment, findComments } from './features/comments/commentsApi'
 
 const app = express()
 
@@ -26,8 +27,11 @@ AppDataSource.initialize()
   })
   .catch(error => console.log('db err', error))
 
-app.get('/', (_, res) => {
-  res.json('👋 Howdy from the server :)')
+// get all users
+app.get('/users', async (_req, res) => {
+  const users = await findUsers()
+
+  res.send(users)
 })
 
 // get all posts
@@ -37,17 +41,11 @@ app.get('/posts', async (_req, res) => {
   res.send(posts)
 })
 
+// find post by id (for thread)
 app.get('/posts/:id', async (req, res) => {
   const post = await findPostById(Number(req.params.id))
 
   res.send(post)
-})
-
-// get all users
-app.get('/users', async (_req, res) => {
-  const users = await findUsers()
-
-  res.send(users)
 })
 
 // create post (and create or update user)
@@ -74,6 +72,20 @@ app.post('/posts/create', async (req, res) => {
       message: topic.message
     }
   }))
+})
+
+// find all comments
+app.get('/comments', async (_req, res) => {
+  const comments = await findComments()
+
+  res.send(comments)
+})
+
+// create comment
+app.post('/comments/create', async (req, res) => {
+  const comment = await createComment(req.body)
+  console.log('comment created', comment)
+  res.send(comment)
 })
 
 app.listen(port, () => {
