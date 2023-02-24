@@ -5,21 +5,29 @@ import { Post, PostModel } from "./postsModel"
 const posts = AppDataSource.getRepository(PostModel)
 
 export const createPost = async (data: Post) => {
-  let post = new PostModel()
+  const post = new PostModel()
   
-  await posts.save({ ...post, ...data })
+  post.avatar = data.avatar || ''
+  post.comments = data.comments
+  post.datetime = new Date()
+  post.likes = data.likes || 0
+  post.message = data.message
+  post.title = data.title
+  post.userId = data.userId
+
+  await posts.save(post)
 
   console.log("Post has been saved. Post id is", post.id)
 }
 
 export const findPosts = async () => {
-  const foundPosts = await posts.find()
-
-  console.log("All posts from the db: ", foundPosts.length)
-
-  return foundPosts
+  return await posts.find()
 }
 
 export const findPostsByUserId = async (userId: number) => {
   return await posts.find({ where: { userId } })
+}
+
+export const findPostById = async (id: number) => {
+  return await posts.findOneBy({ id })
 }

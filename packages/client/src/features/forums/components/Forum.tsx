@@ -23,29 +23,47 @@ import {
   useLocation,
   useParams,
 } from 'react-router-dom'
-import { actionPaths, ForumsNames, ForumsNamesRu } from '../types'
+import { actionPaths, ForumsNames, ForumsNamesRu, Topic } from '../types'
 import { Link as RouterLink } from 'react-router-dom'
 import { headers } from '../data'
-
-const rowsMockData = new Array(3).fill(null).map((_, i) => ({
-  name: `Thread ${i}`,
-  user: {
-    name: 'user name',
-    avatar: 'T',
-  },
-  lastMessage: {
-    user: 'User name',
-    date: new Date().toLocaleDateString(),
-    time: new Date().toLocaleTimeString(),
-    content: '',
-  },
-  messagesNumber: 120,
-  views: 8001,
-}))
+import { useEffect, useState } from 'react'
+import { BASE_URL } from '../../../app/api/variables'
 
 export const Forum: React.FC = () => {
-  const { forum, thread } = useParams()
+  const { thread } = useParams()
   const { pathname } = useLocation()
+  const [topics, setTopics] = useState<any[]>([])
+
+  useEffect(() => {
+    fetch('http://localhost:3001/posts')
+      .then((res) => res.json())
+      .then((res: Topic[]) => {
+        const topics = res.map((topic) => {
+          return {
+            id: topic.id,
+            name: topic.title,
+            user: {
+              name: topic.userId,
+              avatar: topic.avatar || 'T'
+            },
+            lastMessage: {
+              user: 'User name',
+              date: new Date().toLocaleDateString(),
+              time: new Date().toLocaleTimeString(),
+              content: '',
+            },
+            messagesNumber: 120,
+            likes: topic.likes,
+          }
+        })
+
+        setTopics(topics)
+      })
+  }, [])
+
+  useEffect(() => {
+    console.log('forum topics', topics)
+  }, [topics])
 
   return (
     <>
@@ -53,7 +71,15 @@ export const Forum: React.FC = () => {
         <ForumThreadOutlet />
       ) : (
         <Container maxWidth="lg" sx={{ pt: 2 }}>
-          <Typography variant="h3">Форум</Typography>
+          <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+            <Typography variant="h3">Форум</Typography>
+            <Button onClick={() => {
+              fetch(`${BASE_URL}/auth/logout`, {
+                credentials: 'include',
+                method: 'POST'
+              })
+            }}>Выйти</Button>
+          </Box>
           <Grid container spacing={2} sx={{ mt: 2 }}>
             <Grid item xs={3}>
               <Link
@@ -72,7 +98,7 @@ export const Forum: React.FC = () => {
             <Grid item xs={7}>
               <Stack direction="row" justifyContent="flex-end">
                 <Chip label="Страницы" />
-                <Pagination count={Math.ceil(rowsMockData.length / 10)} />
+                <Pagination count={Math.ceil(topics.length / 10)} />
               </Stack>
             </Grid>
           </Grid>
@@ -89,7 +115,7 @@ export const Forum: React.FC = () => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {rowsMockData.map((row, i) => (
+                {topics.map((row, i) => (
                   <TableRow key={i * 10000}>
                     <TableCell>
                       <Stack direction={'row'} alignItems="center" spacing={2}>
@@ -104,7 +130,7 @@ export const Forum: React.FC = () => {
                         <Link
                           underline="none"
                           component={RouterLink}
-                          to={`${i}`}>
+                          to={`${row.id}`}>
                           <Typography variant="button">{row.name}</Typography>
                         </Link>
                       </Stack>
@@ -119,7 +145,7 @@ export const Forum: React.FC = () => {
                       от <Link>{row.lastMessage.user}</Link>
                     </TableCell>
                     <TableCell align="right">{row.messagesNumber}</TableCell>
-                    <TableCell align="right">{row.views}</TableCell>
+                    <TableCell align="right">{row.likes}</TableCell>
                   </TableRow>
                 ))}
               </TableBody>

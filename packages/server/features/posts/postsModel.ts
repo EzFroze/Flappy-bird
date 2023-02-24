@@ -2,11 +2,12 @@ import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm"
 
 export interface Post {
   title: string
-  body: string
+  message: string
   datetime?: Date
-  avatar?: any,
+  avatar?: string,
   likes?: number
   userId: number
+  comments: number
 }
 
 @Entity('posts')
@@ -18,7 +19,7 @@ export class PostModel implements Post {
   title: string = ''
 
   @Column('text')
-  body: string = ''
+  message: string = ''
 
   @Column({ type: 'timestamptz', nullable: true })
   datetime: Date = new Date()
@@ -28,6 +29,9 @@ export class PostModel implements Post {
 
   @Column('integer')
   likes: number = 0
+
+  @Column({ type: 'integer', nullable: true })
+  comments: number = 0
 
   @Column('integer')
   userId!: number

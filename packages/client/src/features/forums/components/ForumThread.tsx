@@ -7,6 +7,7 @@ import {
 import {
   Avatar,
   Box,
+  Button,
   Container,
   Divider,
   IconButton,
@@ -15,8 +16,11 @@ import {
   Tooltip,
   Typography,
 } from '@mui/material'
-import { useParams } from 'react-router-dom'
-import { ForumsNames, ForumsNamesRu } from '../types'
+import { useEffect, useState } from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
+import { baseOptions, BASE_URL } from '../../../app/api/variables'
+import { RoutesEnum } from '../../../app/router/types'
+import { ForumsNames, ForumsNamesRu, Topic, User } from '../types'
 import { ForumSendMessage } from './ForumSendMessage'
 
 const postContentStyle: React.CSSProperties = {
@@ -41,39 +45,69 @@ const tooltipAttrs = {
 }
 
 export const ForumThread: React.FC = () => {
-  const { forum, thread } = useParams()
+  const { thread } = useParams()
+  const nav = useNavigate()
+  const [ topic, setTopic ] = useState<Topic>()
+  const [ user, setUser ] = useState<User>()
+  const [ avatar, setAvatar ] = useState('')
 
-  const forumName = forum as ForumsNames
+  // loading post info
+  useEffect(() => {
+    fetch(`http://localhost:3001/posts/${thread}`)
+      .then((res) => res.json())
+      .then((res) => {
+        console.log('thread:', res)
+        setTopic(res)
+      })
+  }, [])
+
+  // loading user info for the post
+  useEffect(() => {
+    if (!topic) return
+
+    fetch(`${BASE_URL}/user/${topic.userId}`, baseOptions)
+      .then((res) => res.json())
+      .then((res) => {
+        console.log('user by id', res)
+        setUser(res)
+      })
+  }, [topic])
 
   return (
     <Container maxWidth="lg" sx={{ pt: 2 }}>
-      <Typography variant="subtitle1">{ForumsNamesRu[forumName]}</Typography>
-      <Typography variant="h3">Thread Topic {thread}</Typography>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+        <Typography variant="h3">{topic?.title || '<Нет названия>'}</Typography>
+        <Button onClick={() => nav(RoutesEnum.Forums)}>На форум</Button>
+      </Box>
       {[1].map((_, i) => (
         <Paper key={i + 'msg'} className="post" sx={{ display: 'flex', mt: 2 }}>
           <Box className="post__avatar" sx={{ pl: 2, pt: 2 }}>
-            <Avatar variant="rounded" sx={{ width: 64, height: 64 }}>
-              AVA
-            </Avatar>
+            <Avatar
+              src={`${BASE_URL}/resources${user?.avatar}` || ''} 
+              variant="rounded" 
+              sx={{ width: 64, height: 64 }}
+            />
           </Box>
           <Box style={postContentStyle}>
             <Box sx={postUsernameSx}>
               <Box>
-                <Typography variant="h5">Username</Typography>
+                <Typography variant="h5">
+                  {user?.display_name || user?.login || 'Anonymous'}
+                </Typography>
               </Box>
               <Box>
                 <Typography variant="body1" sx={{ textAlign: 'right' }}>
-                  #42
+                  #{ topic?.id || 0}
                 </Typography>
                 <Typography variant="body1" sx={{ textAlign: 'right' }}>
-                  01.02.2022
+                  { topic?.datetime ? new Date(topic.datetime).toLocaleDateString() : ''}
                 </Typography>
               </Box>
             </Box>
             <Divider sx={{ ml: 2, mr: 2 }} />
             <Box id="post__message" sx={{ p: 2, pt: 2 }}>
               <Box id="message__content">
-                <Typography variant="body1">There some post content</Typography>
+                <Typography variant="body1">{topic?.message || ''}</Typography>
               </Box>
               <Box
                 id="message__control"
@@ -101,7 +135,8 @@ export const ForumThread: React.FC = () => {
           </Box>
         </Paper>
       ))}
-      <ForumSendMessage />
+      <ForumSendMessage 
+        setMessage={(text: string) => {}} />
     </Container>
   )
 }

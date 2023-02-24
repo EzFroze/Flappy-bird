@@ -21,6 +21,7 @@
     "@testing-library/user-event": "^14.4.3",
     "dotenv": "^16.0.2",
     "eslint-config-prettier": "^8.5.0",
+    "http-proxy-middleware": "^2.0.6",
     "jest-fetch-mock": "^3.0.3",
     "localforage": "^1.10.0",
     "match-sorter": "^6.3.1",

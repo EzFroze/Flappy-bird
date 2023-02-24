@@ -4,7 +4,7 @@ export enum RoutesEnum {
   Profile = '/profile',
   ProfileChange = '/profile-change',
   Password = '/password',
-  Forums = '/forums',
+  Forums = '/forum',
   ServerError = '/server-error',
   NotFound = '*',
   Game = '/game',

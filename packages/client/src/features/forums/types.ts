@@ -17,3 +17,25 @@ export const ForumsNamesRu = {
   [ForumsNames.art]: 'Творчество',
   [ForumsNames.recycle]: 'Recycle Bin',
 } as const
+
+export interface User {
+  id: number
+  first_name: string
+  second_name: string
+  display_name: string
+  login: string
+  email: string
+  phone: string
+  avatar: string
+}
+
+export interface Topic {
+  id: number
+  title: string
+  message: string
+  datetime?: Date
+  avatar?: any,
+  likes?: number
+  userId: number
+  comments: number
+}
