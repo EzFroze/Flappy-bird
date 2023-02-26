@@ -14,6 +14,7 @@ import {
 } from './features/users/usersApi'
 import { createPost, findPosts, findPostById } from './features/posts/postsApi'
 import { createComment, findComments } from './features/comments/commentsApi'
+import { createLike, deleteLike, findAllLikes } from './features/likes/likesController'
 
 const app = express()
 
@@ -72,6 +73,28 @@ app.post('/comments/create', async (req, res) => {
   const comment = await createComment(req.body)
   console.log('comment created', comment)
   res.send(comment)
+})
+
+app.get('/likes', async (_req, res) => {
+  const likes = await findAllLikes()
+
+  res.send(likes)
+})
+
+// create like
+app.post('/likes', async (req, res) => {
+  const like = await createLike(req.body)
+  console.log('like created', like)
+  res.send(like)
+})
+
+// delete like
+app.delete('/likes', async (req, res) => {
+  await deleteLike(Number(req.body.id), req.body.type)
+
+  console.log('like deleted', req.body)
+  
+  res.send('deleted')
 })
 
 app.listen(port, () => {
