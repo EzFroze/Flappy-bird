@@ -2,7 +2,7 @@ import { Theme } from "@emotion/react"
 import { FavoriteBorder, Reply, SentimentVeryDissatisfied } from "@mui/icons-material"
 import { Avatar, Box, Divider, IconButton, Paper, SxProps, Tooltip, Typography } from "@mui/material"
 import { BASE_URL } from "../../../app/api/variables"
-import { Comment, Topic, User } from "../types"
+import { Comment, ForumTopic, Topic, User } from "../types"
 
 const postContentStyle: React.CSSProperties = {
   display: 'flex',
@@ -27,21 +27,24 @@ const tooltipAttrs = {
 
 export const CommentPost: React.FC<{
   isTopic?: boolean
-  user: User
   topic: Topic | Comment
 }> = ({
   isTopic = false,
-  user,
   topic
 }) => {
   return (
-    <Paper 
+    <Paper
+      elevation={isTopic ? 4 : 1} 
       className="post" 
-      sx={{ display: 'flex', mt: 2, border: isTopic ? '2px solid green' : ''  }}
+      sx={{ 
+        display: 'flex', 
+        mt: 2,
+        backgroundColor: isTopic ? '#f5f5f5' : '',
+      }}
     >
       <Box className="post__avatar" sx={{ pl: 2, pt: 2 }}>
         <Avatar
-          src={user?.avatar ? `${BASE_URL}/resources${user?.avatar}` : ''} 
+          src={`${BASE_URL}/resources${topic.user?.avatar}`} 
           variant="rounded" 
           sx={{ width: 64, height: 64 }}
         />
@@ -50,7 +53,7 @@ export const CommentPost: React.FC<{
         <Box sx={postUsernameSx}>
           <Box>
             <Typography variant="h5">
-              {user?.display_name || user?.login || 'Anonymous'}
+              {topic.user?.display_name || topic.user?.login || 'Anonymous'}
             </Typography>
           </Box>
           <Box>

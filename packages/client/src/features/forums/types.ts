@@ -36,19 +36,35 @@ export interface Topic {
   datetime?: Date
   avatar?: any,
   likes?: number
-  userId: number
-  comments: number
+  user: User
+  comments: {
+    last: Comment,
+    quantity: number
+  }
 }
 
 export interface Comment {
   id?: number
   message: string
   datetime?: Date
-  postId: number
-  userId: number
   reactions?: {
     type: number,
     count: number
   }[]
   user?: User
+  postId: number
+}
+
+export type ForumTopic = {
+  id: number,
+  name: string,
+  lastMessage: {
+    user?: string,
+    date?: string,
+    time?: string,
+    content?: string,
+  },
+  messagesNumber: number,
+  likes: number,
+  user: User
 }

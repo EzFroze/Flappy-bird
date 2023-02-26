@@ -1,18 +1,14 @@
-import { Column, Entity, PrimaryColumn, PrimaryGeneratedColumn } from "typeorm"
+import { CommentModel } from "../comments/commentsModel"
+import { Column, Entity, OneToMany, PrimaryColumn } from "typeorm"
+import { PostModel } from "../posts/postsModel"
 
-export interface User {
-  id: number
-  login: string
-  avatar: string
-  display_name: string
-}
 
 @Entity('users')
-export class UserModel implements User {
+export class UserModel {
   @PrimaryColumn()
   id!: number
   
-  @Column()
+  @Column({ nullable: true })
   login: string = ''
   
   @Column({ nullable: true })

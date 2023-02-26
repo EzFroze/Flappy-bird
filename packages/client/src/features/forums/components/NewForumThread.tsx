@@ -7,7 +7,10 @@ import { Topic, User } from '../types'
 import { ForumSendMessage } from './ForumSendMessage'
 
 export const NewForumThread: React.FC = () => {
-  const [ topic, setTopic ] = useState</* Topic */any>()
+  const [ topic, setTopic ] = useState({
+    title: '',
+    message: ''
+  })
   const [user, setUser] = useState({
     id: 0,
     display_name: '',
@@ -36,14 +39,15 @@ export const NewForumThread: React.FC = () => {
         <TextField 
           label="Название темы" 
           sx={{ width: '100%' }} 
-          onChange={(e) => setTopic((t: any) => ({ ...t, title: e.target.value }))}
+          onChange={(e) => setTopic((t) => ({ ...t, title: e.target.value }))}
         />
       </Paper>
       <ForumSendMessage 
         submitButtonTitle={'Создать'}
-        setMessage={(message) => setTopic((t: any) => ({ ...t, message }))} 
+        setMessage={(message) => setTopic((t) => ({ ...t, message }))}
         onClick={() => {
-          if (user.id === 0) return
+          if (user.id === 0)
+            return
 
           fetch('http://127.0.0.1:3001/posts/create', {
             method: 'POST',
@@ -51,9 +55,10 @@ export const NewForumThread: React.FC = () => {
             headers: {
               'content-type': 'application/json',
             },
-            body: JSON.stringify({ user, topic })
+            body: JSON.stringify({ ...topic, user })
           }).then(() => nav(RoutesEnum.Forums))
-        }}
+        } } 
+        message={topic.message}
       />
     </Container>
   )

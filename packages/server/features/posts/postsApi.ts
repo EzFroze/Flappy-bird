@@ -1,33 +1,63 @@
 import { UserModel } from "../../features/users/usersModel"
 import { AppDataSource } from "../../app/data-source"
-import { Post, PostModel } from "./postsModel"
+import { PostModel } from "./postsModel"
 
 const posts = AppDataSource.getRepository(PostModel)
+const users = AppDataSource.getRepository(UserModel)
 
-export const createPost = async (data: Post) => {
+export const createPost = async (data: PostModel) => {
+  console.log('creating post...', data)
+
+  const user = new UserModel()
+
+  user.id = data.user.id
+  user.avatar = data.user.avatar
+  user.display_name = data.user.display_name
+  user.login = data.user.login
+
+  await users.save(user)
+
   const post = new PostModel()
-  
-  post.avatar = data.avatar || ''
-  post.comments = data.comments
+
   post.datetime = new Date()
-  post.likes = data.likes || 0
+  post.likes = 0
   post.message = data.message
   post.title = data.title
-  post.userId = data.userId
+  post.user = data.user
 
-  await posts.save(post)
+  const resultPost = await posts.save(post)
 
-  console.log("Post has been saved. Post id is", post.id)
+  return resultPost
 }
 
 export const findPosts = async () => {
-  return await posts.find()
+  const foundsPosts = await posts.find({
+    relations: {
+      user: true,
+      comments: {
+        user: true
+      }
+    }
+  })
+
+  return foundsPosts.map((post) => ({
+    ...post,
+    comments: {
+      last: post.comments[post.comments.length - 1],
+      quantity: post.comments.length
+    }
+  }))
 }
 
 export const findPostsByUserId = async (userId: number) => {
-  return await posts.find({ where: { userId } })
+  return await posts.find({ where: { user: { id: userId } } })
 }
 
 export const findPostById = async (id: number) => {
-  return await posts.findOneBy({ id })
+  const [ thread ] = await posts.find({
+    relations: { user: true },
+    where: { id }
+  })
+
+  return thread
 }

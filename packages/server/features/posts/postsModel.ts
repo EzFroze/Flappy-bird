@@ -1,17 +1,9 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm"
-
-export interface Post {
-  title: string
-  message: string
-  datetime?: Date
-  avatar?: string,
-  likes?: number
-  userId: number
-  comments: number
-}
+import { UserModel } from "../users/usersModel"
+import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm"
+import { CommentModel } from "../comments/commentsModel"
 
 @Entity('posts')
-export class PostModel implements Post {
+export class PostModel {
   @PrimaryGeneratedColumn()
   id!: number
 
@@ -24,15 +16,12 @@ export class PostModel implements Post {
   @Column({ type: 'timestamptz', nullable: true })
   datetime: Date = new Date()
 
-  @Column('text')
-  avatar: string = ''
-
   @Column('integer')
   likes: number = 0
 
-  @Column({ type: 'integer', nullable: true })
-  comments: number = 0
+  @ManyToOne(() => UserModel)
+  user!: UserModel
 
-  @Column('integer')
-  userId!: number
+  @OneToMany(() => CommentModel, (comment) => comment.post)
+  comments!: CommentModel[]
 }

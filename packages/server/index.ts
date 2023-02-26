@@ -6,18 +6,23 @@ import express from 'express'
 import 'reflect-metadata'
 
 import { AppDataSource } from './app/data-source'
-import { createUser, findUserById, findUsers, updateUser } from './features/users/usersApi'
+import {
+  createUser,
+  findUserById,
+  findUsers,
+  updateUser,
+} from './features/users/usersApi'
 import { createPost, findPosts, findPostById } from './features/posts/postsApi'
-import type { Comment } from './features/comments/commentsModel'
 import { createComment, findComments } from './features/comments/commentsApi'
 
 const app = express()
 
-app.use(express.json());
-app.use(cors({
-  origin: 'http://localhost:3000',
-}))
-
+app.use(express.json())
+app.use(
+  cors({
+    origin: '*',
+  })
+)
 
 const port = Number(process.env.SERVER_PORT) || 3001
 
@@ -50,33 +55,14 @@ app.get('/posts/:id', async (req, res) => {
 
 // create post (and create or update user)
 app.post('/posts/create', async (req, res) => {
-  const { user, topic } = req.body
+  await createPost(req.body)
 
-  let dbUser = await findUserById(user.id)
-
-  if (dbUser === null) {
-    dbUser = await createUser(user)
-  } else {
-    await updateUser(dbUser.id, user)
-  }
-
-  await createPost({
-    ...topic,
-    userId: dbUser.id 
-  })
-
-  res.send(JSON.stringify({
-    status: 'created',
-    content: {
-      title: topic.title,
-      message: topic.message
-    }
-  }))
+  res.send('ok')
 })
 
-// find all comments
-app.get('/comments', async (_req, res) => {
-  const comments = await findComments()
+// find thread comments
+app.get('/comments/thread/:id', async (req, res) => {
+  const comments = await findComments(Number(req.params.id))
 
   res.send(comments)
 })

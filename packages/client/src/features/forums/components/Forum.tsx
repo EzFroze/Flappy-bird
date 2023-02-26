@@ -15,7 +15,6 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  Tooltip,
   Typography,
 } from '@mui/material'
 import {
@@ -23,7 +22,7 @@ import {
   useLocation,
   useParams,
 } from 'react-router-dom'
-import { actionPaths, ForumsNames, ForumsNamesRu, Topic } from '../types'
+import { actionPaths, ForumTopic, Topic } from '../types'
 import { Link as RouterLink } from 'react-router-dom'
 import { headers } from '../data'
 import { useEffect, useState } from 'react'
@@ -32,28 +31,29 @@ import { BASE_URL } from '../../../app/api/variables'
 export const Forum: React.FC = () => {
   const { thread } = useParams()
   const { pathname } = useLocation()
-  const [topics, setTopics] = useState<any[]>([])
+  const [topics, setTopics] = useState<ForumTopic[]>([])
 
   useEffect(() => {
     fetch('http://localhost:3001/posts')
       .then((res) => res.json())
       .then((res: Topic[]) => {
+        console.log('res', res)
         const topics = res.map((topic) => {
+          const user = topic.comments?.last?.user
+          const dt = topic.comments?.last?.datetime
+
           return {
             id: topic.id,
             name: topic.title,
-            user: {
-              name: topic.userId,
-              avatar: topic.avatar || 'T'
-            },
             lastMessage: {
-              user: 'User name',
-              date: new Date().toLocaleDateString(),
-              time: new Date().toLocaleTimeString(),
+              user: user?.display_name || user?.login || '',
+              date: dt ? new Date(dt).toLocaleDateString() : '',
+              time: dt ? new Date(dt).toLocaleTimeString() : '',
               content: '',
             },
-            messagesNumber: 120,
-            likes: topic.likes,
+            messagesNumber: topic.comments.quantity,
+            likes: topic.likes || 0,
+            user: topic.user
           }
         })
 
@@ -119,14 +119,9 @@ export const Forum: React.FC = () => {
                   <TableRow key={i * 10000}>
                     <TableCell>
                       <Stack direction={'row'} alignItems="center" spacing={2}>
-                        <Tooltip
-                          title={row.user.name}
-                          placement="top-start"
-                          arrow>
-                          <Avatar sx={{ backgroundColor: 'darkred' }}>
-                            {row.user.avatar}
-                          </Avatar>
-                        </Tooltip>
+                        <Avatar
+                          sx={{ border: '1px solid black' }} 
+                          src={`${BASE_URL}/resources/${row.user.avatar}`} />
                         <Link
                           underline="none"
                           component={RouterLink}
@@ -136,13 +131,19 @@ export const Forum: React.FC = () => {
                       </Stack>
                     </TableCell>
                     <TableCell>
-                      <Stack direction={'row'} spacing={1}>
-                        <Box>{row.lastMessage.date}</Box>
-                        <Box sx={{ color: 'darkgrey' }}>
-                          {row.lastMessage.time.slice(0, 5)}
-                        </Box>
-                      </Stack>
-                      от <Link>{row.lastMessage.user}</Link>
+                      {
+                        row.lastMessage.user && (
+                          <>
+                            <Stack direction={'row'} spacing={1}>
+                              <Box>{row.lastMessage.date}</Box>
+                              <Box sx={{ color: 'darkgrey' }}>
+                                {row.lastMessage.time?.slice(0, 5)}
+                              </Box>
+                            </Stack>
+                            от <Link>{row.lastMessage.user}</Link>
+                          </>
+                        ) || 'Нет сообщений'
+                      }
                     </TableCell>
                     <TableCell align="right">{row.messagesNumber}</TableCell>
                     <TableCell align="right">{row.likes}</TableCell>
