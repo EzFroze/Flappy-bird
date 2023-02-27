@@ -1,27 +1,16 @@
-import { Theme } from '@emotion/react'
 import {
-  FavoriteBorder,
-  Reply,
-  SentimentVeryDissatisfied,
-} from '@mui/icons-material'
-import {
-  Avatar,
   Box,
   Button,
   Container,
-  Divider,
-  IconButton,
-  Paper,
-  Skeleton,
-  SxProps,
-  Tooltip,
   Typography,
 } from '@mui/material'
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { baseOptions, BASE_URL } from '../../../app/api/variables'
 import { RoutesEnum } from '../../../app/router/types'
-import { Topic, User, Comment, ForumTopic } from '../types'
+import { useStore } from '../../../app/store/hooks'
+import { Topic, Comment } from '../types'
+import { CommentDrawer } from './CommentDrawer'
 import { CommentPost } from './CommentPost'
 import { ForumSendMessage } from './ForumSendMessage'
 
@@ -33,6 +22,8 @@ export const ForumThread: React.FC = () => {
   const [ loading, setLoading ] = useState(false)
   const [ comment, setComment ] = useState('')
   const [ comments, setComments ] = useState<Comment[]>([])
+
+  const selectedCommentId = useStore(({ forum }) => forum.selectedComment)
 
   useEffect(() => {
     fetch(`${BASE_URL}/auth/user`, baseOptions)
@@ -103,7 +94,7 @@ export const ForumThread: React.FC = () => {
       {comments.map((comment, i) => {
         return <CommentPost 
           key={1000 + i} 
-          topic={comment!} 
+          topic={comment!}
         />
       })}
       <ForumSendMessage
@@ -112,6 +103,7 @@ export const ForumThread: React.FC = () => {
         message={comment}
         setMessage={setComment} 
       />
+      <CommentDrawer topic={comments.find((comment) => comment.id === selectedCommentId)} />
     </Container>
   )
 }

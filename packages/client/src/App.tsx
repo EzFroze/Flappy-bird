@@ -4,7 +4,6 @@ import { RequireAuth } from './components/requireAuth/RequireAuth'
 import { actionPaths } from './features/forums/types'
 import {
   ForumCreateThreadPage,
-  ForumsPage,
   ForumPage,
   ForumThreadPage,
   GamePage,
@@ -62,14 +61,12 @@ export const App = () => {
             </RequireAuth>
           }
         />
-        <Route path={RoutesEnum.Forums} element={<ForumsPage />}>
-          <Route path={':forum'} element={<ForumPage />}>
-            <Route path={':thread'} element={<ForumThreadPage />} />
-            <Route
-              path={actionPaths.createThread}
-              element={<ForumCreateThreadPage />}
-            />
-          </Route>
+        <Route path={RoutesEnum.Forums} element={<ForumPage />}>
+          <Route path={':thread'} element={<ForumThreadPage />} />
+          <Route
+            path={actionPaths.createThread}
+            element={<ForumCreateThreadPage />}
+          />
         </Route>
         <Route path={RoutesEnum.Leaderboard} element={<LeaderboardPage />} />
         <Route path={RoutesEnum.Game} element={<GamePage />} />

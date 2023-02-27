@@ -1,9 +1,12 @@
 import { Theme } from "@emotion/react"
 import { FavoriteBorder, Favorite, Reply, SentimentVeryDissatisfied } from "@mui/icons-material"
-import { Avatar, Box, Divider, IconButton, Paper, SxProps, Tooltip, Typography } from "@mui/material"
+import { Avatar, Box, Divider, Drawer, IconButton, Paper, SxProps, Tooltip, Typography } from "@mui/material"
 import { useEffect, useState } from "react"
 import { baseOptions, BASE_URL } from "../../../app/api/variables"
+import { useSet } from "../../../app/store/hooks"
+import { selectedComment, toggleDrawer } from "../services/forumSlice"
 import { Comment, ForumTopic, Topic, User } from "../types"
+import { ForumSendMessage } from "./ForumSendMessage"
 
 const postContentStyle: React.CSSProperties = {
   display: 'flex',
@@ -28,11 +31,14 @@ const tooltipAttrs = {
 
 export const CommentPost: React.FC<{
   isTopic?: boolean
+  isSub?: boolean
   topic: Topic | Comment
 }> = ({
   isTopic = false,
-  topic
+  isSub = false,
+  topic,
 }) => {
+  const set = useSet()
   const [ likes, setLikes ] = useState<
     Record<'userId' | 'commentId' | 'postId', number>[]
   >()
@@ -85,6 +91,7 @@ export const CommentPost: React.FC<{
   }
 
   return (
+    <>
     <Paper
       elevation={isTopic ? 4 : 1} 
       className="post" 
@@ -125,28 +132,41 @@ export const CommentPost: React.FC<{
           <Box
             id="message__control"
             sx={{ display: 'flex', pt: 2, gap: 1 }}>
-            <Tooltip title="Лайк" placement="left" {...tooltipAttrs}>
-              <IconButton 
-                size="small" 
-                color={defineLike() ? "error" : "primary"} 
-                onClick={() => {
-                  if (topic?.id && user?.id) {
-                    console.log('liked')
-                    handleLike(topic.id, user?.id)
-                  }
-                }}
-              >
-                { defineLike() ? <Favorite /> : <FavoriteBorder />}
-              </IconButton>
-            </Tooltip>
-            <Tooltip
-              title="Ответить + цитата"
-              placement="right"
-              {...tooltipAttrs}>
-              <IconButton size="small" color="primary">
-                <Reply />
-              </IconButton>
-            </Tooltip>
+            {
+              !isSub && (
+                <Tooltip title="Лайк" placement="left" {...tooltipAttrs}>
+                  <IconButton 
+                    size="small" 
+                    color={defineLike() ? "error" : "primary"} 
+                    onClick={() => {
+                      if (topic?.id && user?.id) {
+                        console.log('liked')
+                        handleLike(topic.id, user?.id)
+                      }
+                    }}
+                  >
+                    { defineLike() ? <Favorite /> : <FavoriteBorder />}
+                  </IconButton>
+                </Tooltip>
+              )
+            }
+            { !isTopic && (
+              <Tooltip
+                title="Ответить на пост"
+                placement="right"
+                {...tooltipAttrs}>
+                <IconButton 
+                  size="small" 
+                  color="primary" 
+                  onClick={() => {
+                    set(toggleDrawer())
+                    set(selectedComment(topic.id))
+                  }}
+                >
+                  <Reply />
+                </IconButton>
+              </Tooltip>
+            )}
             <Tooltip title="Жалоба" placement="left" {...tooltipAttrs}>
               <IconButton sx={{ ml: 'auto' }} size="small" color="error">
                 <SentimentVeryDissatisfied />
@@ -156,5 +176,6 @@ export const CommentPost: React.FC<{
         </Box>
       </Box>
     </Paper>
+    </>
   )
 }

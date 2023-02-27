@@ -1,7 +1,6 @@
 import { ExamplePage } from './ExamplePage'
 import { ForumCreateThreadPage } from './ForumCreateThreadPage'
 import { ForumPage } from './ForumPage'
-import { ForumsPage } from './ForumsPage'
 import { ForumThreadPage } from './ForumThreadPage'
 import { GamePage } from './GamePage'
 import { LeaderboardPage } from './LeaderboardPage'
@@ -22,7 +21,6 @@ export {
   ProfilePage,
   ProfileChangePage,
   PasswordPage,
-  ForumsPage,
   ForumPage,
   ForumThreadPage,
   ForumCreateThreadPage,
