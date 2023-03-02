@@ -18,62 +18,59 @@ import {
   SignUpPage,
   ExamplePage,
 } from './pages'
+import { ErrorBoundary } from 'react-error-boundary'
+import { NavMenu } from './components/navMenu/components/NavMenu'
+import './App.css'
 
 export const App = () => {
   return (
     <>
-      <div style={{ display: 'flex', gap: 5 }}>
-        {Object.values(RoutesEnum).map((link, i) => {
-          return (
-            <div key={i}>
-              <Link to={link}>{link}</Link>
-            </div>
-          )
-        })}
-      </div>
+      <NavMenu />
       <hr />
-      <Routes>
-        <Route index element={<SignInPage />} />
-        <Route path="*" element={<NotFoundPage />} />
-        <Route path={RoutesEnum.Example} element={<ExamplePage />} />
-        <Route path={RoutesEnum.SignUp} element={<SignUpPage />} />
-        <Route path={RoutesEnum.ServerError} element={<ServerErrorPage />} />
-        <Route
-          path={RoutesEnum.Profile}
-          element={
-            <RequireAuth>
-              <ProfilePage />
-            </RequireAuth>
-          }
-        />
-        <Route
-          path={RoutesEnum.ProfileChange}
-          element={
-            <RequireAuth>
-              <ProfileChangePage />
-            </RequireAuth>
-          }
-        />
-        <Route
-          path={RoutesEnum.Password}
-          element={
-            <RequireAuth>
-              <PasswordPage />
-            </RequireAuth>
-          }
-        />
-        <Route path={RoutesEnum.Forums} element={<ForumsPage />}>
-          <Route path={':forum'} element={<ForumPage />}>
-            <Route path={':thread'} element={<ForumThreadPage />} />
-            <Route
-              path={actionPaths.createThread}
-              element={<ForumCreateThreadPage />}
-            />
+      <ErrorBoundary FallbackComponent={ServerErrorPage}>
+        <Routes>
+          <Route index element={<SignInPage />} />
+          <Route path="*" element={<NotFoundPage />} />
+          <Route path={RoutesEnum.Example} element={<ExamplePage />} />
+          <Route path={RoutesEnum.SignUp} element={<SignUpPage />} />
+          <Route path={RoutesEnum.ServerError} element={<ServerErrorPage />} />
+          <Route
+            path={RoutesEnum.Profile}
+            element={
+              <RequireAuth>
+                <ProfilePage />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path={RoutesEnum.ProfileChange}
+            element={
+              <RequireAuth>
+                <ProfileChangePage />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path={RoutesEnum.Password}
+            element={
+              <RequireAuth>
+                <PasswordPage />
+              </RequireAuth>
+            }
+          />
+          <Route path={RoutesEnum.Forums} element={<ForumsPage />}>
+            <Route path={':forum'} element={<ForumPage />}>
+              <Route path={':thread'} element={<ForumThreadPage />} />
+              <Route
+                path={actionPaths.createThread}
+                element={<ForumCreateThreadPage />}
+              />
+            </Route>
           </Route>
-        </Route>
-        <Route path={RoutesEnum.Leaderboard} element={<LeaderboardPage />} />
-        <Route path={RoutesEnum.Game} element={<GamePage />} />
-      </Routes>
+          <Route path={RoutesEnum.Leaderboard} element={<LeaderboardPage />} />
+          <Route path={RoutesEnum.Game} element={<GamePage />} />
+        </Routes>
+      </ErrorBoundary>
     </>
   )
 }
