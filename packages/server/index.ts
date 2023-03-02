@@ -15,6 +15,7 @@ import {
 import { createPost, findPosts, findPostById } from './features/posts/postsApi'
 import { createComment, findComments } from './features/comments/commentsApi'
 import { createLike, deleteLike, findAllLikes } from './features/likes/likesController'
+import { createSubcomment, findSubcomments } from './features/subcomments/subcommentsApi'
 
 const app = express()
 
@@ -75,10 +76,18 @@ app.post('/comments/create', async (req, res) => {
   res.send(comment)
 })
 
-app.post('/comments/sub', async (req, res) => {
-  const comment = await createComment(req.body)
-  console.log('comment created', comment)
-  res.send(comment)
+// todo: create sub comments
+app.post('/subcomments', async (req, res) => {
+  const subcomment = await createSubcomment(req.body)
+  console.log('subcomment created', subcomment)
+  res.send(subcomment)
+})
+
+// get subcomments
+app.get('/subcomments/:commentId', async (req, res) => {
+  const subcomments = await findSubcomments(Number(req.params.commentId))
+
+  res.send(subcomments)
 })
 
 app.get('/likes', async (_req, res) => {

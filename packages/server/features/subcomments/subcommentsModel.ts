@@ -1,15 +1,14 @@
 import { UserModel } from "../users/usersModel"//"features/users/usersModel"
 import { Column, Entity, Generated, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm"
 import { PostModel } from "../posts/postsModel"
-import { AutoIncrement } from "sequelize-typescript"
-import { SubcommentModel } from "../subcomments/subcommentsModel"
+import { CommentModel } from "../comments/commentsModel"
 
-@Entity('comments')
-export class CommentModel {
+@Entity('subcomments')
+export class SubcommentModel {
   @PrimaryGeneratedColumn()
   id!: number
 
-  @Column('text')
+  @Column({ nullable: true })
   message: string = ''
 
   @Column({ type: 'timestamptz', nullable: true })
@@ -22,11 +21,11 @@ export class CommentModel {
   reactions: { type: number; count: number }[] = []
 
   @Column({ nullable: true })
-  postId!: number
+  commentId!: number
 
   @ManyToOne(() => UserModel)
   user!: UserModel
 
-  @ManyToOne(() => PostModel, (post) => post.comments)
-  post!: PostModel
+  @ManyToOne(() => CommentModel)
+  comment!: CommentModel
 }

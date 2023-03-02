@@ -34,11 +34,11 @@ export interface Topic {
   title: string
   message: string
   datetime?: Date
-  avatar?: any,
+  avatar?: any
   likes?: number
   user: User
   comments: {
-    last: Comment,
+    last: Comment
     quantity: number
   }
 }
@@ -48,7 +48,7 @@ export interface Comment {
   message: string
   datetime?: Date
   reactions?: {
-    type: number,
+    type: number
     count: number
   }[]
   user?: User
@@ -56,15 +56,26 @@ export interface Comment {
 }
 
 export type ForumTopic = {
-  id: number,
-  name: string,
+  id: number
+  name: string
   lastMessage: {
-    user?: string,
-    date?: string,
-    time?: string,
-    content?: string,
-  },
-  messagesNumber: number,
-  likes: number,
+    user?: string
+    date?: string
+    time?: string
+    content?: string
+  }
+  messagesNumber: number
+  likes: number
   user: User
+}
+
+export type Subcomment = {
+  message: string
+  datetime: Date
+  likes: number
+  reactions: any[]
+  id: number
+  commentId: number
+  user: Pick<User, 'login' | 'avatar' | 'display_name' | 'id'>
+  comment: Comment
 }

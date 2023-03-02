@@ -5,7 +5,7 @@ import { useEffect, useState } from "react"
 import { baseOptions, BASE_URL } from "../../../app/api/variables"
 import { useSet } from "../../../app/store/hooks"
 import { selectedComment, toggleDrawer } from "../services/forumSlice"
-import { Comment, ForumTopic, Topic, User } from "../types"
+import { Comment, ForumTopic, Subcomment, Topic, User } from "../types"
 import { ForumSendMessage } from "./ForumSendMessage"
 
 const postContentStyle: React.CSSProperties = {
@@ -32,7 +32,7 @@ const tooltipAttrs = {
 export const CommentPost: React.FC<{
   isTopic?: boolean
   isSub?: boolean
-  topic: Topic | Comment
+  topic: Topic | Comment | Subcomment
 }> = ({
   isTopic = false,
   isSub = false,
@@ -79,7 +79,7 @@ export const CommentPost: React.FC<{
   }
 
   const defineLike = () => {
-    const a = likes?.find((like) => {
+    const like = likes?.find((like) => {
       if (isTopic) {
         return topic.id === like.postId && user?.id === like.userId
       }
@@ -87,7 +87,7 @@ export const CommentPost: React.FC<{
       return topic.id === like.commentId && user?.id === like.userId
     })
 
-    return a
+    return like
   }
 
   return (
@@ -150,7 +150,7 @@ export const CommentPost: React.FC<{
                 </Tooltip>
               )
             }
-            { !isTopic && (
+            { !isTopic && !isSub && (
               <Tooltip
                 title="Ответить на пост"
                 placement="right"

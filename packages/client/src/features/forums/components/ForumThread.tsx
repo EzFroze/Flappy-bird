@@ -4,7 +4,7 @@ import {
   Container,
   Typography,
 } from '@mui/material'
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { baseOptions, BASE_URL } from '../../../app/api/variables'
 import { RoutesEnum } from '../../../app/router/types'
@@ -79,6 +79,10 @@ export const ForumThread: React.FC = () => {
     })
   }
 
+  const selectedComment = useMemo(() => {
+    return comments.find((comment) => comment.id === selectedCommentId)
+  }, [selectedCommentId])
+
   return (
     <Container maxWidth="lg" sx={{ pt: 2 }}>
       <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
@@ -97,15 +101,20 @@ export const ForumThread: React.FC = () => {
           topic={comment!}
         />
       })}
+      <div style={{ marginTop: 20 }}></div>
       <ForumSendMessage
         disabled={loading}
         onClick={handlePostComment}
         message={comment}
         setMessage={setComment} 
       />
-      <CommentDrawer 
-        topic={comments.find((comment) => comment.id === selectedCommentId)} 
-      />
+      {
+        selectedComment && (
+          <CommentDrawer 
+              topic={selectedComment} 
+          />
+        )
+      }
     </Container>
   )
 }

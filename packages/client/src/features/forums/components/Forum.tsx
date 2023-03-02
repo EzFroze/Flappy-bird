@@ -6,6 +6,7 @@ import {
   Chip,
   Container,
   Grid,
+  IconButton,
   Link,
   Pagination,
   Stack,
@@ -20,18 +21,21 @@ import {
 import {
   Outlet as ForumThreadOutlet,
   useLocation,
+  useNavigate,
   useParams,
 } from 'react-router-dom'
 import { actionPaths, ForumTopic, Topic } from '../types'
 import { Link as RouterLink } from 'react-router-dom'
 import { headers } from '../data'
 import { useEffect, useState } from 'react'
-import { BASE_URL } from '../../../app/api/variables'
+import { baseOptions, BASE_URL } from '../../../app/api/variables'
+import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 
 export const Forum: React.FC = () => {
   const { thread } = useParams()
   const { pathname } = useLocation()
   const [topics, setTopics] = useState<ForumTopic[]>([])
+  const nav = useNavigate()
 
   useEffect(() => {
     fetch('http://localhost:3001/posts')
@@ -77,7 +81,7 @@ export const Forum: React.FC = () => {
               fetch(`${BASE_URL}/auth/logout`, {
                 credentials: 'include',
                 method: 'POST'
-              })
+              }).then(() => nav('/'))
             }}>Выйти</Button>
           </Box>
           <Grid container spacing={2} sx={{ mt: 2 }}>
