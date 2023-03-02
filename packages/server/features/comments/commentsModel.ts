@@ -1,6 +1,7 @@
 import { UserModel } from "../users/usersModel"//"features/users/usersModel"
-import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm"
+import { Column, Entity, Generated, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm"
 import { PostModel } from "../posts/postsModel"
+import { AutoIncrement } from "sequelize-typescript"
 
 @Entity('comments')
 export class CommentModel {
@@ -21,6 +22,10 @@ export class CommentModel {
 
   @Column({ nullable: true })
   postId!: number
+
+  @Column({ nullable: true })
+  @Generated('increment')
+  subCommentId: number = 0
 
   @ManyToOne(() => UserModel)
   user!: UserModel

@@ -75,6 +75,12 @@ app.post('/comments/create', async (req, res) => {
   res.send(comment)
 })
 
+app.post('/comments/sub', async (req, res) => {
+  const comment = await createComment(req.body)
+  console.log('comment created', comment)
+  res.send(comment)
+})
+
 app.get('/likes', async (_req, res) => {
   const likes = await findAllLikes()
 

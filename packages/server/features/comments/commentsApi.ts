@@ -24,6 +24,7 @@ export const createComment = async (data: CommentModel) => {
   comment.message = data.message
   comment.postId = data.postId
   comment.user = data.user
+  comment.subCommentId = data.subCommentId
 
   return comments.save(comment)
 }

@@ -1,14 +1,16 @@
 import { Send } from '@mui/icons-material'
-import { Button, Paper, TextField } from '@mui/material'
+import { Button, Paper, SxProps, TextField, Theme } from '@mui/material'
 import { useState } from 'react'
 
 export const ForumSendMessage: React.FC<{
+  sx?: SxProps<Theme>
   disabled?: boolean 
   submitButtonTitle?: string 
   onClick?: (arg: any) => void
   message: string
   setMessage: (text: string) => void
 }> = ({
+  sx = { p: 2 },
   submitButtonTitle,
   onClick,
   message,
@@ -16,7 +18,7 @@ export const ForumSendMessage: React.FC<{
   disabled
 }) => {
   return (
-    <Paper sx={{ mt: 2, p: 2 }}>
+    <Paper sx={sx}>
       <TextField
         className="thread__answer"
         label="Новое сообщение"

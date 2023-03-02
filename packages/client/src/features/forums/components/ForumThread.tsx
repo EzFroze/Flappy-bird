@@ -103,7 +103,9 @@ export const ForumThread: React.FC = () => {
         message={comment}
         setMessage={setComment} 
       />
-      <CommentDrawer topic={comments.find((comment) => comment.id === selectedCommentId)} />
+      <CommentDrawer 
+        topic={comments.find((comment) => comment.id === selectedCommentId)} 
+      />
     </Container>
   )
 }
