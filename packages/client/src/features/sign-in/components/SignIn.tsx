@@ -7,7 +7,7 @@ import {
   Link as MuiLink,
   FormHelperText,
 } from '@mui/material'
-import { useSearchParams, Link as RouterLink } from 'react-router-dom'
+import { Link as RouterLink } from 'react-router-dom'
 import { validatePassword, validateLogin } from '../../../utils/validation'
 import { Input } from '../../../components/input/components/Input'
 import { PasswordInput } from '../../../components/passwordInput/components/PasswordInput'
@@ -16,10 +16,6 @@ import { useStore } from '../../../app/store/hooks'
 import { getUser } from '../../profile/services/authSlice'
 import { useSignInSubmit } from '../hooks/useSignInSubmit'
 import { useValidationRoute } from '../../../hooks/useValidationRoute'
-import { oAuthAutorize } from '../services/oauth'
-import { fetchGetUser } from '../../profile/services/GetUser'
-import { useSet } from '../../../app/store/hooks'
-import { getOAuthUrl, getServiceId } from '../services/oauth'
 
 export const SignIn: React.FC = () => {
   const {
@@ -50,29 +46,6 @@ export const SignIn: React.FC = () => {
 
   useValidationRoute(RoutesEnum.Game, user)
 
-  const [searchParams] = useSearchParams()
-
-  const handleOAuth = () => {
-    getServiceId()
-      .then(response => response.json())
-      .then(result => window.location.replace(getOAuthUrl(result.service_id)))
-  }
-
-  const set = useSet()
-
-  useEffect(() => {
-    const code = searchParams.get(`code`)
-    if (code) {
-      oAuthAutorize(code).then(response => {
-        if (response.status === 200) {
-          set(fetchGetUser())
-        } else {
-          return response
-        }
-      })
-    }
-  }, [searchParams])
-
   return (
     <Box
       sx={{
@@ -85,7 +58,6 @@ export const SignIn: React.FC = () => {
         alignItems: 'center',
         backgroundColor: '#f5f5f5',
         padding: '10px',
-        borderRadius: '25px',
       }}>
       <Typography
         variant="h5"
@@ -142,22 +114,6 @@ export const SignIn: React.FC = () => {
         </Button>
       </form>
 
-      <Button
-        type="button"
-        onClick={handleOAuth}
-        fullWidth
-        variant="contained"
-        sx={{
-          borderRadius: '10px',
-          fontSize: 16,
-          mt: 2,
-          backgroundColor: '#2a2f3f',
-          '&:hover': {
-            background: '#1976d2',
-          },
-        }}>
-        Войти с Яндекс ID
-      </Button>
       <MuiLink
         color="#fff"
         component={RouterLink}

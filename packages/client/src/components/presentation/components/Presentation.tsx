@@ -19,7 +19,6 @@ export const Presentation: React.FC = () => {
           alignItems: 'center',
           backgroundColor: '#f5f5f5',
           padding: '10px',
-          borderRadius: '25px',
         }}>
         <Typography
           variant="h5"
