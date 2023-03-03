@@ -14,8 +14,9 @@ import {
 } from './features/users/usersApi'
 import { createPost, findPosts, findPostById } from './features/posts/postsApi'
 import { createComment, findComments } from './features/comments/commentsApi'
-import { createLike, deleteLike, findAllLikes } from './features/likes/likesController'
+import { createLike, findAllLikes } from './features/likes/likesController'
 import { createSubcomment, findSubcomments } from './features/subcomments/subcommentsApi'
+import { createComplain, findAllComplains } from './features/complains/complainsController'
 
 const app = express()
 
@@ -36,80 +37,64 @@ AppDataSource.initialize()
 
 // get all users
 app.get('/users', async (_req, res) => {
-  const users = await findUsers()
-
-  res.send(users)
+  res.send(await findUsers())
 })
 
 // get all posts
 app.get('/posts', async (_req, res) => {
-  const posts = await findPosts()
-
-  res.send(posts)
+  res.send(await findPosts())
 })
 
 // find post by id (for thread)
 app.get('/posts/:id', async (req, res) => {
-  const post = await findPostById(Number(req.params.id))
-
-  res.send(post)
+  res.send(await findPostById(Number(req.params.id)))
 })
 
 // create post (and create or update user)
 app.post('/posts/create', async (req, res) => {
-  await createPost(req.body)
-
-  res.send('ok')
+  res.send(await createPost(req.body))
 })
 
 // find thread comments
 app.get('/comments/thread/:id', async (req, res) => {
-  const comments = await findComments(Number(req.params.id))
-
-  res.send(comments)
+  res.send(await findComments(Number(req.params.id)))
 })
 
 // create comment
 app.post('/comments/create', async (req, res) => {
-  const comment = await createComment(req.body)
-  console.log('comment created', comment)
-  res.send(comment)
+  res.send(await createComment(req.body))
 })
 
 // todo: create sub comments
 app.post('/subcomments', async (req, res) => {
-  const subcomment = await createSubcomment(req.body)
-  console.log('subcomment created', subcomment)
-  res.send(subcomment)
+  res.send(await createSubcomment(req.body))
 })
 
 // get subcomments
 app.get('/subcomments/:commentId', async (req, res) => {
-  const subcomments = await findSubcomments(Number(req.params.commentId))
-
-  res.send(subcomments)
+  res.send(await findSubcomments(Number(req.params.commentId)))
 })
 
+// get all likes
 app.get('/likes', async (_req, res) => {
-  const likes = await findAllLikes()
-
-  res.send(likes)
+  res.send(await findAllLikes())
 })
 
 // create like
 app.post('/likes', async (req, res) => {
-  const like = await createLike(req.body)
-  console.log('like created', like)
-  res.send(like)
+  const likes = await createLike(req.body)
+  console.log('likes', likes)
+  res.send(likes)
 })
 
-// delete like
-app.delete('/likes', async (req, res) => {
-  await deleteLike(Number(req.body.id), req.body.type)
+// get all complains
+app.get('/complains', async (_req, res) => {
+  res.send(await findAllComplains())
+})
 
-  console.log('like deleted', req.body)
-  
-  res.send('deleted')
+// create complain
+app.post('/complains', async (req, res) => {
+  res.send(await createComplain(req.body))
 })
 
 app.listen(port, () => {

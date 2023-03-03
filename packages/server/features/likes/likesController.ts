@@ -11,19 +11,21 @@ export const createLike = async (data: LikesModel) => {
     commentId: data.commentId
   })
 
+  console.log('found like', foundLike)
+
   if (foundLike) {
-    return likes.delete({ id: foundLike.id })
+    await likes.delete({ id: foundLike.id })
+
+    return likes.find()
   }
   
   like.userId = data.userId
   like.postId = data?.postId || 0
   like.commentId = data?.commentId || 0
 
-  return likes.save(like)
-}
-
-export const deleteLike = (id: LikesModel['id'], type: 'post' | 'comment') => {
-  return likes.delete({ [`${type}Id`]: id })
+  await likes.save(like)
+  
+  return likes.find()
 }
 
 export const findAllLikes = async () => {

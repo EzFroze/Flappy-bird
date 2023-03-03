@@ -108,13 +108,7 @@ export const ForumThread: React.FC = () => {
         message={comment}
         setMessage={setComment} 
       />
-      {
-        selectedComment && (
-          <CommentDrawer 
-              topic={selectedComment} 
-          />
-        )
-      }
+      <CommentDrawer topic={selectedComment} />
     </Container>
   )
 }

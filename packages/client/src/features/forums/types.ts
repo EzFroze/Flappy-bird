@@ -79,3 +79,24 @@ export type Subcomment = {
   user: Pick<User, 'login' | 'avatar' | 'display_name' | 'id'>
   comment: Comment
 }
+
+export type DbRequest = {
+  model: 'likes' | 'posts' | 'comments' | 'users' | 'subcomments' | 'complains'
+  id?: number | string
+  method?: 'get' | 'post' | 'delete' | 'patch'
+  body?: string
+}
+
+export type Like = {
+  userId: number
+  postId: number
+  commentId: number
+  id: number
+}
+
+export type Complain = {
+  postId?: number
+  commentId?: number
+  subcommentId?: number
+  message: string
+}

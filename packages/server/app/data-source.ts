@@ -4,6 +4,7 @@ import { PostModel } from "../features/posts/postsModel";
 import { CommentModel } from "../features/comments/commentsModel";
 import { LikesModel } from "../features/likes/LikesModel";
 import { SubcommentModel } from "../features/subcomments/subcommentsModel";
+import { ComplainModel } from "../features/complains/ComplainsModel";
 
 const { 
   POSTGRES_USER, 
@@ -21,7 +22,7 @@ export const AppDataSource = new DataSource({
   database: POSTGRES_DB,
   synchronize: true,
   logging: false,
-  entities: [UserModel, PostModel, CommentModel, LikesModel, SubcommentModel],
+  entities: [UserModel, PostModel, CommentModel, LikesModel, SubcommentModel, ComplainModel],
   subscribers: [],
   migrations: [],
 })

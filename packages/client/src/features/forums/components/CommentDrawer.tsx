@@ -84,7 +84,7 @@ export const CommentDrawer: React.FC<{ topic: Topic | Comment }> = ({ topic }) =
         <CommentPost topic={topic} isTopic={true} isSub={true} />
         <Divider />
         {subComments.map((sc) => (
-          <CommentPost topic={sc} isSub={true} />
+          <CommentPost key={`sc-${sc.id}`} topic={sc} isSub={true} />
         ))}
         <ForumSendMessage 
           sx={{ p: 2, mt: 'auto' }} 

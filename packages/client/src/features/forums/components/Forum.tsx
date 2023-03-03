@@ -6,7 +6,6 @@ import {
   Chip,
   Container,
   Grid,
-  IconButton,
   Link,
   Pagination,
   Stack,
@@ -28,14 +27,20 @@ import { actionPaths, ForumTopic, Topic } from '../types'
 import { Link as RouterLink } from 'react-router-dom'
 import { headers } from '../data'
 import { useEffect, useState } from 'react'
-import { baseOptions, BASE_URL } from '../../../app/api/variables'
-import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
+import { BASE_URL } from '../../../app/api/variables'
 
 export const Forum: React.FC = () => {
   const { thread } = useParams()
   const { pathname } = useLocation()
   const [topics, setTopics] = useState<ForumTopic[]>([])
   const nav = useNavigate()
+
+  useEffect(() => {
+    fetch('http://localhost:3001/users')
+      .then(r => r.json())
+      .then(r => console.log('users', r))
+      .catch(err => console.log('err', err))
+  }, [])
 
   useEffect(() => {
     fetch('http://localhost:3001/posts')
