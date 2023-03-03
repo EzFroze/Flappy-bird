@@ -2,6 +2,7 @@ import { Box, Divider, Drawer } from "@mui/material"
 import { useEffect, useState } from "react"
 import { baseOptions, BASE_URL } from "../../../app/api/variables"
 import { useSet, useStore } from "../../../app/store/hooks"
+import { useDb } from "../hooks/useDb"
 import { toggleDrawer } from "../services/forumSlice"
 import { Topic, Comment, User, Subcomment } from "../types"
 import { CommentPost } from "./CommentPost"
@@ -12,31 +13,33 @@ export const CommentDrawer: React.FC<{ topic: Topic | Comment }> = ({ topic }) =
   const drawerOpen = useStore((state) => state.forum.drawerOpen)
 
   const [ message, setMessage ] = useState('')
-  const [ subComments, setSubComments ] = useState<Subcomment[]>([])
   const [ user, setUser ] = useState<User>()
 
+  const [ 
+    getSubcomments, 
+    { result: subcomments } 
+  ] = useDb<Subcomment[]>('subcomments')
+  const [ postSubcomments ] = useDb<Subcomment[]>('subcomments', 'post')
+
   useEffect(() => {
-    console.log('topic', topic)
-    if (topic?.id) {
-      fetch(`http://localhost:3001/subcomments/${topic.id}`)
-      .then(r => r.json())
-      .then((res) => {
-        console.log('res sub comments', res)
-        setSubComments(res)
-      })
-    }
+    if (!topic?.id) return
+
+    getSubcomments({ id: topic.id })
   }, [topic?.id])
+
+  const userRedux = useStore(s => s.user.data)
+
+  useEffect(() => {
+    console.log('user redix', userRedux)
+  }, [userRedux])
 
   useEffect(() => {
     fetch(`${BASE_URL}/auth/user`, baseOptions)
-      .then(r=>r.json())
-      .then((res) => {
-        console.log('res user', res)
-        setUser(res)
-      })
+      .then(r => r.json())
+      .then((res) => setUser(res))
   }, [])
 
-  const handlePostSubcomment = () => {
+  const handlePostSubcomment = async () => {
     if (topic === undefined) return
 
     const body: {
@@ -49,20 +52,10 @@ export const CommentDrawer: React.FC<{ topic: Topic | Comment }> = ({ topic }) =
       user
     }
 
-    console.log('thread body', body)
+    await postSubcomments({ body: JSON.stringify(body) })
 
-    fetch('http://localhost:3001/subcomments/', {
-      method: 'POST',
-      mode: 'cors',
-      headers: {
-        'content-type': 'application/json',
-      },
-      body: JSON.stringify(body)
-    }).then((res) => res.json()).then((res) => {
-      console.log('res subcomments', res)
-      setSubComments((scs) => scs.concat(res))
-      setMessage('')
-    })
+    setMessage('')
+    getSubcomments({ id: topic.id })
   }
 
   return (
@@ -83,7 +76,7 @@ export const CommentDrawer: React.FC<{ topic: Topic | Comment }> = ({ topic }) =
       }}>
         <CommentPost topic={topic} isTopic={true} isSub={true} />
         <Divider />
-        {subComments.map((sc) => (
+        {(subcomments || []).map((sc) => (
           <CommentPost key={`sc-${sc.id}`} topic={sc} isSub={true} />
         ))}
         <ForumSendMessage 

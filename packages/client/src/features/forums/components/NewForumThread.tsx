@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { baseOptions, BASE_URL } from '../../../app/api/variables'
 import { RoutesEnum } from '../../../app/router/types'
+import { useDb } from '../hooks/useDb'
 import { Topic, User } from '../types'
 import { ForumSendMessage } from './ForumSendMessage'
 
@@ -20,6 +21,8 @@ export const NewForumThread: React.FC = () => {
 
   const nav = useNavigate()
 
+  const [ postNewTopic ] = useDb('posts', 'post')
+
   useEffect(() => {
     fetch(`${BASE_URL}/auth/user`, baseOptions)
       .then((res) => res.json())
@@ -27,10 +30,6 @@ export const NewForumThread: React.FC = () => {
         setUser({ display_name, login, id, avatar })
       })
   }, [])
-
-  useEffect(() => {
-    console.log('topic', topic)
-  }, [topic])
   
   return (
     <Container maxWidth="lg" sx={{ pt: 2 }}>
@@ -49,14 +48,10 @@ export const NewForumThread: React.FC = () => {
           if (user.id === 0)
             return
 
-          fetch('http://127.0.0.1:3001/posts/create', {
-            method: 'POST',
-            mode: 'cors',
-            headers: {
-              'content-type': 'application/json',
-            },
-            body: JSON.stringify({ ...topic, user })
-          }).then(() => nav(RoutesEnum.Forums))
+            console.log('user', user)
+
+            postNewTopic({ body: JSON.stringify({ ...topic, user }) })
+              .then(() => nav(RoutesEnum.Forums))
         } } 
         message={topic.message}
       />

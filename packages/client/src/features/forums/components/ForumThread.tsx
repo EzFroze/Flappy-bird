@@ -9,6 +9,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { baseOptions, BASE_URL } from '../../../app/api/variables'
 import { RoutesEnum } from '../../../app/router/types'
 import { useStore } from '../../../app/store/hooks'
+import { useDb } from '../hooks/useDb'
 import { Topic, Comment } from '../types'
 import { CommentDrawer } from './CommentDrawer'
 import { CommentPost } from './CommentPost'
@@ -17,11 +18,9 @@ import { ForumSendMessage } from './ForumSendMessage'
 export const ForumThread: React.FC = () => {
   const { thread } = useParams()
   const nav = useNavigate()
-  const [ topic, setTopic ] = useState<Topic>()
   const [ currentUser, setCurrentUser ] = useState<any>()
   const [ loading, setLoading ] = useState(false)
   const [ comment, setComment ] = useState('')
-  const [ comments, setComments ] = useState<Comment[]>([])
 
   const selectedCommentId = useStore(({ forum }) => forum.selectedComment)
 
@@ -29,32 +28,26 @@ export const ForumThread: React.FC = () => {
     fetch(`${BASE_URL}/auth/user`, baseOptions)
       .then((res) => res.json())
       .then(({ id, display_name, login, avatar }) => {
-        //console.log('currentUser:', res)
+        if (id === undefined) return
+
         setCurrentUser({ id, display_name, login, avatar })
       })
   }, [])
 
-  // loading post info
   useEffect(() => {
-    setLoading(true)
-    fetch(`http://localhost:3001/posts/${thread}`)
-      .then((res) => res.json())
-      .then((res) => {
-        console.log('thread:', res)
-        setTopic(res)
-      })
-  }, [thread])
+    console.log('cur us', currentUser)
+  }, [])
+
+  const [ getTopic, { result: topic } ] = useDb<Topic>('posts')
+  const [ getComments, { result: comments } ] = useDb<Comment[]>('comments')
+  const [ postComment ] = useDb<Comment>('comments', 'post')
 
   useEffect(() => {
-    fetch(`http://localhost:3001/comments/thread/${thread}`)
-      .then((res) => res.json())
-      .then((res) => {
-        console.log('comments: ', res)
-        setComments(res)
-      }).finally(() => setLoading(false))
+    getTopic({ id: thread })
+    getComments({ id: `thread/${thread}`})
   }, [thread])
 
-  const handlePostComment = () => {
+  const handlePostComment = async () => {
     if (topic === undefined || currentUser === undefined) return
 
     const body: Comment = {
@@ -63,25 +56,15 @@ export const ForumThread: React.FC = () => {
       postId: topic.id
     }
 
-    console.log('thread bdoy', body)
+    await postComment({ body: JSON.stringify(body) })
 
-    fetch('http://localhost:3001/comments/create', {
-      method: 'POST',
-      mode: 'cors',
-      headers: {
-        'content-type': 'application/json',
-      },
-      body: JSON.stringify(body)
-    }).then((res) => res.json()).then((res) => {
-      console.log('res comments', res)
-      setComments((c) => c.concat(res))
-      setComment('')
-    })
+    setComment('')
+    getComments({ id: `thread/${thread}`})
   }
 
   const selectedComment = useMemo(() => {
-    return comments.find((comment) => comment.id === selectedCommentId)
-  }, [selectedCommentId])
+    return (comments || []).find((comment) => comment.id === selectedCommentId)
+  }, [selectedCommentId, comments])
 
   return (
     <Container maxWidth="lg" sx={{ pt: 2 }}>
@@ -95,7 +78,7 @@ export const ForumThread: React.FC = () => {
       { topic !== undefined && (
         <CommentPost topic={topic} isTopic={true} />
       )}
-      {comments.map((comment, i) => {
+      {(comments || []).map((comment, i) => {
         return <CommentPost 
           key={1000 + i} 
           topic={comment!}

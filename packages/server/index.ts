@@ -51,7 +51,7 @@ app.get('/posts/:id', async (req, res) => {
 })
 
 // create post (and create or update user)
-app.post('/posts/create', async (req, res) => {
+app.post('/posts', async (req, res) => {
   res.send(await createPost(req.body))
 })
 
@@ -61,7 +61,7 @@ app.get('/comments/thread/:id', async (req, res) => {
 })
 
 // create comment
-app.post('/comments/create', async (req, res) => {
+app.post('/comments', async (req, res) => {
   res.send(await createComment(req.body))
 })
 

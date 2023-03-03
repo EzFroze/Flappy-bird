@@ -5,7 +5,7 @@ export const useDb = <T>(
   model: DbRequest['model'], 
   method: DbRequest['method'] = 'get'
 ) => {
-  const [ result, setResult ] = useState<T>()
+  const [ result, setResult ] = useState<T | undefined>()
   const [ error, setError ] = useState<any>()
   const [ loading, setLoading ] = useState(false)
 

@@ -23,11 +23,12 @@ import {
   useNavigate,
   useParams,
 } from 'react-router-dom'
-import { actionPaths, ForumTopic, Topic } from '../types'
+import { actionPaths, ForumTopic, Like, Topic } from '../types'
 import { Link as RouterLink } from 'react-router-dom'
 import { headers } from '../data'
 import { useEffect, useState } from 'react'
 import { BASE_URL } from '../../../app/api/variables'
+import { useDb } from '../hooks/useDb'
 
 export const Forum: React.FC = () => {
   const { thread } = useParams()
@@ -35,44 +36,39 @@ export const Forum: React.FC = () => {
   const [topics, setTopics] = useState<ForumTopic[]>([])
   const nav = useNavigate()
 
+  const [ getPosts, { result: posts }] = useDb<Topic[]>('posts')
+  const [ getLikes, { result: likes }] = useDb<Like[]>('likes')
+
   useEffect(() => {
-    fetch('http://localhost:3001/users')
-      .then(r => r.json())
-      .then(r => console.log('users', r))
-      .catch(err => console.log('err', err))
+    getPosts({})
+    getLikes({})
   }, [])
 
   useEffect(() => {
-    fetch('http://localhost:3001/posts')
-      .then((res) => res.json())
-      .then((res: Topic[]) => {
-        console.log('res', res)
-        const topics = res.map((topic) => {
-          const user = topic.comments?.last?.user
-          const dt = topic.comments?.last?.datetime
+    const topics = (posts || []).map((topic) => {
+      const user = topic.comments?.last?.user
+      const dt = topic.comments?.last?.datetime
+      const likesNumber = (likes || []).filter((like) => {
+        return like.postId === topic.id
+      }).length
 
-          return {
-            id: topic.id,
-            name: topic.title,
-            lastMessage: {
-              user: user?.display_name || user?.login || '',
-              date: dt ? new Date(dt).toLocaleDateString() : '',
-              time: dt ? new Date(dt).toLocaleTimeString() : '',
-              content: '',
-            },
-            messagesNumber: topic.comments.quantity,
-            likes: topic.likes || 0,
-            user: topic.user
-          }
-        })
+      return {
+        id: topic.id,
+        name: topic.title,
+        lastMessage: {
+          user: user?.display_name || user?.login || '',
+          date: dt ? new Date(dt).toLocaleDateString() : '',
+          time: dt ? new Date(dt).toLocaleTimeString() : '',
+          content: '',
+        },
+        messagesNumber: topic.comments.quantity,
+        likes: likesNumber,
+        user: topic.user
+      }
+    })
 
-        setTopics(topics)
-      })
-  }, [])
-
-  useEffect(() => {
-    console.log('forum topics', topics)
-  }, [topics])
+    setTopics(topics)
+  }, [posts, likes])
 
   return (
     <>

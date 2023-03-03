@@ -1,10 +1,10 @@
-import { UserModel } from "../features/users/usersModel";
-import { DataSource } from "typeorm";
-import { PostModel } from "../features/posts/postsModel";
-import { CommentModel } from "../features/comments/commentsModel";
-import { LikesModel } from "../features/likes/LikesModel";
-import { SubcommentModel } from "../features/subcomments/subcommentsModel";
-import { ComplainModel } from "../features/complains/ComplainsModel";
+import { UserModel } from '../features/users/usersModel'
+import { DataSource } from 'typeorm'
+import { PostModel } from '../features/posts/postsModel'
+import { CommentModel } from '../features/comments/commentsModel'
+import { LikesModel } from '../features/likes/LikesModel'
+import { SubcommentModel } from '../features/subcomments/subcommentsModel'
+import { ComplainModel } from '../features/complains/ComplainsModel'
 
 const { 
   POSTGRES_USER, 
@@ -14,15 +14,22 @@ const {
 } = process.env
 
 export const AppDataSource = new DataSource({
-  type: "postgres",
-  host: "localhost",
+  type: 'postgres',
+  host: 'localhost',
   port: 5432,
   username: POSTGRES_USER || 'postgres',
   password: POSTGRES_PASSWORD || 'admin123',
   database: POSTGRES_DB,
   synchronize: true,
   logging: false,
-  entities: [UserModel, PostModel, CommentModel, LikesModel, SubcommentModel, ComplainModel],
+  entities: [
+    UserModel,
+    PostModel,
+    CommentModel,
+    LikesModel,
+    SubcommentModel,
+    ComplainModel,
+  ],
   subscribers: [],
   migrations: [],
 })
