@@ -106,7 +106,7 @@ export const Presentation: React.FC = () => {
               animationDuration: '0.3s',
               animationIterationCount: 'infinite',
               animationTimingFunction: 'linear',
-              animationDelay: '0s',
+              animationDelay: '0.5s',
             }}></img>
           <img
             src={bird_2}
@@ -122,7 +122,7 @@ export const Presentation: React.FC = () => {
               animationDuration: '0.3s',
               animationIterationCount: 'infinite',
               animationTimingFunction: 'linear',
-              animationDelay: '0s',
+              animationDelay: '0.5s',
             }}></img>
         </Box>
       </Box>

@@ -1,7 +1,19 @@
 import { BASE_URL, baseOptions } from '../../../app/api/variables'
 import { RequestOptions, Method } from '../../../app/api/types'
+import { getWindow, ssrWindow, extend } from 'ssr-window'
 
-export const redirectUrl = location.protocol + '//' + location.host
+/*toDo проверить как будет работать авторизация при деплое на хостинг, возможно отказаться от location */
+extend(ssrWindow, {
+  location: {
+    protocol: 'http',
+    host: 'localhost:3000',
+  },
+})
+
+const window = getWindow()
+
+export const redirectUrl =
+  window.location.protocol + '//' + window.location.host
 
 export const getOAuthUrl = (serviceId: string) =>
   `https://oauth.yandex.ru/authorize/?response_type=code&client_id=${serviceId}&redirect_uri=${redirectUrl}`
@@ -24,7 +36,7 @@ export const oAuthAutorize = (code: string | number): Promise<Response> => {
     method: Method.POST,
     body: JSON.stringify({
       code,
-      redirect_uri: location.protocol + '//' + location.host,
+      redirect_uri: window.location.protocol + '//' + window.location.host,
     }),
   }
 

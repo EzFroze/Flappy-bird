@@ -21,8 +21,41 @@ import {
 import { ErrorBoundary } from 'react-error-boundary'
 import { NavMenu } from './components/navMenu/components/NavMenu'
 import './App.css'
+import { useEffect } from 'react'
 
 export const App = () => {
+  useEffect(() => {
+    let message1
+    let message2
+    Notification.requestPermission().then(function (result) {
+      if (!('Notification' in window)) {
+        alert('This browser does not support desktop notification')
+      } else if (result === 'granted') {
+        let notification
+        notification = new Notification('Flappy-bird!', {
+          body: 'Привет, друг! Рады, что ты снами!',
+          icon: '/bird/frame-1.png',
+        })
+        message1 = setTimeout(() => {
+          notification = new Notification('Flappy-bird!', {
+            body: 'Давай играть?!',
+            icon: '/bird/frame-1.png',
+          })
+        }, 10000)
+        message2 = setTimeout(() => {
+          notification = new Notification('Flappy-bird!', {
+            body: 'Зарегистрируйся и сможешь попасть в таблицу лидеров!',
+            icon: '/bird/frame-1.png',
+          })
+        }, 15000)
+      }
+    })
+    return () => {
+      clearTimeout(message1)
+      clearTimeout(message2)
+    }
+  }, [])
+
   return (
     <>
       <NavMenu />
