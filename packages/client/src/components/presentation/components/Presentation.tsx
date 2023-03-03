@@ -61,7 +61,8 @@ export const Presentation: React.FC = () => {
               animationTimingFunction: 'linear',
 
               animationDelay: '0s',
-            }}></img>
+            }}
+          />
           <img
             src={forest}
             style={{
@@ -75,7 +76,8 @@ export const Presentation: React.FC = () => {
               animationIterationCount: 'infinite',
               animationTimingFunction: 'linear',
               animationDelay: '0s',
-            }}></img>
+            }}
+          />
           <img
             src={forest}
             style={{
@@ -89,7 +91,8 @@ export const Presentation: React.FC = () => {
               animationIterationCount: 'infinite',
               animationTimingFunction: 'linear',
               animationDelay: '20s',
-            }}></img>
+            }}
+          />
 
           <img
             src={bird_1}
@@ -106,7 +109,8 @@ export const Presentation: React.FC = () => {
               animationIterationCount: 'infinite',
               animationTimingFunction: 'linear',
               animationDelay: '0.5s',
-            }}></img>
+            }}
+          />
           <img
             src={bird_2}
             style={{
@@ -122,7 +126,8 @@ export const Presentation: React.FC = () => {
               animationIterationCount: 'infinite',
               animationTimingFunction: 'linear',
               animationDelay: '0.5s',
-            }}></img>
+            }}
+          />
         </Box>
       </Box>
     </>
