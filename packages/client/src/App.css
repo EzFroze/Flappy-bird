@@ -1,0 +1,14 @@
+* {
+  font-family: 'Roboto', sans-serif;
+}
+
+#root,
+body,
+html {
+  height: 10vh;
+}
+
+body {
+  padding: 0;
+  margin: 0;
+}

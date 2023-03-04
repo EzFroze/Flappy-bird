@@ -1,9 +1,9 @@
-import { Container, Paper, TextField, Typography } from '@mui/material'
+import { Container, Divider, Paper, TextField, Typography } from '@mui/material'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { baseOptions, BASE_URL } from '../../../app/api/variables'
 import { RoutesEnum } from '../../../app/router/types'
-import { useDb } from '../hooks/useDb'
+import { useDb } from '../../../hooks/useDb'
 import { Topic, User } from '../types'
 import { ForumSendMessage } from './ForumSendMessage'
 
@@ -34,7 +34,7 @@ export const NewForumThread: React.FC = () => {
   return (
     <Container maxWidth="lg" sx={{ pt: 2 }}>
       <Typography variant="h3">Новая тема</Typography>
-      <Paper sx={{ mt: 2, p: 2 }}>
+      <Paper sx={{ mt: 2, mb: 2, p: 2 }}>
         <TextField 
           label="Название темы" 
           sx={{ width: '100%' }} 

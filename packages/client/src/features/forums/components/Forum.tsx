@@ -29,12 +29,16 @@ import { Link as RouterLink } from 'react-router-dom'
 import { headers } from '../data'
 import { useEffect, useState } from 'react'
 import { BASE_URL } from '../../../app/api/variables'
-import { useDb } from '../hooks/useDb'
+import { useDb } from '../../../hooks/useDb'
+import { useTheme } from '../../../hooks/useTheme'
+import { useStore } from '../../../app/store/hooks'
+import { getUser } from '../../profile/services/authSlice'
 
 export const Forum: React.FC = () => {
   const { thread } = useParams()
   const { pathname } = useLocation()
   const [topics, setTopics] = useState<ForumTopic[]>([])
+  const theme = useTheme()
   const nav = useNavigate()
 
   const [ getPosts, { result: posts }] = useDb<Topic[]>('posts')
@@ -71,20 +75,31 @@ export const Forum: React.FC = () => {
     setTopics(topics)
   }, [posts, likes])
 
+
+
   return (
     <>
       {thread || pathname.includes(actionPaths.createThread) ? (
         <ForumThreadOutlet />
       ) : (
-        <Container maxWidth="lg" sx={{ pt: 2 }}>
-          <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+        <Container 
+          maxWidth="lg" 
+          sx={{ 
+            pt: 2,
+          }}>
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <Typography variant="h3">Форум</Typography>
-            <Button onClick={() => {
-              fetch(`${BASE_URL}/auth/logout`, {
-                credentials: 'include',
-                method: 'POST'
-              }).then(() => nav('/'))
-            }}>Выйти</Button>
+            <Button
+              variant='contained'
+              onClick={() => {
+                fetch(`${BASE_URL}/auth/logout`, {
+                  credentials: 'include',
+                  method: 'POST'
+                }).then(() => nav('/'))
+              }}
+            >
+              Выйти
+            </Button>
           </Box>
           <Grid container spacing={2} sx={{ mt: 2 }}>
             <Grid item xs={3}>
@@ -95,7 +110,8 @@ export const Forum: React.FC = () => {
                 component={RouterLink}>
                 <Button
                   startIcon={<AddCircleOutlineIcon />}
-                  variant="contained">
+                  variant="contained"
+                >
                   Новая тема
                 </Button>
               </Link>
@@ -109,7 +125,7 @@ export const Forum: React.FC = () => {
             </Grid>
           </Grid>
 
-          <TableContainer sx={{ mt: 2, backgroundColor: 'white' }}>
+          <TableContainer sx={{ mt: 2 }}>
             <Table>
               <TableHead>
                 <TableRow>

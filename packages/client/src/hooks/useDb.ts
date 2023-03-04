@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { DbRequest } from "../types"
+import { DbRequest } from "../features/forums/types"
 
 export const useDb = <T>(
   model: DbRequest['model'], 

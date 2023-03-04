@@ -24,13 +24,40 @@ import ModeNightIcon from '@mui/icons-material/ModeNight';
 import LightModeIcon from '@mui/icons-material/LightMode';
 import { useSet, useStore } from './app/store/hooks'
 import { useEffect, useState } from 'react'
-import { useDb } from './features/forums/hooks/useDb'
+import { useDb } from './hooks/useDb'
 import { baseOptions, BASE_URL } from './app/api/variables'
+import { grey, teal } from '@mui/material/colors';
 
-const darkTheme = createTheme({ palette: { mode: 'dark' } });
-const lightTheme = createTheme({ palette: { mode: 'light' } });
+import './App.css'
 
 let themeEnabled = false
+
+const lightTheme = createTheme({
+  palette: {
+    mode: 'light'
+  }
+})
+
+const darkTheme = createTheme({
+  palette: {
+    mode: 'dark',
+    primary: {
+      main: teal[500]
+    },
+    error: {
+      main: grey[300]
+    }
+  },
+  components: {
+    MuiTypography: {
+      styleOverrides: {
+        h3: {
+          color: grey[50]
+        },
+      }
+    }
+  }
+})
 
 export const App = () => {
   const theme = useStore((s) => s.themes.mode)
@@ -39,6 +66,12 @@ export const App = () => {
 
   const [ createUser ] = useDb('users', 'post')
   const [ getUsers ] = useDb<User[]>('users')
+
+  useEffect(() => {
+    const body = document.querySelector('body')
+    
+    body.style.background = theme === 'light' ? 'white' : 'black'
+  }, [theme])
 
   useEffect(() => {
     fetch(`${BASE_URL}/auth/user`, baseOptions)
@@ -79,23 +112,9 @@ export const App = () => {
   }, [theme])
 
   return (
-    <>
-      <div style={{ 
-        display: 'flex', gap: 5, 
-        backgroundColor: theme === 'dark' ? 'black' : 'white', 
-        color: theme === 'dark' ? 'white' : 'black',
-        height: 50 
-      }}>
-        {Object.values(RoutesEnum).map((link, i) => {
-          return (
-            <div key={i}>
-              <Link to={link}>{link}</Link>
-            </div>
-          )
-        })}
-      </div>
-      <ThemeProvider theme={theme === 'light' ? lightTheme : darkTheme}>
-        <Box sx={{ position: 'absolute', top: 0, right: 0 }}>
+    <ThemeProvider theme={ theme === 'light' ? lightTheme : darkTheme }>
+      <Box sx={{ height: 20 }}></Box>
+        <Box sx={{ position: 'absolute', top: 0, right: 0, height: 20 }}>
           {user.login}
           <IconButton onClick={() => {
             set(toggleTheme())
@@ -103,7 +122,6 @@ export const App = () => {
                 theme === 'dark' ? <ModeNightIcon /> : <LightModeIcon />
               }</IconButton>
         </Box>
-      </ThemeProvider>
       <Routes>
         <Route index element={<SignInPage />} />
         <Route path="*" element={<NotFoundPage />} />
@@ -134,16 +152,22 @@ export const App = () => {
             </RequireAuth>
           }
         />
-        <Route path={RoutesEnum.Forums} element={<RequireAuth><ForumPage /></RequireAuth>}>
-          <Route path={':thread'} element={<ForumThreadPage />} />
+        <Route path={RoutesEnum.Forums} element={
+            <RequireAuth><ForumPage /></RequireAuth>
+          }>
+          <Route path={':thread'} element={
+            <RequireAuth><ForumThreadPage /></RequireAuth>
+          } />
           <Route
             path={actionPaths.createThread}
-            element={<ForumCreateThreadPage />}
+            element={<RequireAuth><ForumCreateThreadPage /></RequireAuth>}
           />
         </Route>
         <Route path={RoutesEnum.Leaderboard} element={<LeaderboardPage />} />
-        <Route path={RoutesEnum.Game} element={<GamePage />} />
+        <Route path={RoutesEnum.Game} element={
+          <RequireAuth><GamePage /></RequireAuth>
+        } />
       </Routes>
-    </>
+    </ThemeProvider>
   )
 }

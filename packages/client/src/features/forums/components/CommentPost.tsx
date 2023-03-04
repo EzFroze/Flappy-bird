@@ -28,7 +28,7 @@ import {
 import { useEffect, useState } from 'react'
 import { baseOptions, BASE_URL } from '../../../app/api/variables'
 import { useSet } from '../../../app/store/hooks'
-import { useDb } from '../hooks/useDb'
+import { useDb } from '../../../hooks/useDb'
 import { selectedComment, toggleDrawer } from '../services/forumSlice'
 import { Comment, Complain, ForumTopic, Like, Subcomment, Topic, User } from '../types'
 import { ForumSendMessage } from './ForumSendMessage'
@@ -128,7 +128,6 @@ export const CommentPost: React.FC<{
         sx={{
           display: 'flex',
           mt: 2,
-          backgroundColor: isTopic ? '#f5f5f5' : '',
         }}>
         <Box className="post__avatar" sx={{ pl: 2, pt: 2 }}>
           <Avatar

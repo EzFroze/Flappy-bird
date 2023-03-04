@@ -2,15 +2,20 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { RootState } from '../../../app/store/store'
 //import { ExampleInitialState } from '../types'
 import { getTheme } from './themeApi'
-import { blue } from '@mui/material/colors';
+import { blue, grey, teal } from '@mui/material/colors';
 import { Theme } from '../types';
 
 export const themeSlice = createSlice({
   name: 'themeSlice',
   initialState: {
-    mode: 'light' as 'light' | 'dark',
+    mode: 'light' as Theme,
     status: 'idle' as 'idle' | 'pending' | 'success' | 'error',
-  } as const ,
+    config: {
+      bgr: [grey[50], teal[900]],
+      btn: [blue[500], blue[900]],
+      txt: [grey[900], grey[50]]
+    }
+  } as const,
   reducers: {
     toggleTheme(state) {
       state.mode = state.mode === 'light' ? 'dark' : 'light'
@@ -33,6 +38,8 @@ export const themeSlice = createSlice({
       })
   },
 })
+
+export const getThemeConfig = (state: RootState) => state.themes.config 
 
 export const { toggleTheme, updateTheme } = themeSlice.actions
 
