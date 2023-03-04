@@ -1,7 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { RootState } from '../../../app/store/store'
-//import { ExampleInitialState } from '../types'
-import { fetchForumData } from './forumApi'
+import { User } from '../types'
 
 export const forumSlice = createSlice({
   name: 'forumSlice',
@@ -9,8 +7,7 @@ export const forumSlice = createSlice({
     drawerOpen: false,
     drawerComment: '',
     selectedComment: 0,
-    data: [],
-    status: 'idle',
+    users: [] as User[]
   },
   reducers: {
     toggleDrawer(state) {
@@ -21,19 +18,10 @@ export const forumSlice = createSlice({
     },
     selectedComment(state, { payload }: PayloadAction<number>) {
       state.selectedComment = payload
+    },
+    updateUsers(state, { payload }: PayloadAction<User[]>) {
+      state.users = payload
     }
-  },
-  extraReducers(builder) {
-    builder.addCase(fetchForumData.fulfilled, (state, { payload }) => {
-      state.status = 'success'
-      state.data = payload
-    }),
-    builder.addCase(fetchForumData.pending, state => {
-      state.status = 'pending'
-    }),
-    builder.addCase(fetchForumData.rejected, state => {
-      state.status = 'error'
-    })
   },
 })
 

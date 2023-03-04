@@ -16,4 +16,7 @@ export class UserModel {
   
   @Column({ nullable: true })
   display_name: string = ''
+
+  @Column({ nullable: true })
+  theme: string = 'light'
 }

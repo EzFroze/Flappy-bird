@@ -27,6 +27,7 @@ export interface User {
   email: string
   phone: string
   avatar: string
+  theme?: 'light' | 'dark'
 }
 
 export interface Topic {
@@ -85,6 +86,7 @@ export type DbRequest = {
   id?: number | string
   method?: 'get' | 'post' | 'delete' | 'patch'
   body?: string
+  params?: string
 }
 
 export type Like = {

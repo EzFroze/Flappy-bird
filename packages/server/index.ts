@@ -6,12 +6,7 @@ import express from 'express'
 import 'reflect-metadata'
 
 import { AppDataSource } from './app/data-source'
-import {
-  createUser,
-  findUserById,
-  findUsers,
-  updateUser,
-} from './features/users/usersApi'
+import { createUser, findUsers } from './features/users/usersApi'
 import { createPost, findPosts, findPostById } from './features/posts/postsApi'
 import { createComment, findComments } from './features/comments/commentsApi'
 import { createLike, findAllLikes } from './features/likes/likesController'
@@ -38,6 +33,17 @@ AppDataSource.initialize()
 // get all users
 app.get('/users', async (_req, res) => {
   res.send(await findUsers())
+})
+
+// updateTheme
+app.post('/users/theme', async (req, res) => {
+  console.log('user theme', req.body)
+  res.send(await findUsers())
+})
+
+app.post('/users', async (req, res) => {
+  console.log('user theme', req.body)
+  res.send(await createUser(req.body))
 })
 
 // get all posts
