@@ -36,13 +36,12 @@ app.get('/users', async (_req, res) => {
 })
 
 // updateTheme
-app.post('/users/theme', async (req, res) => {
-  console.log('user theme', req.body)
+app.post('/users/theme', async (_req, res) => {
+
   res.send(await findUsers())
 })
 
 app.post('/users', async (req, res) => {
-  console.log('user theme', req.body)
   res.send(await createUser(req.body))
 })
 
@@ -89,7 +88,7 @@ app.get('/likes', async (_req, res) => {
 // create like
 app.post('/likes', async (req, res) => {
   const likes = await createLike(req.body)
-  console.log('likes', likes)
+
   res.send(likes)
 })
 
