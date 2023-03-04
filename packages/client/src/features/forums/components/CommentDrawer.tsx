@@ -27,12 +27,6 @@ export const CommentDrawer: React.FC<{ topic: Topic | Comment }> = ({ topic }) =
     getSubcomments({ id: topic.id })
   }, [topic?.id])
 
-  const userRedux = useStore(s => s.user.data)
-
-  useEffect(() => {
-    console.log('user redix', userRedux)
-  }, [userRedux])
-
   useEffect(() => {
     fetch(`${BASE_URL}/auth/user`, baseOptions)
       .then(r => r.json())

@@ -51,14 +51,6 @@ const tooltipAttrs = {
   enterNextDelay: 1000,
 }
 
-const StyledBadge = styled(Badge)(() => ({
-  '& .MuiBadge-badge': {
-    right: 4,
-    top: 25,
-    border: ``,
-  },
-}));
-
 export const CommentPost: React.FC<{
   isTopic?: boolean
   isSub?: boolean
