@@ -7,6 +7,7 @@ import {
 } from '@mui/icons-material'
 import {
   Avatar,
+  Badge,
   Box,
   Button,
   Dialog,
@@ -14,12 +15,9 @@ import {
   DialogContent,
   DialogTitle,
   Divider,
-  Drawer,
   IconButton,
-  Input,
-  Modal,
   Paper,
-  Popover,
+  styled,
   SxProps,
   TextField,
   Tooltip,
@@ -30,8 +28,7 @@ import { baseOptions, BASE_URL } from '../../../app/api/variables'
 import { useSet } from '../../../app/store/hooks'
 import { useDb } from '../../../hooks/useDb'
 import { selectedComment, toggleDrawer } from '../services/forumSlice'
-import { Comment, Complain, ForumTopic, Like, Subcomment, Topic, User } from '../types'
-import { ForumSendMessage } from './ForumSendMessage'
+import { Comment, Complain, Like, Subcomment, Topic, User } from '../types'
 
 const postContentStyle: React.CSSProperties = {
   display: 'flex',
@@ -54,10 +51,19 @@ const tooltipAttrs = {
   enterNextDelay: 1000,
 }
 
+const StyledBadge = styled(Badge)(() => ({
+  '& .MuiBadge-badge': {
+    right: 4,
+    top: 25,
+    border: ``,
+  },
+}));
+
 export const CommentPost: React.FC<{
   isTopic?: boolean
   isSub?: boolean
   topic: Topic | Comment | Subcomment
+  likes?: number
 }> = ({ isTopic = false, isSub = false, topic }) => {
   const set = useSet()
   const [user, setUser] = useState<User>()
@@ -65,6 +71,7 @@ export const CommentPost: React.FC<{
   const [complainMessage, setComplainMessage] = useState('')
 
   const [ getLikes, { result: likes } ] = useDb<Like[]>('likes')
+  const [ getSubcomments, { result: subcomments }] = useDb<Subcomment[]>('subcomments')
   const [ postLike ] = useDb<Like>('likes', 'post')
   const [ postComplain ] = useDb<Complain>('complains', 'post')
   const [ getComplains ] = useDb<Complain[]>('complains')
@@ -79,6 +86,12 @@ export const CommentPost: React.FC<{
     getLikes({})
   }, [])
 
+  useEffect(() => {
+    if (!isTopic && !isSub && topic?.id) {
+      getSubcomments({ id: topic.id })
+    }
+  }, [isTopic, isSub, topic.id])
+
   const handleLike = (id: number, userId: number) => {
     postLike({ body: JSON.stringify({
       userId,
@@ -87,6 +100,16 @@ export const CommentPost: React.FC<{
       getLikes({})
     }, 100))
   }
+
+  const likesQuantity = (likes || []).filter((like) => {
+    if (isTopic) {
+      return like.postId === topic.id
+    }
+
+    if (!isTopic && !isSub) {
+      return like.commentId === topic.id
+    }
+  }).length
 
   const defineLike = () => {
     const like = likes?.find(like => {
@@ -162,16 +185,23 @@ export const CommentPost: React.FC<{
             <Box id="message__control" sx={{ display: 'flex', pt: 2, gap: 1 }}>
               {!isSub && user?.id !== topic?.user?.id && (
                 <Tooltip title="Лайк" placement="left" {...tooltipAttrs}>
-                  <IconButton
-                    size="small"
-                    color={defineLike() ? 'error' : 'primary'}
-                    onClick={() => {
-                      if (topic?.id && user?.id) {
-                        handleLike(topic.id, user?.id)
-                      }
-                    }}>
-                    {defineLike() ? <FavoriteTwoTone /> : <FavoriteBorder />}
-                  </IconButton>
+                  <Badge
+                    sx={{ color: 'darkgray' }} 
+                    overlap="circular"
+                    badgeContent={likesQuantity > 1 ? likesQuantity : undefined} 
+                    max={9}
+                  >
+                    <IconButton
+                      size="small"
+                      color={defineLike() ? 'error' : 'primary'}
+                      onClick={() => {
+                        if (topic?.id && user?.id) {
+                          handleLike(topic.id, user?.id)
+                        }
+                      }}>
+                      {defineLike() ? <FavoriteTwoTone /> : <FavoriteBorder />}
+                    </IconButton>
+                  </Badge>
                 </Tooltip>
               )}
               {!isTopic && !isSub && (
@@ -179,15 +209,21 @@ export const CommentPost: React.FC<{
                   title="Ответить на пост"
                   placement="right"
                   {...tooltipAttrs}>
-                  <IconButton
-                    size="small"
-                    color="primary"
-                    onClick={() => {
-                      set(toggleDrawer())
-                      set(selectedComment(topic.id))
-                    }}>
-                    <Reply />
-                  </IconButton>
+                  <Badge 
+                    sx={{ color: 'darkgray' }} 
+                    badgeContent={subcomments?.length || 0} 
+                    overlap="circular"
+                  >
+                    <IconButton
+                      size="small"
+                      color="primary"
+                      onClick={() => {
+                        set(toggleDrawer())
+                        set(selectedComment(topic.id))
+                      }}>
+                      <Reply />
+                    </IconButton>
+                  </Badge>
                 </Tooltip>
               )}
               <Tooltip title="Жалоба" placement="left" {...tooltipAttrs}>

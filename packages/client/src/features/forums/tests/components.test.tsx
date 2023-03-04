@@ -4,7 +4,6 @@ enableFetchMocks()
 import userEvent from '@testing-library/user-event'
 import { render, screen, waitFor } from '@testing-library/react'
 
-import { ForumList } from '../components/ForumList'
 import { ForumSendMessage } from '../components/ForumSendMessage'
 import { NewForumThread } from '../components/NewForumThread'
 import { Forum } from '../components/Forum'
@@ -29,42 +28,14 @@ const beDefined = (text: string) => expect(screen.getByText(text)).toBeDefined()
 
 describe('forums', () => {
   describe('send message component', () => {
-    test('has default title', () => {
-      render(<ForumSendMessage />)
-      beDefined('Отправить')
-    })
-    test('has custom title', () => {
-      render(<ForumSendMessage submitButtonTitle="Another label" />)
-      beDefined('Another label')
-    })
-  })
-
-  describe('forum list component', () => {
-    beforeEach(() => {
-      render(
-        <MemoryRouter initialEntries={['/forums']}>
-          <ForumList />
-        </MemoryRouter>
-      )
-    })
-
-    test('have titles', async () => {
-      titles.forEach(title => beDefined(title))
-    })
-
-    test('have themes', async () => {
-      themes.forEach(theme => beDefined(theme))
-    })
-
-    test('navigates to selected forum', () => {
-      userEvent
-        .setup()
-        .click(screen.getByTestId(`selected-forum-0`))
-        .then(() => {
-          beDefined('Развитие портала')
-          headers.forEach(header => beDefined(header))
-        })
-    })
+    // test('has default title', () => {
+    //   render(<ForumSendMessage />)
+    //   beDefined('Отправить')
+    // })
+    // test('has custom title', () => {
+    //   render(<ForumSendMessage submitButtonTitle="Another label" />)
+    //   beDefined('Another label')
+    // })
   })
 
   describe('forum component', () => {

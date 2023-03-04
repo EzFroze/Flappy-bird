@@ -10,7 +10,7 @@ import { baseOptions, BASE_URL } from '../../../app/api/variables'
 import { RoutesEnum } from '../../../app/router/types'
 import { useStore } from '../../../app/store/hooks'
 import { useDb } from '../../../hooks/useDb'
-import { Topic, Comment } from '../types'
+import { Topic, Comment, Like } from '../types'
 import { CommentDrawer } from './CommentDrawer'
 import { CommentPost } from './CommentPost'
 import { ForumSendMessage } from './ForumSendMessage'
@@ -19,7 +19,6 @@ export const ForumThread: React.FC = () => {
   const { thread } = useParams()
   const nav = useNavigate()
   const [ currentUser, setCurrentUser ] = useState<any>()
-  const [ loading, setLoading ] = useState(false)
   const [ comment, setComment ] = useState('')
 
   const selectedCommentId = useStore(({ forum }) => forum.selectedComment)
@@ -34,17 +33,15 @@ export const ForumThread: React.FC = () => {
       })
   }, [])
 
-  useEffect(() => {
-    console.log('cur us', currentUser)
-  }, [])
-
   const [ getTopic, { result: topic } ] = useDb<Topic>('posts')
   const [ getComments, { result: comments } ] = useDb<Comment[]>('comments')
   const [ postComment ] = useDb<Comment>('comments', 'post')
+  const [ getLikes ] = useDb<Like[]>('likes') 
 
   useEffect(() => {
     getTopic({ id: thread })
     getComments({ id: `thread/${thread}`})
+    getLikes({})
   }, [thread])
 
   const handlePostComment = async () => {
@@ -86,7 +83,7 @@ export const ForumThread: React.FC = () => {
       })}
       <div style={{ marginTop: 20 }}></div>
       <ForumSendMessage
-        disabled={loading}
+        disabled={false}
         onClick={handlePostComment}
         message={comment}
         setMessage={setComment} 

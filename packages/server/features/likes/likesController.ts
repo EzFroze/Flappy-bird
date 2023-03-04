@@ -11,8 +11,6 @@ export const createLike = async (data: LikesModel) => {
     commentId: data.commentId
   })
 
-  console.log('found like', foundLike)
-
   if (foundLike) {
     await likes.delete({ id: foundLike.id })
 

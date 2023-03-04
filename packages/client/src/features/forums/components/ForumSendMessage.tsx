@@ -1,6 +1,5 @@
 import { Send } from '@mui/icons-material'
 import { Button, Paper, SxProps, TextField, Theme } from '@mui/material'
-import { useState } from 'react'
 
 export const ForumSendMessage: React.FC<{
   sx?: SxProps<Theme>

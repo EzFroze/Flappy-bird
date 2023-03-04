@@ -1,10 +1,10 @@
-import { Container, Divider, Paper, TextField, Typography } from '@mui/material'
-import { useEffect, useState } from 'react'
+import { Button, Container, Paper, Stack, TextField, Typography } from '@mui/material'
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { baseOptions, BASE_URL } from '../../../app/api/variables'
 import { RoutesEnum } from '../../../app/router/types'
+import { useStore } from '../../../app/store/hooks'
 import { useDb } from '../../../hooks/useDb'
-import { Topic, User } from '../types'
+import { User } from '../types'
 import { ForumSendMessage } from './ForumSendMessage'
 
 export const NewForumThread: React.FC = () => {
@@ -12,28 +12,17 @@ export const NewForumThread: React.FC = () => {
     title: '',
     message: ''
   })
-  const [user, setUser] = useState({
-    id: 0,
-    display_name: '',
-    login: '',
-    avatar: ''
-  })
-
+  const user = useStore((s) => s.user.data as unknown as User)
   const nav = useNavigate()
 
   const [ postNewTopic ] = useDb('posts', 'post')
-
-  useEffect(() => {
-    fetch(`${BASE_URL}/auth/user`, baseOptions)
-      .then((res) => res.json())
-      .then(({ id, display_name, login, avatar }: User) => {
-        setUser({ display_name, login, id, avatar })
-      })
-  }, [])
   
   return (
     <Container maxWidth="lg" sx={{ pt: 2 }}>
-      <Typography variant="h3">Новая тема</Typography>
+      <Stack direction={'row'} justifyContent={'space-between'}>
+        <Typography variant="h3">Новая тема</Typography>
+        <Button onClick={() => nav(RoutesEnum.Forums)}>На форум</Button>
+      </Stack>
       <Paper sx={{ mt: 2, mb: 2, p: 2 }}>
         <TextField 
           label="Название темы" 
@@ -47,8 +36,6 @@ export const NewForumThread: React.FC = () => {
         onClick={() => {
           if (user.id === 0)
             return
-
-            console.log('user', user)
 
             postNewTopic({ body: JSON.stringify({ ...topic, user }) })
               .then(() => nav(RoutesEnum.Forums))

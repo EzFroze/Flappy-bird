@@ -1,11 +1,9 @@
 import { UserModel } from "../../features/users/usersModel"
 import { AppDataSource } from "../../app/data-source"
 import { PostModel } from "./postsModel"
-import { LikesModel } from "../../features/likes/LikesModel"
 
 const posts = AppDataSource.getRepository(PostModel)
 const users = AppDataSource.getRepository(UserModel)
-const likes = AppDataSource.getRepository(LikesModel)
 
 export const createPost = async (data: PostModel) => {
   console.log('creating post...', data)

@@ -1,9 +1,11 @@
 import { UserModel } from "../../features/users/usersModel"
 import { AppDataSource } from "../../app/data-source"
 import { CommentModel } from "./commentsModel"
+import { LikesModel } from "../../features/likes/LikesModel"
 
 const comments = AppDataSource.getRepository(CommentModel)
 const users = AppDataSource.getRepository(UserModel)
+const likes = AppDataSource.getRepository(LikesModel)
 
 export const createComment = async (data: CommentModel) => {
   console.log('creating comment...', data)
@@ -35,7 +37,6 @@ export const findComments = async (postId: number) => {
     },
     where: { postId }
   })
-
 
   return foundComments
 }
