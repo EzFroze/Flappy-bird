@@ -3,8 +3,6 @@ import { useEffect, useRef, useState } from 'react'
 import { Bird, GameStatus, Player } from '../types'
 import { useBlocks } from '../hooks/useBlocks'
 import { getCollision } from '../utils/getCollision'
-import { OpenInFull, CloseFullscreen } from '@mui/icons-material'
-import { useFullscreen } from '../../../hooks/useFullscreen'
 import { Dialogs } from './Dialogs'
 import { useCanvas } from '../hooks/useCanvas'
 import {
@@ -20,10 +18,11 @@ import { usePlayerAction } from '../hooks/usePlayerAction'
 
 import wingUpFrame from '/bird/frame-1.png'
 import wingDownFrame from '/bird/frame-2.png'
-import { useSet, useStore } from '../../../app/store/hooks'
+import forest from '/background/forest.png'
+import { useFullscreen } from '../../../hooks/useFullscreen'
 
 export const Game_v3 = () => {
-  const fullscreen = useStore(s => s.game.fullscreen)
+  const { fullscreen } = useFullscreen()
   const [frame, setFrame] = useState(0)
   const [status, setStatus] = useState(GameStatus.start)
   const canvas = useCanvas()
@@ -54,6 +53,7 @@ export const Game_v3 = () => {
   })
 
   const [ bird, setBird ] = useState<Bird>()
+  const [ bgr, setBgr ] = useState<HTMLImageElement | null>(null)
 
   useEffect(() => {
     const waveUp = new Image()
@@ -68,7 +68,24 @@ export const Game_v3 = () => {
     waveDown.onload = () => {
       setBird(b => ({ ...b, waveDown }))
     }
+
+    const bgr = new Image()
+
+    bgr.src = forest
+
+    bgr.onload = () => {
+      setBgr(bgr)
+    }
   }, [])
+
+  useEffect(() => {
+    if (bird && bgr) {
+      setStatus(GameStatus.run)
+      setTimeout(() => {
+        setStatus(GameStatus.start)
+      }, 0)
+    }
+  }, [bird, bgr])
 
   useEffect(() => {
     if (canvas.current === null) return
@@ -183,7 +200,12 @@ export const Game_v3 = () => {
   }, [status])
 
   return (
-    <Box display={'flex'} justifyContent={'center'} alignItems={'center'} minHeight={'100vh'}>
+    <Box 
+      display={'flex'} 
+      justifyContent={'center'} 
+      alignItems={'center'} 
+      minHeight={'100vh'}
+    >
       <Box sx={{ margin: 'auto', p: 1 }}>
         <canvas
           style={{ outline: '1px solid black' }}

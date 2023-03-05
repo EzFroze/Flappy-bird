@@ -10,11 +10,14 @@ export const gameSlice = createSlice({
     toggleFullscreen(state) {
       state.fullscreen = !state.fullscreen
     },
+    updateFullscreen(state, action: PayloadAction<boolean>) {
+      state.fullscreen = action.payload
+    }
   },
 })
 
 export const getExampleInput = (state: RootState) => state.example.input
 
-export const { toggleFullscreen } = gameSlice.actions
+export const { toggleFullscreen, updateFullscreen } = gameSlice.actions
 
 export default gameSlice.reducer

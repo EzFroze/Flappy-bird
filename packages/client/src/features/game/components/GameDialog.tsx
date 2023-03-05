@@ -43,7 +43,7 @@ export const GameDialog: React.FC<DialogProps> = ({
         <Typography textAlign={'center'} variant='h5'>
           {title}
         </Typography>
-        <Button onClick={onClick} variant='contained'>
+        <Button onClick={onClick} variant='contained' color='secondary'>
             {buttonTitle}
         </Button>
         <Button 

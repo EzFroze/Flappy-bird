@@ -61,6 +61,8 @@ export const renderBirdFall = (
   height: number,
   bird: Bird
 ) => {
+  if (!bird) return
+
   ctx.globalAlpha = 0.7
 
   if (Math.round(player.y) >= height - 20 - player.h) {
@@ -79,6 +81,8 @@ export const renderBirdWave = (
   player: Player,
   bird: Bird
 ) => {
+  if (!bird) return
+
   if (Math.ceil(player.wave) % 2 === 0) {
     ctx.drawImage(bird.waveUp, player.x, player.y, player.w, player.h)
   } else {
