@@ -1,8 +1,21 @@
-import { useCallback, useRef } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { GameStatus } from '../types'
 import forest from '/background/forest.png'
 
 export const useBackground = () => {
+  const [ background, setBackground ] = useState<HTMLImageElement>()
+
+  useEffect(() => {
+    const background = new Image()
+
+    background.src = forest
+
+    background.onload = () => {
+      setBackground(background)
+    }
+
+  }, [])
+
   const backgroundPosition = useRef({
     first: 0,
     second: 0,
@@ -11,26 +24,23 @@ export const useBackground = () => {
   const renderBackground = (
     ctx: CanvasRenderingContext2D,
     canvas: HTMLCanvasElement,
-    status: GameStatus
+    status: GameStatus  
   ) => {
     if (!canvas) return
+    if (!background) return
 
     const { width, height } = canvas
-    const background1 = new Image()
-    const background2 = new Image()
-    background1.src = forest
-    background2.src = forest
 
     ctx.globalAlpha = 0.7
     ctx.drawImage(
-      background1,
+      background,
       backgroundPosition.current.first,
       0,
       width,
       height
     )
     ctx.drawImage(
-      background2,
+      background,
       backgroundPosition.current.second,
       0,
       width,

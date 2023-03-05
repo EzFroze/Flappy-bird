@@ -7,7 +7,7 @@ import { DialogProps } from '../types'
 export const GameDialog: React.FC<DialogProps> = ({
   title,
   buttonTitle,
-  open,
+  open = false,
   onClick,
 }) => {
   const goTo = useNavigate()

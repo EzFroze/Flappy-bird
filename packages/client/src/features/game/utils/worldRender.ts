@@ -1,5 +1,5 @@
 import { brown, green } from '@mui/material/colors'
-import { Player, Position } from '../types'
+import { Bird, Player, Position } from '../types'
 import wingUpFrame from '/bird/frame-1.png'
 import wingDownFrame from '/bird/frame-2.png'
 
@@ -60,33 +60,30 @@ export const renderInfo = ({
 export const renderBirdFall = (
   ctx: CanvasRenderingContext2D,
   player: Player,
-  height: number
+  height: number,
+  bird: Bird
 ) => {
-  const bird = new Image()
+  ctx.globalAlpha = 0.7
 
   if (Math.round(player.y) >= height - 20 - player.h) {
-    bird.src = wingDownFrame
+    ctx.drawImage(bird.waveDown, player.x, player.y, player.w, player.h)
   } else {
     player.y += 2
-    bird.src = wingUpFrame
+    ctx.drawImage(bird.waveUp, player.x, player.y, player.w, player.h)
   }
 
-  ctx.globalAlpha = 0.7
-  ctx.drawImage(bird, player.x, player.y, player.w, player.h)
   ctx.globalAlpha = 1
+
 }
 
 export const renderBirdWave = (
   ctx: CanvasRenderingContext2D,
-  player: Player
+  player: Player,
+  bird: Bird
 ) => {
-  const bird = new Image()
-
   if (Math.ceil(player.wave) % 2 === 0) {
-    bird.src = wingUpFrame
+    ctx.drawImage(bird.waveUp, player.x, player.y, player.w, player.h)
   } else {
-    bird.src = wingDownFrame
+    ctx.drawImage(bird.waveDown, player.x, player.y, player.w, player.h)
   }
-
-  ctx.drawImage(bird, player.x, player.y, player.w, player.h)
 }
