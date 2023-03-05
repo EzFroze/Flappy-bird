@@ -1,8 +1,23 @@
-import { Button, Dialog, DialogActions, DialogTitle } from '@mui/material'
+import { Box, Button, Dialog, DialogActions, DialogTitle, IconButton, Slide, Stack, Typography } from '@mui/material'
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
 import { RoutesEnum } from '../../../app/router/types'
+import { useSet, useStore } from '../../../app/store/hooks'
 import { DialogProps } from '../types'
+import OpenInFull from '@mui/icons-material/OpenInFull';
+import CloseFullscreen from '@mui/icons-material/CloseFullscreen';
+import { toggleFullscreen } from '../services/gameSlice'
+import { blue, grey } from '@mui/material/colors'
+import { TransitionProps } from '@mui/material/transitions'
+
+const Transition = React.forwardRef(function Transition(
+  props: TransitionProps & {
+    children: React.ReactElement<any, any>;
+  },
+  ref: React.Ref<unknown>,
+) {
+  return <Slide direction="up" ref={ref} {...props} />;
+});
 
 export const GameDialog: React.FC<DialogProps> = ({
   title,
@@ -11,16 +26,42 @@ export const GameDialog: React.FC<DialogProps> = ({
   onClick,
 }) => {
   const goTo = useNavigate()
+  const fullscreen = useStore(s => s.game.fullscreen)
+  const set = useSet()
 
   return (
-    <Dialog open={open}>
-      <DialogTitle>{title}</DialogTitle>
-      <DialogActions>
-        <Button onClick={() => goTo(RoutesEnum.Leaderboard)}>
-          Перейти в "Лидерборд"
+    <Dialog 
+      open={open}
+      TransitionComponent={Transition}
+      keepMounted
+    >
+      <Box sx={{ 
+        padding: 8, 
+        display: 'flex', flexDirection: 'column', gap: 2,
+        alignItems: 'stretch' 
+      }}>
+        <Typography textAlign={'center'} variant='h5'>
+          {title}
+        </Typography>
+        <Button onClick={onClick} variant='contained'>
+            {buttonTitle}
         </Button>
-        <Button onClick={onClick}>{buttonTitle}</Button>
-      </DialogActions>
+        <Button 
+          onClick={() => goTo(RoutesEnum.Leaderboard)} 
+          variant='contained'
+        >
+            Таблица рекордов
+        </Button>
+        <IconButton
+          onClick={() => set(toggleFullscreen())}
+          sx={{ 
+            position: 'absolute', right: 0, top: 0, 
+            color: blue[700] 
+          }}
+        >
+          { fullscreen ? <CloseFullscreen /> : <OpenInFull />}
+        </IconButton>
+      </Box>
     </Dialog>
   )
 }

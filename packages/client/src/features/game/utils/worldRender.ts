@@ -1,7 +1,5 @@
 import { brown, green } from '@mui/material/colors'
 import { Bird, Player, Position } from '../types'
-import wingUpFrame from '/bird/frame-1.png'
-import wingDownFrame from '/bird/frame-2.png'
 
 export const renderBlock = (
   ctx: CanvasRenderingContext2D,

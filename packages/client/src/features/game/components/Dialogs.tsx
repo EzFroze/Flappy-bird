@@ -7,8 +7,14 @@ export const Dialogs: React.FC<{
   updateStatus: React.Dispatch<React.SetStateAction<GameStatus>>
   restorePlayer: () => void
   restartLevel: () => void
-  progress: number
-}> = ({ status, updateStatus, restorePlayer, restartLevel, progress }) => {
+  progress: number,
+}> = ({ 
+  status, 
+  updateStatus, 
+  restorePlayer, 
+  restartLevel, 
+  progress,
+}) => {
   const restart = useCallback(() => {
     updateStatus(GameStatus.start)
     restorePlayer()
