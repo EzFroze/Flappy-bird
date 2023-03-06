@@ -2,7 +2,7 @@ import { Box, createTheme, IconButton, ThemeProvider } from '@mui/material'
 import { Routes, Route, Link, useNavigate } from 'react-router-dom'
 import { RoutesEnum } from './app/router/types'
 import { RequireAuth } from './components/requireAuth/RequireAuth'
-import { actionPaths, User } from './features/forums/types'
+import { User } from './features/forums/types'
 import { toggleTheme, updateTheme } from './features/themes/services/themeSlice'
 import {
   ForumCreateThreadPage,
@@ -29,6 +29,7 @@ import { baseOptions, BASE_URL } from './app/api/variables'
 import { grey, teal } from '@mui/material/colors';
 
 import './App.css'
+import { saveUser, userSelector } from './features/forums/services/forumSlice'
 
 let themeEnabled = false
 
@@ -60,9 +61,9 @@ const darkTheme = createTheme({
 })
 
 export const App = () => {
-  const theme = useStore((s) => s.themes.mode)
+  const theme = useStore((state) => state.themes.mode)
   const set = useSet()
-  const [ user, setUser ] = useState<Partial<User & { theme: 'light' | 'dark' }>>({})
+  const user = useStore(userSelector)
 
   const [ createUser ] = useDb('users', 'post')
   const [ getUsers ] = useDb<User[]>('users')
@@ -85,18 +86,20 @@ export const App = () => {
 
           // adding user to db
           if (!user) {
+            const newUser = { 
+              id, display_name, login, avatar, 
+              theme
+            }
+
             createUser({ 
-              body: JSON.stringify({ 
-                id, display_name, login, avatar, 
-                theme
-              }) 
+              body: JSON.stringify(newUser) 
             })
+
+            set(saveUser(newUser as User))
           } else {
             set(updateTheme(user.theme))
+            set(saveUser(user))
           }
-        }).finally(() => {
-          // user is logger so we add him to local state
-          setUser({ id, display_name, login, avatar, theme })
         })
       }).then(() => themeEnabled = true)
   }, [])
@@ -115,7 +118,7 @@ export const App = () => {
     <ThemeProvider theme={ theme === 'light' ? lightTheme : darkTheme }>
       <Box sx={{ height: 20 }}></Box>
         <Box sx={{ position: 'absolute', top: 0, right: 0, height: 20 }}>
-          {user.login}
+          {user?.login}
           <IconButton onClick={() => {
             set(toggleTheme())
           }}>{
@@ -155,11 +158,11 @@ export const App = () => {
         <Route path={RoutesEnum.Forums} element={
             <RequireAuth><ForumPage /></RequireAuth>
           }>
-          <Route path={':thread'} element={
+          <Route path={RoutesEnum.Thread} element={
             <RequireAuth><ForumThreadPage /></RequireAuth>
           } />
           <Route
-            path={actionPaths.createThread}
+            path={RoutesEnum.CreateThread}
             element={<RequireAuth><ForumCreateThreadPage /></RequireAuth>}
           />
         </Route>

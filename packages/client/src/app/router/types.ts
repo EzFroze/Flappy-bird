@@ -5,6 +5,8 @@ export enum RoutesEnum {
   ProfileChange = '/profile-change',
   Password = '/password',
   Forums = '/forum',
+  Thread = ':thread',
+  CreateThread = 'createThread',
   ServerError = '/server-error',
   NotFound = '*',
   Game = '/game',

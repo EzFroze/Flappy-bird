@@ -1,9 +1,8 @@
 import { Box, Divider, Drawer } from "@mui/material"
 import { useEffect, useState } from "react"
-import { baseOptions, BASE_URL } from "../../../app/api/variables"
 import { useSet, useStore } from "../../../app/store/hooks"
 import { useDb } from "../../../hooks/useDb"
-import { toggleDrawer } from "../services/forumSlice"
+import { toggleDrawer, userSelector } from "../services/forumSlice"
 import { Topic, Comment, User, Subcomment } from "../types"
 import { CommentPost } from "./CommentPost"
 import { ForumSendMessage } from "./ForumSendMessage"
@@ -13,7 +12,7 @@ export const CommentDrawer: React.FC<{ topic: Topic | Comment }> = ({ topic }) =
   const drawerOpen = useStore((state) => state.forum.drawerOpen)
 
   const [ message, setMessage ] = useState('')
-  const [ user, setUser ] = useState<User>()
+  const user = useStore(userSelector)
 
   const [ 
     getSubcomments, 
@@ -26,12 +25,6 @@ export const CommentDrawer: React.FC<{ topic: Topic | Comment }> = ({ topic }) =
 
     getSubcomments({ id: topic.id })
   }, [topic?.id])
-
-  useEffect(() => {
-    fetch(`${BASE_URL}/auth/user`, baseOptions)
-      .then(r => r.json())
-      .then((res) => setUser(res))
-  }, [])
 
   const handlePostSubcomment = async () => {
     if (topic === undefined) return

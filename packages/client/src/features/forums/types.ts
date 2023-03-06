@@ -1,8 +1,3 @@
-
-export const actionPaths = {
-  createThread: 'createThread',
-} as const
-
 export interface User {
   id: number
   first_name: string

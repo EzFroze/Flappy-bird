@@ -5,9 +5,7 @@ const repo = AppDataSource.getRepository(UserModel)
 
 export const findUsers = async () => {
   const users = await repo.find()
-
-  //console.log("All users from the db: ", users)
-
+  
   return users
 }
 

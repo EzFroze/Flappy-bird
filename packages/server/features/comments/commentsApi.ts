@@ -8,8 +8,6 @@ const users = AppDataSource.getRepository(UserModel)
 const likes = AppDataSource.getRepository(LikesModel)
 
 export const createComment = async (data: CommentModel) => {
-  console.log('creating comment...', data)
-
   const user = new UserModel()
   
   user.id = data.user.id

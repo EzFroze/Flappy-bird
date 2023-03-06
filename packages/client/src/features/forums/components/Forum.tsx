@@ -22,12 +22,13 @@ import {
   useLocation,
   useParams,
 } from 'react-router-dom'
-import { actionPaths, ForumTopic, Like, Topic } from '../types'
+import { ForumTopic, Like, Topic } from '../types'
 import { Link as RouterLink } from 'react-router-dom'
 import { headers } from '../data'
 import { useEffect, useState } from 'react'
 import { BASE_URL } from '../../../app/api/variables'
 import { useDb } from '../../../hooks/useDb'
+import { RoutesEnum } from '../../../app/router/types'
 
 export const Forum: React.FC = () => {
   const { thread } = useParams()
@@ -44,7 +45,7 @@ export const Forum: React.FC = () => {
 
   useEffect(() => {
     const topics = (posts || []).map((topic) => {
-      const user = topic.comments?.last?.user
+      const lastUser = topic.comments?.last?.user
       const dt = topic.comments?.last?.datetime
       const likesNumber = (likes || []).filter((like) => {
         return like.postId === topic.id
@@ -54,7 +55,7 @@ export const Forum: React.FC = () => {
         id: topic.id,
         name: topic.title,
         lastMessage: {
-          user: user?.display_name || user?.login || '',
+          user: lastUser?.display_name || lastUser?.login || '',
           date: dt ? new Date(dt).toLocaleDateString() : '',
           time: dt ? new Date(dt).toLocaleTimeString() : '',
           content: '',
@@ -72,7 +73,7 @@ export const Forum: React.FC = () => {
 
   return (
     <>
-      {thread || pathname.includes(actionPaths.createThread) ? (
+      {thread || pathname.includes(RoutesEnum.CreateThread) ? (
         <ForumThreadOutlet />
       ) : (
         <Container 
@@ -88,7 +89,7 @@ export const Forum: React.FC = () => {
               <Link
                 data-test="link-create-thread"
                 underline="none"
-                to={actionPaths.createThread}
+                to={RoutesEnum.CreateThread}
                 component={RouterLink}>
                 <Button
                   startIcon={<AddCircleOutlineIcon />}
@@ -119,8 +120,8 @@ export const Forum: React.FC = () => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {topics.map((row, i) => (
-                  <TableRow key={i * 10000}>
+                {topics.map((row) => (
+                  <TableRow key={`topic_table_row_${row.id}`}>
                     <TableCell>
                       <Stack direction={'row'} alignItems="center" spacing={2}>
                         <Avatar

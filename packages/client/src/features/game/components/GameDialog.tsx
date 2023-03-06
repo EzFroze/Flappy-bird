@@ -11,13 +11,12 @@ export const GameDialog: React.FC<DialogProps> = ({
   onClick,
 }) => {
   const nav = useNavigate()
-  const goTo = useNavigate()
 
   return (
     <Dialog open={open}>
       <DialogTitle>{title}</DialogTitle>
       <DialogActions>
-        <Button onClick={() => goTo(RoutesEnum.Leaderboard)}>
+        <Button onClick={() => nav(RoutesEnum.Leaderboard)}>
           Перейти в "Лидерборд"
         </Button>
         <Button onClick={onClick}>{buttonTitle}</Button>

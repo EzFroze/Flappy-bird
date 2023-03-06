@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { RootState } from '../../../app/store/store'
 import { User } from '../types'
 
 export const forumSlice = createSlice({
@@ -7,7 +8,8 @@ export const forumSlice = createSlice({
     drawerOpen: false,
     drawerComment: '',
     selectedComment: 0,
-    users: [] as User[]
+    users: [] as User[],
+    user: undefined as User | undefined,
   },
   reducers: {
     toggleDrawer(state) {
@@ -21,10 +23,21 @@ export const forumSlice = createSlice({
     },
     updateUsers(state, { payload }: PayloadAction<User[]>) {
       state.users = payload
-    }
+    },
+    saveUser(state, { payload }: PayloadAction<User>) {
+      state.user = payload
+    },
   },
 })
 
-export const { toggleDrawer, drawerComment, selectedComment } = forumSlice.actions
+export const userSelector = (state: RootState) => state.forum.user
+
+export const {
+  toggleDrawer,
+  drawerComment,
+  selectedComment,
+  saveUser,
+  updateUsers,
+} = forumSlice.actions
 
 export default forumSlice.reducer

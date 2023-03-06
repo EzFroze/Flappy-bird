@@ -8,8 +8,6 @@ const users = AppDataSource.getRepository(UserModel)
 const comments = AppDataSource.getRepository(CommentModel)
 
 export const createSubcomment = async (data: SubcommentModel) => {
-  console.log('creating subcomment...', data)
-
   const user = new UserModel()
   
   user.id = data.user.id
