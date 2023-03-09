@@ -5,7 +5,6 @@ import { LikesModel } from "../../features/likes/LikesModel"
 
 const comments = AppDataSource.getRepository(CommentModel)
 const users = AppDataSource.getRepository(UserModel)
-const likes = AppDataSource.getRepository(LikesModel)
 
 export const createComment = async (data: CommentModel) => {
   const user = new UserModel()

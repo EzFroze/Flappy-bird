@@ -8,16 +8,16 @@ export class PostModel {
   id!: number
 
   @Column('text')
-  title: string = ''
+  title = ''
 
   @Column('text')
-  message: string = ''
+  message = ''
 
   @Column({ type: 'timestamptz', nullable: true })
   datetime: Date = new Date()
 
   @Column('integer')
-  likes: number = 0
+  likes = 0
 
   @ManyToOne(() => UserModel)
   user!: UserModel

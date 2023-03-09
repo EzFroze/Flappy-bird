@@ -5,12 +5,12 @@ export class LikesModel {
   @PrimaryGeneratedColumn()
   id!: number
 
-  @Column({ nullable: true })
-  userId: number = 0
+  @Column({ type: 'int', nullable: true })
+  userId = 0
 
-  @Column({ nullable: true })
-  postId: number = 0
+  @Column({ type: 'int', nullable: true })
+  postId = 0
 
-  @Column({ nullable: true })
-  commentId: number = 0
+  @Column({ type: 'int', nullable: true })
+  commentId = 0
 }

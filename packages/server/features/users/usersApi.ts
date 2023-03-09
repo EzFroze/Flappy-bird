@@ -24,10 +24,3 @@ export const createUser = async (data: UserModel) => {
 
   return repo.save(user)
 }
-
-// user.first_name = 'lolkek'
-// user.second_name = 'azaza'
-// user.email = 'test@yandex.ru'
-// user.login = 'anon'
-// user.password = 'admin'
-// user.phone = '0123456789'

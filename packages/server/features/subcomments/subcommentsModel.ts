@@ -8,14 +8,14 @@ export class SubcommentModel {
   @PrimaryGeneratedColumn()
   id!: number
 
-  @Column({ nullable: true })
-  message: string = ''
+  @Column({ type: 'text', nullable: true })
+  message = ''
 
   @Column({ type: 'timestamptz', nullable: true })
   datetime: Date = new Date()
 
   @Column('integer')
-  likes: number = 0
+  likes = 0
 
   @Column({ type: 'simple-json', nullable: true })
   reactions: { type: number; count: number }[] = []

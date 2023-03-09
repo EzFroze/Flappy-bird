@@ -6,8 +6,6 @@ const posts = AppDataSource.getRepository(PostModel)
 const users = AppDataSource.getRepository(UserModel)
 
 export const createPost = async (data: PostModel) => {
-  console.log('creating post...', data)
-
   const user = new UserModel()
 
   user.id = data.user.id

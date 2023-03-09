@@ -1,6 +1,4 @@
-import { CommentModel } from "../comments/commentsModel"
-import { Column, Entity, OneToMany, PrimaryColumn } from "typeorm"
-import { PostModel } from "../posts/postsModel"
+import { Column, Entity, PrimaryColumn } from "typeorm"
 
 
 @Entity('users')
@@ -8,15 +6,15 @@ export class UserModel {
   @PrimaryColumn()
   id!: number
   
-  @Column({ nullable: true })
-  login: string = ''
+  @Column({ type: 'text', nullable: true })
+  login = ''
   
-  @Column({ nullable: true })
-  avatar: string = ''
+  @Column({ type: 'text', nullable: true })
+  avatar = ''
   
-  @Column({ nullable: true })
-  display_name: string = ''
+  @Column({ type: 'text', nullable: true })
+  display_name = ''
 
-  @Column({ nullable: true })
-  theme: string = 'light'
+  @Column({ type: 'text', nullable: true })
+  theme = 'light'
 }

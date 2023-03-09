@@ -1,8 +1,6 @@
 import { UserModel } from "../users/usersModel"//"features/users/usersModel"
-import { Column, Entity, Generated, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm"
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm"
 import { PostModel } from "../posts/postsModel"
-import { AutoIncrement } from "sequelize-typescript"
-import { SubcommentModel } from "../subcomments/subcommentsModel"
 
 @Entity('comments')
 export class CommentModel {
@@ -10,13 +8,13 @@ export class CommentModel {
   id!: number
 
   @Column('text')
-  message: string = ''
+  message = ''
 
   @Column({ type: 'timestamptz', nullable: true })
   datetime: Date = new Date()
 
   @Column('integer')
-  likes: number = 0
+  likes = 0
 
   @Column({ type: 'simple-json', nullable: true })
   reactions: { type: number; count: number }[] = []

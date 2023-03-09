@@ -5,15 +5,15 @@ export class ComplainModel {
   @PrimaryGeneratedColumn()
   id!: number
 
-  @Column({ nullable: true })
-  postId: number = 0
+  @Column({ type: 'int', nullable: true })
+  postId = 0
 
-  @Column({ nullable: true })
-  commentId: number = 0
+  @Column({ type: 'int', nullable: true })
+  commentId = 0
 
-  @Column({ nullable: true })
-  subcommentId: number = 0
+  @Column({ type: 'int', nullable: true })
+  subcommentId = 0
 
-  @Column({ nullable: true })
-  message: string = ''
+  @Column({ type: 'text', nullable: true })
+  message = ''
 }
