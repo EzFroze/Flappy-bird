@@ -6,7 +6,7 @@
     "lint": "eslint .",
     "format": "prettier --write .",
     "test": "jest ./",
-    "preview": "cross-env NODE_ENV=production node ssServer",
+    "preview": "cross-env NODE_ENV=production node ssrServer",
     "dev": "cross-env NODE_ENV=development node ssrServer",
     "build": "npm run build:client && npm run build:server",
     "build:client": "vite build --outDir dist/client",
@@ -23,6 +23,7 @@
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/user-event": "^14.4.3",
     "compression": "^1.7.4",
+    "cross-env": "^7.0.3",
     "dotenv": "^16.0.2",
     "eslint-config-prettier": "^8.5.0",
     "http-proxy-middleware": "^2.0.6",
@@ -33,11 +34,13 @@
     "prettier": "^2.7.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-error-boundary": "^3.1.4",
     "react-hook-form": "^7.41.2",
     "react-redux": "^8.0.5",
     "react-router-dom": "^6.6.1",
     "sirv": "^2.0.2",
-    "sort-by": "^1.2.0"
+    "sort-by": "^1.2.0",
+    "ssr-window": "^4.0.2"
   },
   "devDependencies": {
     "@testing-library/react": "^13.3.0",

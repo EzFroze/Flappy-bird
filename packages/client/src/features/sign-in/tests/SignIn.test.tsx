@@ -56,7 +56,7 @@ describe('SignIn tests', () => {
       fireEvent.change(signIn.getByLabelText(/Введите пароль/i), {
         target: { value: '1234567AS' },
       })
-      fireEvent.click(signIn.getByText(/Войти/i))
+      fireEvent.click(signIn.getByText('Войти'))
     })
     expect(
       signIn.getByText('⚠ Login or password is incorrect')
