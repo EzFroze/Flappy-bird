@@ -23,12 +23,12 @@ import { ErrorBoundary } from 'react-error-boundary'
 import { NavMenu } from './components/navMenu/components/NavMenu'
 import './App.css'
 import { useEffect } from 'react'
-import ModeNightIcon from '@mui/icons-material/ModeNight';
-import LightModeIcon from '@mui/icons-material/LightMode';
+import ModeNightIcon from '@mui/icons-material/ModeNight'
+import LightModeIcon from '@mui/icons-material/LightMode'
 import { useSet, useStore } from './app/store/hooks'
 import { useDb } from './hooks/useDb'
 import { baseOptions, BASE_URL } from './app/api/variables'
-import { grey, teal } from '@mui/material/colors';
+import { grey, teal, common } from '@mui/material/colors'
 
 import './App.css'
 import { saveUser, userSelector } from './features/forums/services/forumSlice'
@@ -37,64 +37,73 @@ let themeEnabled = false
 
 const lightTheme = createTheme({
   palette: {
-    mode: 'light'
-  }
+    mode: 'light',
+    primary: {
+      main: common.black,
+    },
+  },
 })
 
 const darkTheme = createTheme({
   palette: {
     mode: 'dark',
     primary: {
-      main: teal[500]
+      main: common.white,
     },
     error: {
-      main: grey[300]
-    }
+      main: grey[300],
+    },
   },
   components: {
     MuiTypography: {
       styleOverrides: {
         h3: {
-          color: grey[50]
+          color: grey[50],
         },
-      }
-    }
-  }
+        h5: {
+          color: grey[50],
+        },
+      },
+    },
+  },
 })
 
 export const App = () => {
-  const theme = useStore((state) => state.themes.mode)
+  const theme = useStore(state => state.themes.mode)
   const set = useSet()
   const user = useStore(userSelector)
 
-  const [ createUser ] = useDb('users', 'post')
-  const [ getUsers ] = useDb<User[]>('users')
+  const [createUser] = useDb('users', 'post')
+  const [getUsers] = useDb<User[]>('users')
 
   useEffect(() => {
     const body = document.querySelector('body')
-    
+
     body.style.background = theme === 'light' ? 'white' : 'black'
   }, [theme])
 
   useEffect(() => {
     fetch(`${BASE_URL}/auth/user`, baseOptions)
-      .then((response) => response.json())
+      .then(response => response.json())
       .then(({ id, display_name, login, avatar }) => {
         if (!id) return
 
         // check if user in db
-        getUsers({}).then((users) => {
-          const user = users.find((user) => user.id === id)
+        getUsers({}).then(users => {
+          const user = users.find(user => user.id === id)
 
           // adding user to db
           if (!user) {
-            const newUser = { 
-              id, display_name, login, avatar, 
-              theme
+            const newUser = {
+              id,
+              display_name,
+              login,
+              avatar,
+              theme,
             }
 
-            createUser({ 
-              body: JSON.stringify(newUser) 
+            createUser({
+              body: JSON.stringify(newUser),
             })
 
             set(saveUser(newUser as User))
@@ -103,7 +112,8 @@ export const App = () => {
             set(saveUser(user))
           }
         })
-      }).then(() => themeEnabled = true)
+      })
+      .then(() => (themeEnabled = true))
   }, [])
 
   useEffect(() => {
@@ -111,8 +121,8 @@ export const App = () => {
     if (!themeEnabled) return
 
     // updating user and theme
-    createUser({ 
-      body: JSON.stringify({ ...user, theme }) 
+    createUser({
+      body: JSON.stringify({ ...user, theme }),
     })
   }, [theme])
 
@@ -150,25 +160,29 @@ export const App = () => {
 
   return (
     <>
-      <NavMenu />
-      <hr />
-      <ErrorBoundary FallbackComponent={ServerErrorPage}>
-        <ThemeProvider theme={ theme === 'light' ? lightTheme : darkTheme }>
+      <ThemeProvider theme={theme === 'light' ? lightTheme : darkTheme}>
+        <NavMenu />
+        <hr />
+        <ErrorBoundary FallbackComponent={ServerErrorPage}>
           <Box sx={{ height: 20 }}></Box>
-            <Box sx={{ position: 'absolute', top: 0, right: 0, height: 20 }}>
-              {user?.login}
-              <IconButton onClick={() => {
+          <Box sx={{ position: 'absolute', top: 0, right: 0, height: 20 }}>
+            {user?.login}
+            <IconButton
+              onClick={() => {
                 set(toggleTheme())
-              }}>{
-                    theme === 'dark' ? <ModeNightIcon /> : <LightModeIcon />
-                  }</IconButton>
-            </Box>
+              }}>
+              {theme === 'dark' ? <ModeNightIcon /> : <LightModeIcon />}
+            </IconButton>
+          </Box>
           <Routes>
             <Route index element={<SignInPage />} />
             <Route path="*" element={<NotFoundPage />} />
             <Route path={RoutesEnum.Example} element={<ExamplePage />} />
             <Route path={RoutesEnum.SignUp} element={<SignUpPage />} />
-            <Route path={RoutesEnum.ServerError} element={<ServerErrorPage />} />
+            <Route
+              path={RoutesEnum.ServerError}
+              element={<ServerErrorPage />}
+            />
             <Route
               path={RoutesEnum.Profile}
               element={
@@ -193,24 +207,45 @@ export const App = () => {
                 </RequireAuth>
               }
             />
-            <Route path={RoutesEnum.Forums} element={
-                <RequireAuth><ForumPage /></RequireAuth>
+            <Route
+              path={RoutesEnum.Forums}
+              element={
+                <RequireAuth>
+                  <ForumPage />
+                </RequireAuth>
               }>
-              <Route path={RoutesEnum.Thread} element={
-                <RequireAuth><ForumThreadPage /></RequireAuth>
-              } />
+              <Route
+                path={RoutesEnum.Thread}
+                element={
+                  <RequireAuth>
+                    <ForumThreadPage />
+                  </RequireAuth>
+                }
+              />
               <Route
                 path={RoutesEnum.CreateThread}
-                element={<RequireAuth><ForumCreateThreadPage /></RequireAuth>}
+                element={
+                  <RequireAuth>
+                    <ForumCreateThreadPage />
+                  </RequireAuth>
+                }
               />
             </Route>
-            <Route path={RoutesEnum.Leaderboard} element={<LeaderboardPage />} />
-            <Route path={RoutesEnum.Game} element={
-              <RequireAuth><GamePage /></RequireAuth>
-            } />
+            <Route
+              path={RoutesEnum.Leaderboard}
+              element={<LeaderboardPage />}
+            />
+            <Route
+              path={RoutesEnum.Game}
+              element={
+                <RequireAuth>
+                  <GamePage />
+                </RequireAuth>
+              }
+            />
           </Routes>
-        </ThemeProvider>
-      </ErrorBoundary>
+        </ErrorBoundary>
+      </ThemeProvider>
     </>
   )
 }

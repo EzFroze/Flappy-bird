@@ -56,15 +56,14 @@ export const SignIn: React.FC = () => {
         gap: '10px',
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#f5f5f5',
         padding: '10px',
       }}>
       <Typography
         variant="h5"
+        color="primary"
         sx={{
           fontWeight: 'bolder',
         }}
-        color="black"
         align="center">
         {'Вход'}
       </Typography>
@@ -105,6 +104,7 @@ export const SignIn: React.FC = () => {
             borderRadius: '10px',
             fontSize: 16,
             mt: 2,
+            color: 'white',
             backgroundColor: '#2a2f3f',
             '&:hover': {
               background: '#1976d2',

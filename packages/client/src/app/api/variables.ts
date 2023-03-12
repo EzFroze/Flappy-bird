@@ -7,4 +7,8 @@ const baseOptions: Options = {
   },
 }
 
+export const teamName = 'BUGANDPLAY'
+
+export const LeaderbordLength = 5
+
 export { BASE_URL, baseOptions }

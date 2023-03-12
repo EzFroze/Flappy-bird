@@ -74,7 +74,6 @@ export const SignUp: React.FC = () => {
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
-          backgroundColor: '#f5f5f5',
           padding: '25px',
           borderRadius: '25px',
           width: '400px',
@@ -84,9 +83,9 @@ export const SignUp: React.FC = () => {
           sx={{
             fontWeight: 'bolder',
           }}
-          color="black"
+          color="primary"
           align="center">
-          {'Create account'}
+          Создать аккаунт
         </Typography>
         <FormHelperText
           sx={{
@@ -167,6 +166,7 @@ export const SignUp: React.FC = () => {
               borderRadius: '10px',
               fontSize: 16,
               mt: 2,
+              color: 'white',
               backgroundColor: '#2a2f3f',
               '&:hover': {
                 background: '#1976d2',
