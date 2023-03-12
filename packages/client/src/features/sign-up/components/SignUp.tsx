@@ -85,7 +85,7 @@ export const SignUp: React.FC = () => {
           }}
           color="primary"
           align="center">
-          Создать аккаунт
+          Создать профиль пользователя
         </Typography>
         <FormHelperText
           sx={{
