@@ -148,10 +148,11 @@ export const App = () => {
     }
   }, [])
 
+  const fullscreen = useStore((state) => state.game.fullscreen)
+
   return (
     <>
-      <NavMenu />
-      <hr />
+      { !fullscreen && <><NavMenu /><hr /></> }
       <ErrorBoundary FallbackComponent={ServerErrorPage}>
         <ThemeProvider theme={ theme === 'light' ? lightTheme : darkTheme }>
           <Box sx={{ height: 20 }}></Box>

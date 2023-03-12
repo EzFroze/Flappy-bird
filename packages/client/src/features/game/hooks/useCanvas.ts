@@ -22,7 +22,7 @@ export const useCanvas = () => {
     return () => {
       window.removeEventListener('resize', updateCanvasSize)
     }
-  }, [fullscreen.enabled])
+  }, [fullscreen])
 
   return canvas
 }
