@@ -1,4 +1,4 @@
-import { Box, Button, Dialog, DialogActions, DialogTitle, IconButton, Slide, Stack, Typography } from '@mui/material'
+import { Box, Button, Dialog, DialogActions, DialogTitle, IconButton, Slide, Stack, Tooltip, Typography } from '@mui/material'
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
 import { RoutesEnum } from '../../../app/router/types'
@@ -52,15 +52,17 @@ export const GameDialog: React.FC<DialogProps> = ({
         >
             Таблица рекордов
         </Button>
-        <IconButton
-          onClick={() => set(toggleFullscreen())}
-          sx={{ 
-            position: 'absolute', right: 0, top: 0, 
-            color: blue[700] 
-          }}
-        >
-          { fullscreen ? <CloseFullscreen /> : <OpenInFull />}
-        </IconButton>
+        <Tooltip title="Изменение разрешения может перезапустить игру" placement='left'>
+          <IconButton
+            onClick={() => set(toggleFullscreen())}
+            sx={{ 
+              position: 'absolute', right: 0, top: 0, 
+              color: blue[700] 
+            }}
+          >
+            { fullscreen ? <CloseFullscreen /> : <OpenInFull />}
+          </IconButton>
+        </Tooltip>
       </Box>
     </Dialog>
   )
