@@ -6,7 +6,7 @@ import { useSet, useStore } from '../../../app/store/hooks'
 import { DialogProps } from '../types'
 import OpenInFull from '@mui/icons-material/OpenInFull';
 import CloseFullscreen from '@mui/icons-material/CloseFullscreen';
-import { toggleFullscreen } from '../services/gameSlice'
+import { toggleFullscreen, updateFullscreen } from '../services/gameSlice'
 import { blue, grey } from '@mui/material/colors'
 import { TransitionProps } from '@mui/material/transitions'
 
@@ -47,7 +47,12 @@ export const GameDialog: React.FC<DialogProps> = ({
             {buttonTitle}
         </Button>
         <Button 
-          onClick={() => goTo(RoutesEnum.Leaderboard)} 
+          onClick={() => {
+            set(updateFullscreen(false))
+            setTimeout(() => {
+              goTo(RoutesEnum.Leaderboard)
+            }, 100)
+          }} 
           variant='contained'
         >
             Таблица рекордов
@@ -57,7 +62,6 @@ export const GameDialog: React.FC<DialogProps> = ({
             onClick={() => set(toggleFullscreen())}
             sx={{ 
               position: 'absolute', right: 0, top: 0, 
-              color: blue[700] 
             }}
           >
             { fullscreen ? <CloseFullscreen /> : <OpenInFull />}
