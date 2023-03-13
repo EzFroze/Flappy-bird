@@ -32,4 +32,5 @@ export type DialogProps = {
   title: string
   buttonTitle: string
   onClick: () => void
+  progress?: number
 }

@@ -17,7 +17,7 @@ export const Presentation: React.FC = () => {
           gap: '10px',
           justifyContent: 'center',
           alignItems: 'center',
-          backgroundColor: '#f5f5f5',
+
           padding: '10px',
         }}>
         <Typography
@@ -25,7 +25,7 @@ export const Presentation: React.FC = () => {
           sx={{
             fontWeight: 'bolder',
           }}
-          color="black"
+          color="primary"
           align="center">
           {'Flappy-bird'}
         </Typography>
@@ -34,7 +34,7 @@ export const Presentation: React.FC = () => {
           sx={{
             fontWeight: 'bolder',
           }}
-          color="black"
+          color="primary"
           align="center">
           {'Просто жми '}
           <SpaceBar /> {'или'} <ArrowUpward />

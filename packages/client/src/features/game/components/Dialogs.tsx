@@ -45,12 +45,14 @@ export const Dialogs: React.FC<{
         title: `Вы прошли игру!`,
         buttonTitle: 'Начать заново',
         onClick: restart,
+        progress,
       },
       [GameStatus.gameover]: {
         open: true,
         title: `Игра окончена! Ваш прогресс: ${progress}`,
         buttonTitle: 'Начать заново',
         onClick: restart,
+        progress,
       },
     }),
     [status, progress, restart]

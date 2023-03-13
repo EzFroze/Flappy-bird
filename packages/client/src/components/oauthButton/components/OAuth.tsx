@@ -39,7 +39,6 @@ export const OAuth: React.FC = () => {
         gap: '10px',
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#f5f5f5',
         padding: '10px',
       }}>
       <Button
@@ -51,6 +50,7 @@ export const OAuth: React.FC = () => {
           borderRadius: '10px',
           fontSize: 16,
           mt: 2,
+          color: 'white',
           backgroundColor: '#2a2f3f',
           '&:hover': {
             background: '#1976d2',
