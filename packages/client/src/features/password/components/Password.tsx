@@ -19,6 +19,7 @@ import { BASE_URL } from '../../../app/api/variables'
 import { RoutesEnum } from '../../../app/router/types'
 import { useForm } from 'react-hook-form'
 import { useServerError } from '../../../hooks/useServerError'
+import { styles } from '../../profile/styles/styles'
 
 export const Password: React.FC = () => {
   const {
@@ -77,7 +78,7 @@ export const Password: React.FC = () => {
         <Typography
           variant="h4"
           sx={{
-            fontWeight: 600,
+            fontWeight: 'bolder',
             mt: 1,
           }}
           color="primary"
@@ -133,16 +134,7 @@ export const Password: React.FC = () => {
           <Button
             variant="contained"
             fullWidth
-            sx={{
-              borderRadius: '10px',
-              fontSize: 16,
-              mt: 2,
-              color: 'white',
-              backgroundColor: '#2a2f3f',
-              '&:hover': {
-                background: '#1976d2',
-              },
-            }}
+            sx={styles.button}
             type="submit">
             Сохранить
           </Button>
@@ -151,8 +143,3 @@ export const Password: React.FC = () => {
     </Container>
   )
 }
-/*<Stack color="primary" spacing={1} component="nav">
-              <ListChild label="Старый пароль" name="oldPassword" />
-              <ListChild label="Новый пароль" name="newPassword" />
-              <ListChild label="Подтвердите пароль" />
-            </Stack>*/

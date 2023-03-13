@@ -18,6 +18,7 @@ import {
   validateLogin,
   validatePhone,
 } from '../../../utils/validation'
+import { styles } from '../../profile/styles/styles'
 
 export const ProfileChange: React.FC = () => {
   const set = useSet()
@@ -28,12 +29,12 @@ export const ProfileChange: React.FC = () => {
     formState: { errors },
   } = useForm({
     defaultValues: {
-      email: user.data.email ? user.data.email : '',
-      first_name: user.data.first_name ? user.data.first_name : '',
-      second_name: user.data.second_name ? user.data.second_name : '',
-      display_name: user.data.display_name ? user.data.display_name : '',
-      login: user.data.login ? user.data.login : '',
-      phone: user.data.phone ? user.data.phone : '',
+      email: user.data.email || '',
+      first_name: user.data.first_name || '',
+      second_name: user.data.second_name || '',
+      display_name: user.data.display_name || '',
+      login: user.data.login || '',
+      phone: user.data.phone || '',
     },
     mode: 'onChange',
   })
@@ -144,16 +145,7 @@ export const ProfileChange: React.FC = () => {
             <Button
               variant="contained"
               fullWidth
-              sx={{
-                borderRadius: '10px',
-                fontSize: 16,
-                mt: 2,
-                color: 'white',
-                backgroundColor: '#2a2f3f',
-                '&:hover': {
-                  background: '#1976d2',
-                },
-              }}
+              sx={styles.button}
               type="submit">
               Сохранить
             </Button>
@@ -168,28 +160,3 @@ export const ProfileChange: React.FC = () => {
     </>
   )
 }
-
-/*<Stack color="white" spacing={1} component="nav">
-                <ListChild label="Почта" name="email" text={user.data?.email} />
-                <ListChild
-                  label="Имя"
-                  name="first_name"
-                  text={user.data?.first_name}
-                />
-                <ListChild
-                  label="Имя в игре"
-                  name="display_name"
-                  text={user.data?.display_name}
-                />
-                <ListChild
-                  label="Фамилия"
-                  name="second_name"
-                  text={user.data?.second_name}
-                />
-                <ListChild label="Логин" name="login" text={user.data?.login} />
-                <ListChild
-                  label="Телефон"
-                  name="phone"
-                  text={user.data?.phone}
-                />
-              </Stack>*/

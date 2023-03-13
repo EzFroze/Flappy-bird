@@ -24,6 +24,22 @@ export const GameDialog: React.FC<DialogProps> = ({
   const nav = useNavigate()
   const user = useStore(getUser)
   const { serverError, setError } = useServerError()
+
+  const sendResultToLeaderboard = () => {
+    sendUserResult({
+      id: user.data.id,
+      name: user.data.login,
+      avatar: user.data.avatar,
+      progress,
+    }).then(response => {
+      if (response.status === 200) {
+        nav(RoutesEnum.Leaderboard)
+      } else {
+        setError(new Error(`Что-то пошло не так.`))
+      }
+    })
+  }
+
   return (
     <Dialog open={open}>
       <DialogTitle>{title}</DialogTitle>
@@ -39,21 +55,7 @@ export const GameDialog: React.FC<DialogProps> = ({
           {'Форум'}
         </Button>
         {progress ? (
-          <Button
-            onClick={() => {
-              sendUserResult({
-                id: user.data.id,
-                name: user.data.login,
-                avatar: user.data.avatar,
-                progress,
-              }).then(response => {
-                if (response.status === 200) {
-                  nav(RoutesEnum.Leaderboard)
-                } else {
-                  setError(new Error(`Что-то пошло не так.`))
-                }
-              })
-            }}>
+          <Button onClick={sendResultToLeaderboard}>
             {'Сохранить результат'}
           </Button>
         ) : (

@@ -11,7 +11,7 @@ import {
 import userAvatar from '../../../assets/img/userAvatar.jpg'
 import { Link as RouterLink, useNavigate } from 'react-router-dom'
 import { ListProfile } from './ListProfile'
-import { Stack } from '@mui/system'
+import { styles } from '../styles/styles'
 import { avatarChange } from '../services/ChangeAvatar'
 import { logout } from '../services/LogOut'
 import { getUser, clearUser } from '../services/authSlice'
@@ -56,12 +56,7 @@ export const Profile: React.FC = () => {
   return (
     <>
       <Container component="main" maxWidth="md">
-        <Box
-          sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-          }}>
+        <Box sx={styles.boxMain}>
           <Avatar
             alt="User Avatar"
             src={
@@ -75,7 +70,7 @@ export const Profile: React.FC = () => {
           <Typography
             variant="h4"
             sx={{
-              fontWeight: 600,
+              fontWeight: 'bolder',
             }}
             align="center"
             color="primary">
@@ -98,16 +93,7 @@ export const Profile: React.FC = () => {
             fullWidth
             onClick={toggleModal}
             variant="contained"
-            sx={{
-              borderRadius: '10px',
-              fontSize: 16,
-              mt: 2,
-              color: 'white',
-              backgroundColor: '#2a2f3f',
-              '&:hover': {
-                background: '#1976d2',
-              },
-            }}>
+            sx={styles.button}>
             Изменить аватар
           </Button>
 
@@ -118,22 +104,7 @@ export const Profile: React.FC = () => {
             type="button"
             variant="button"
             underline="none"
-            sx={{
-              display: 'block',
-              textAlign: 'center',
-              width: 'calc(100% - 32px)',
-              fontSize: 16,
-              padding: '6px 16px',
-              lineHeight: 1.75,
-              textTransform: 'uppercase',
-              borderWidth: '3px',
-              borderRadius: '10px',
-              mt: 2,
-              backgroundColor: '#2a2f3f',
-              '&:hover': {
-                background: '#1976d2',
-              },
-            }}>
+            sx={styles.link}>
             Изменить пароль
           </MuiLink>
           <MuiLink
@@ -143,22 +114,7 @@ export const Profile: React.FC = () => {
             type="button"
             variant="button"
             underline="none"
-            sx={{
-              display: 'block',
-              textAlign: 'center',
-              width: 'calc(100% - 32px)',
-              fontSize: 16,
-              padding: '6px 16px',
-              lineHeight: 1.75,
-              textTransform: 'uppercase',
-              borderWidth: '3px',
-              borderRadius: '10px',
-              mt: 2,
-              backgroundColor: '#2a2f3f',
-              '&:hover': {
-                background: '#1976d2',
-              },
-            }}>
+            sx={styles.link}>
             Изменить данные
           </MuiLink>
           <Button
@@ -166,16 +122,7 @@ export const Profile: React.FC = () => {
             fullWidth
             onClick={handleLogOut}
             variant="contained"
-            sx={{
-              borderRadius: '10px',
-              fontSize: 16,
-              mt: 2,
-              color: 'white',
-              backgroundColor: '#2a2f3f',
-              '&:hover': {
-                background: '#1976d2',
-              },
-            }}>
+            sx={styles.button}>
             Выйти
           </Button>
         </Box>

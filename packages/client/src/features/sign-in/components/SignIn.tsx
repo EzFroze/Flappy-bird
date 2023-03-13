@@ -16,6 +16,7 @@ import { useStore } from '../../../app/store/hooks'
 import { getUser } from '../../profile/services/authSlice'
 import { useSignInSubmit } from '../hooks/useSignInSubmit'
 import { useValidationRoute } from '../../../hooks/useValidationRoute'
+import { styles } from '../../profile/styles/styles'
 
 export const SignIn: React.FC = () => {
   const {
@@ -96,20 +97,7 @@ export const SignIn: React.FC = () => {
           handleMouseDown={handleMouseDownPassword}
         />
 
-        <Button
-          type="submit"
-          fullWidth
-          variant="contained"
-          sx={{
-            borderRadius: '10px',
-            fontSize: 16,
-            mt: 2,
-            color: 'white',
-            backgroundColor: '#2a2f3f',
-            '&:hover': {
-              background: '#1976d2',
-            },
-          }}>
+        <Button type="submit" fullWidth variant="contained" sx={styles.button}>
           Войти
         </Button>
       </form>
@@ -121,21 +109,7 @@ export const SignIn: React.FC = () => {
         type="button"
         variant="button"
         underline="none"
-        sx={{
-          display: 'block',
-          textAlign: 'center',
-          fontSize: 16,
-          padding: '6px 16px',
-          lineHeight: 1.75,
-          textTransform: 'uppercase',
-          borderWidth: '3px',
-          borderRadius: '10px',
-          width: '100%',
-          backgroundColor: '#2a2f3f',
-          '&:hover': {
-            background: '#1976d2',
-          },
-        }}>
+        sx={styles.link}>
         Зарегистрироваться
       </MuiLink>
     </Box>
