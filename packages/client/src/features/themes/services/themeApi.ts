@@ -10,7 +10,7 @@ export const themeApi = {
 }
 
 export const getTheme = createAsyncThunk(
-  'example/fetchData',
+  'theme/fetchData',
   async (arg: 'light' | 'dark') => {
     return themeApi.fetchData(arg)
   }

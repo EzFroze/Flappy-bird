@@ -1,10 +1,8 @@
 import { Box, IconButton } from '@mui/material'
 import { useEffect, useRef, useState } from 'react'
-import { GameStatus, Player } from '../types'
+import { Bird, GameStatus, Player } from '../types'
 import { useBlocks } from '../hooks/useBlocks'
 import { getCollision } from '../utils/getCollision'
-import { OpenInFull, CloseFullscreen } from '@mui/icons-material'
-import { useFullscreen } from '../../../hooks/useFullscreen'
 import { Dialogs } from './Dialogs'
 import { useCanvas } from '../hooks/useCanvas'
 import {
@@ -18,8 +16,13 @@ import { useBackground } from '../hooks/useBackground'
 import { useControls } from '../hooks/useControls'
 import { usePlayerAction } from '../hooks/usePlayerAction'
 
+import wingUpFrame from '/bird/frame-1.png'
+import wingDownFrame from '/bird/frame-2.png'
+import forest from '/background/forest.png'
+import { useFullscreen } from '../../../hooks/useFullscreen'
+
 export const Game_v3 = () => {
-  const fullscreen = useFullscreen()
+  const { fullscreen } = useFullscreen()
   const [frame, setFrame] = useState(0)
   const [status, setStatus] = useState(GameStatus.start)
   const canvas = useCanvas()
@@ -48,6 +51,42 @@ export const Game_v3 = () => {
     frame,
     status,
   })
+
+  const [ bird, setBird ] = useState<Bird>()
+  const [ bgr, setBgr ] = useState<HTMLImageElement | null>(null)
+
+  useEffect(() => {
+    const waveUp = new Image()
+    const waveDown = new Image()
+
+    waveUp.src = wingUpFrame
+    waveDown.src = wingDownFrame
+
+    waveUp.onload = () => {
+      setBird(b => ({ ...b, waveUp }))
+    }
+    waveDown.onload = () => {
+      setBird(b => ({ ...b, waveDown }))
+    }
+
+    const bgr = new Image()
+
+    bgr.src = forest
+
+    bgr.onload = () => {
+      setBgr(bgr)
+    }
+  }, [])
+
+  useEffect(() => {
+    if (bird && bgr) {
+      setStatus(GameStatus.run)
+      setTimeout(() => {
+        setStatus(GameStatus.start)
+      }, 0)
+    }
+  }, [bird, bgr])
+
   useEffect(() => {
     if (canvas.current === null) return
 
@@ -65,14 +104,14 @@ export const Game_v3 = () => {
       y: coef,
       h: coef,
       w: coef,
-      move: fullscreen.enabled ? coef / 2 : coef / 1.5,
+      move: fullscreen ? coef / 2 : coef / 1.5,
       speed: coef / 30,
     }
 
     if (status !== GameStatus.start) {
       setStatus(GameStatus.screenChanged)
     }
-  }, [canvas.current?.width, fullscreen.enabled])
+  }, [canvas.current?.width, fullscreen])
 
   useEffect(() => {
     if (status === GameStatus.pause) return
@@ -86,7 +125,7 @@ export const Game_v3 = () => {
 
   useEffect(() => {
     createLevel()
-  }, [fullscreen.enabled])
+  }, [fullscreen])
 
   const renderFrame = () => {
     if (canvas.current === null) return
@@ -128,11 +167,11 @@ export const Game_v3 = () => {
     if (status === GameStatus.screenChanged) return
 
     if (status === GameStatus.gameover) {
-      renderBirdFall(ctx, playerRef.current, height)
+      renderBirdFall(ctx, playerRef.current, height, bird)
     }
 
     if (status !== GameStatus.gameover) {
-      renderBirdWave(ctx, playerRef.current)
+      renderBirdWave(ctx, playerRef.current, bird)
     }
 
     blocks.current.forEach(({ x, y, w, h }) => {
@@ -161,7 +200,12 @@ export const Game_v3 = () => {
   }, [status])
 
   return (
-    <Box sx={{ display: 'flex', height: '100%' }}>
+    <Box 
+      display={'flex'} 
+      justifyContent={'center'} 
+      alignItems={'center'} 
+      minHeight={'100vh'}
+    >
       <Box sx={{ margin: 'auto', p: 1 }}>
         <canvas
           style={{ outline: '1px solid black' }}
@@ -177,11 +221,6 @@ export const Game_v3 = () => {
         restartLevel={createLevel}
         progress={playerRef.current.progress}
       />
-      <Box sx={{ position: 'absolute', right: 5, top: 5 }}>
-        <IconButton sx={{ height: 54, width: 54 }} onClick={fullscreen.toggle}>
-          {fullscreen.enabled ? <CloseFullscreen /> : <OpenInFull />}
-        </IconButton>
-      </Box>
     </Box>
   )
 }

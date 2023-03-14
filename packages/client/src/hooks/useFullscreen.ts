@@ -1,15 +1,14 @@
 import { useEffect, useState } from 'react'
+import { useSet, useStore } from '../app/store/hooks'
+import { updateFullscreen } from '../features/game/services/gameSlice'
 
 export const useFullscreen = () => {
-  const [enabled, setEnabled] = useState<boolean>(false)
-
-  const toggle = () => {
-    setEnabled(e => !e)
-  }
+  const fullscreen = useStore(s => s.game.fullscreen)
+  const set = useSet()
 
   useEffect(() => {
     const exit = () => {
-      setEnabled(Boolean(document.fullscreenElement))
+      set(updateFullscreen(Boolean(document.fullscreenElement)))
     }
 
     document.addEventListener('fullscreenchange', exit)
@@ -20,14 +19,14 @@ export const useFullscreen = () => {
   }, [])
 
   useEffect(() => {
-    if (enabled) {
+    if (fullscreen) {
       document.documentElement.requestFullscreen()
     } else {
       if (document.fullscreenElement) {
         document.exitFullscreen()
       }
     }
-  }, [enabled])
+  }, [fullscreen])
 
-  return { enabled, toggle }
+  return { fullscreen }
 }

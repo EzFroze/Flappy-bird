@@ -1,5 +1,5 @@
 import { Box, createTheme, IconButton, ThemeProvider } from '@mui/material'
-import { Routes, Route, Link, useNavigate } from 'react-router-dom'
+import { Routes, Route, Link, useNavigate, useParams } from 'react-router-dom'
 import { RoutesEnum } from './app/router/types'
 import { RequireAuth } from './components/requireAuth/RequireAuth'
 import { User } from './features/forums/types'
@@ -158,12 +158,12 @@ export const App = () => {
     }
   }, [])
 
+  const fullscreen = useStore((state) => state.game.fullscreen)
+
   return (
-    <>
-      <ThemeProvider theme={theme === 'light' ? lightTheme : darkTheme}>
-        <NavMenu />
-        <hr />
-        <ErrorBoundary FallbackComponent={ServerErrorPage}>
+    <ThemeProvider theme={ theme === 'light' ? lightTheme : darkTheme }>
+      { !fullscreen && <><NavMenu /><hr /></> }
+      <ErrorBoundary FallbackComponent={ServerErrorPage}>
           <Box sx={{ height: 20 }}></Box>
           <Box sx={{ position: 'absolute', top: 0, right: 0, height: 20 }}>
             {user?.login}
@@ -245,7 +245,6 @@ export const App = () => {
             />
           </Routes>
         </ErrorBoundary>
-      </ThemeProvider>
-    </>
+    </ThemeProvider>
   )
 }
