@@ -1,7 +1,15 @@
-import { UserModel } from "../users/usersModel"//"features/users/usersModel"
-import { Column, Entity, Generated, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm"
-import { PostModel } from "../posts/postsModel"
-import { CommentModel } from "../comments/commentsModel"
+import { UserModel } from '../users/usersModel' //"features/users/usersModel"
+import {
+  Column,
+  Entity,
+  Generated,
+  JoinColumn,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm'
+import { PostModel } from '../posts/postsModel'
+import { CommentModel } from '../comments/commentsModel'
 
 @Entity('subcomments')
 export class SubcommentModel {

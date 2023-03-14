@@ -1,7 +1,7 @@
-import { UserModel } from "../users/usersModel"
-import { AppDataSource } from "../../app/data-source"
-import { SubcommentModel } from "./subcommentsModel"
-import { CommentModel } from "../comments/commentsModel"
+import { UserModel } from '../users/usersModel'
+import { AppDataSource } from '../../app/data-source'
+import { SubcommentModel } from './subcommentsModel'
+import { CommentModel } from '../comments/commentsModel'
 
 const subcomments = AppDataSource.getRepository(SubcommentModel)
 const users = AppDataSource.getRepository(UserModel)
@@ -9,12 +9,12 @@ const comments = AppDataSource.getRepository(CommentModel)
 
 export const createSubcomment = async (data: SubcommentModel) => {
   const user = new UserModel()
-  
+
   user.id = data.user.id
   user.avatar = data.user.avatar
   user.display_name = data.user.display_name
   user.login = data.user.login
-  
+
   const savedUser = await users.save(user)
   const foundComment = await comments.findOneBy({ id: data.commentId })
 
@@ -35,11 +35,10 @@ export const findSubcomments = async (commentId: number) => {
   const foundComments = await subcomments.find({
     relations: {
       user: true,
-      comment: true
+      comment: true,
     },
-    where: { commentId }
+    where: { commentId },
   })
-
 
   return foundComments
 }

@@ -10,8 +10,14 @@ import { createUser, findUsers } from './features/users/usersApi'
 import { createPost, findPosts, findPostById } from './features/posts/postsApi'
 import { createComment, findComments } from './features/comments/commentsApi'
 import { createLike, findAllLikes } from './features/likes/likesController'
-import { createSubcomment, findSubcomments } from './features/subcomments/subcommentsApi'
-import { createComplain, findAllComplains } from './features/complains/complainsController'
+import {
+  createSubcomment,
+  findSubcomments,
+} from './features/subcomments/subcommentsApi'
+import {
+  createComplain,
+  findAllComplains,
+} from './features/complains/complainsController'
 
 const app = express()
 
@@ -37,7 +43,6 @@ app.get('/users', async (_req, res) => {
 
 // updateTheme
 app.post('/users/theme', async (_req, res) => {
-
   res.send(await findUsers())
 })
 

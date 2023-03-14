@@ -1,11 +1,11 @@
-import { UserModel } from "./usersModel"
-import { AppDataSource } from "../../app/data-source"
+import { UserModel } from './usersModel'
+import { AppDataSource } from '../../app/data-source'
 
 const repo = AppDataSource.getRepository(UserModel)
 
 export const findUsers = async () => {
   const users = await repo.find()
-  
+
   return users
 }
 
