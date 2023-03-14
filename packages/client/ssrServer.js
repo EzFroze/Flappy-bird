@@ -11,6 +11,8 @@ const bootstrap = async () => {
   const app = express()
   let vite
 
+  //app.use(express.static('public'))
+
   if (process.env.NODE_ENV === DEV_ENV) {
     vite = await createViteServer({
       server: { middlewareMode: true },
@@ -25,6 +27,8 @@ const bootstrap = async () => {
       })
     )
   }
+
+
 
   app.use('*', async (req, res, next) => {
     const url = req.originalUrl

@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react'
 import { useFullscreen } from '../../../hooks/useFullscreen'
 
 export const useCanvas = () => {
-  const fullscreen = useFullscreen()
+  const { fullscreen } = useFullscreen()
   const canvas = useRef<HTMLCanvasElement | null>(null)
 
   const updateCanvasSize = () => {
@@ -22,7 +22,7 @@ export const useCanvas = () => {
     return () => {
       window.removeEventListener('resize', updateCanvasSize)
     }
-  }, [fullscreen.enabled])
+  }, [fullscreen])
 
   return canvas
 }
