@@ -46,7 +46,10 @@ const RouterLink: React.FC<RouterLinkProps> = props => {
     <ListItemButton component={MyNavLink}>
       <ListItemIcon
         sx={{
-          color: '#2a2f3f',
+          color: 'black',
+          '.css-19mdmo4-MuiButtonBase-root-MuiListItemButton-root > &': {
+            color: 'white',
+          },
           '.Mui-selected > &': { color: 'orange' },
         }}>
         {props.icon}
@@ -63,7 +66,12 @@ export const NavMenu: React.FC = () => {
     <List
       sx={{
         display: 'flex',
-        color: '#2a2f3f',
+        '& > .css-h4pi96-MuiButtonBase-root-MuiListItemButton-root': {
+          color: 'black',
+        },
+        '& > .css-19mdmo4-MuiButtonBase-root-MuiListItemButton-root': {
+          color: 'white',
+        },
         '& > .Mui-selected': { color: 'orange' },
       }}>
       <RouterLink to={RoutesEnum.Game} text="Играть" icon={<SportsEsports />} />

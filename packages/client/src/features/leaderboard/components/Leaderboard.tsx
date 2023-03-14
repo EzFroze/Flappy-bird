@@ -1,100 +1,92 @@
-import { Typography, Container } from '@mui/material'
-import { FC, useEffect, useState, useMemo } from 'react'
-import UsersList from './UsersList'
-import { useFetching } from '../hooks/useFetching'
-import UsersService from '../services/UsersService'
-import { getPageCount } from '../utils/pages'
-import { useUsers } from '../hooks/useUsers'
-import { FetchUsersType, SortOrder, User, UsersFilter } from '../types'
-import { ColumnHeader } from './ColumnHeader'
-import { styles } from '../styles/styles'
+import {
+  Typography,
+  Container,
+  FormHelperText,
+  TableContainer,
+  Table,
+  TableHead,
+  TableBody,
+  TableCell,
+  TableRow,
+  Paper,
+  Avatar,
+} from '@mui/material'
+import { BASE_URL } from '../../../app/api/variables'
+import { useServerError } from '../../../hooks/useServerError'
+import { FC, useEffect, useState } from 'react'
+import { getLeaderboard, transformLeaderboard } from '../services/leaderboard'
 
 export const Leaderboard: FC = () => {
-  const [users, setUsers] = useState([])
-  const [error, setError] = useState('')
-  const [totalPages, setTotalPages] = useState(0)
-  const [usersInPage, setUsersInPage] = useState(15)
-  const [page, setPage] = useState(1)
-  const [filter, setFilter] = useState<UsersFilter>({
-    sort: 'place',
-    query: '',
-    order: SortOrder.DescendingOrder,
-  })
-  const sortedAndSearchedUsers = useUsers(users, filter)
-
-  const [fetchUsers, isUsersLoading, userError] = useFetching(
-    async (usersInPage: number, page: number) => {
-      const [users, headers] = await UsersService.getTop(usersInPage, page)
-      const totalCount = headers.get('x-total-count')
-      setUsers(users)
-      setTotalPages(getPageCount(totalCount, usersInPage))
-    }
-  )
-
-  const sortFields: Record<keyof User, SortOrder> = useMemo(() => {
-    return {
-      id: SortOrder.DescendingOrder,
-      place: SortOrder.DescendingOrder,
-      name: SortOrder.DescendingOrder,
-      scores: SortOrder.DescendingOrder,
-      date: SortOrder.DescendingOrder,
-    }
+  const [leaderboard, setLeaderboard] = useState([])
+  const { serverError, setError } = useServerError()
+  useEffect(() => {
+    getLeaderboard()
+      .then(response => {
+        if (response.status === 200) {
+          return response.json()
+        } else if (response.status === 401) {
+          setError(new Error(`Войдите в аккаунт`))
+        } else {
+          setError(new Error(`Что-то пошло не так`))
+        }
+      })
+      .then(result => {
+        if (result) {
+          if (result.length) {
+            setLeaderboard(transformLeaderboard(result))
+          } else {
+            setError(new Error(`У нас пока нет статистики. Станьте первым!`))
+          }
+        }
+      })
+      .catch(setError)
   }, [])
 
-  useEffect(() => {
-    ;(fetchUsers as FetchUsersType)(usersInPage, page)
-  }, [page, usersInPage])
-
-  const changeSortOrder = (sort: keyof User) => {
-    let order = sortFields[sort]
-
-    Object.keys(sortFields).forEach(
-      key => (sortFields[key as keyof User] = SortOrder.DescendingOrder)
-    )
-
-    order == SortOrder.AscendingOrder
-      ? (order = SortOrder.DescendingOrder)
-      : (order = SortOrder.AscendingOrder)
-    sortFields[sort] = order
-    setFilter({ ...filter, sort, order })
-  }
-
   return (
-    <Container sx={styles.startContainer}>
-      <Typography textAlign={'center'} variant="h4">
+    <Container
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+      }}>
+      <Typography color="primary" variant="h4">
         Результаты
       </Typography>
-      <Container disableGutters sx={styles.horizontalContainer}>
-        <ColumnHeader
-          text="Место"
-          width={150}
-          changeSortOrder={changeSortOrder}
-          sortField={'place'}
-          sortOrder={sortFields.place}
-        />
-        <ColumnHeader
-          text="Игрок"
-          width={200}
-          changeSortOrder={changeSortOrder}
-          sortField={'name'}
-          sortOrder={sortFields.name}
-        />
-        <ColumnHeader
-          text="Счёт"
-          width={200}
-          changeSortOrder={changeSortOrder}
-          sortField={'scores'}
-          sortOrder={sortFields.scores}
-        />
-        <ColumnHeader
-          text="Дата"
-          width={200}
-          changeSortOrder={changeSortOrder}
-          sortField={'date'}
-          sortOrder={sortFields.date}
-        />
-      </Container>
-      <UsersList users={sortedAndSearchedUsers} />
+      <FormHelperText
+        sx={{
+          color: 'red',
+          fontSize: 16,
+        }}>
+        {serverError}
+      </FormHelperText>
+      <TableContainer component={Paper}>
+        <Table sx={{ minWidth: 310 }} aria-label="simple table">
+          <TableHead>
+            <TableRow>
+              <TableCell>Место</TableCell>
+              <TableCell align="center">Аватар</TableCell>
+              <TableCell align="right">Логин</TableCell>
+              <TableCell align="right">id</TableCell>
+              <TableCell align="right">Счет</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {leaderboard.map(row => (
+              <TableRow
+                key={row.name}
+                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                <TableCell align="left">{row.place}</TableCell>
+                <TableCell sx={{ display: 'flex', justifyContent: 'center' }}>
+                  <Avatar src={`${BASE_URL}/resources/${row.avatar}`} />
+                </TableCell>
+                <TableCell align="right">{row.name}</TableCell>
+                <TableCell align="right">{row.id}</TableCell>
+                <TableCell align="right">{row.progress}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
     </Container>
   )
 }

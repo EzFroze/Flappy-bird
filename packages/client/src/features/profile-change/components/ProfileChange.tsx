@@ -1,17 +1,9 @@
 import React, { FormEvent, useState } from 'react'
-import {
-  Container,
-  Box,
-  Avatar,
-  Typography,
-  Input,
-  Button,
-  Modal,
-} from '@mui/material'
+import { Container, Box, Avatar, Typography, Button } from '@mui/material'
+import { Input } from '../../../components/input/components/Input'
 import userAvatar from '../../../assets/img/userAvatar.jpg'
 import { useNavigate } from 'react-router-dom'
-import { ListChild } from '../../profile/components/ListChild'
-import { Stack } from '@mui/system'
+import { useForm } from 'react-hook-form'
 import { avatarChange } from '../../profile/services/ChangeAvatar'
 import { getUser } from '../../profile/services/authSlice'
 import { RoutesEnum } from '../../../app/router/types'
@@ -19,10 +11,34 @@ import { useStore, useSet } from '../../../app/store/hooks'
 import { BASE_URL } from '../../../app/api/variables'
 import { profileChange } from '../services/ProfileChange'
 import { fetchGetUser } from '../../profile/services/GetUser'
+import { ChangeAvatarModal } from '../../../components/changeAvatarModal/components/ChangeAvatarModal'
+import {
+  validateName,
+  validateEmail,
+  validateLogin,
+  validatePhone,
+} from '../../../utils/validation'
+import { styles } from '../../profile/styles/styles'
 
 export const ProfileChange: React.FC = () => {
   const set = useSet()
   const user = useStore(getUser)
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    defaultValues: {
+      email: user.data.email || '',
+      first_name: user.data.first_name || '',
+      second_name: user.data.second_name || '',
+      display_name: user.data.display_name || '',
+      login: user.data.login || '',
+      phone: user.data.phone || '',
+    },
+    mode: 'onChange',
+  })
+
   const [modal, setModal] = useState(false)
   const navigate = useNavigate()
   const toggleModal = () => setModal(!modal)
@@ -41,10 +57,8 @@ export const ProfileChange: React.FC = () => {
       })
       .catch(() => navigate(RoutesEnum.ServerError))
   }
-  const handleSubmit = (e: FormEvent) => {
-    e.preventDefault()
-    const form = new FormData(e.target as HTMLFormElement)
-    profileChange(Object.fromEntries(form.entries()) as any)
+  const onSubmit = data => {
+    profileChange(data)
       .then(resp => {
         if (resp.status === 200) {
           navigate('/profile')
@@ -58,135 +72,91 @@ export const ProfileChange: React.FC = () => {
 
   return (
     <>
-      <Container
-        component="main"
-        maxWidth="xl"
-        sx={{
-          backgroundColor: '#131517',
-          height: '100vh',
-          pt: 6,
-        }}>
+      <Container component="main" maxWidth="md">
         <Box
           sx={{
-            width: 885,
-            height: 690,
-            backgroundColor: '#212329',
-            m: '0 auto',
-            borderRadius: 3,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
           }}>
-          <Box
+          <Avatar
+            alt="User Avatar"
+            src={
+              user.data?.avatar
+                ? `${BASE_URL}/resources/${user.data?.avatar}`
+                : userAvatar
+            }
+            sx={{ width: 120, height: 120, m: 'auto' }}
+            onClick={toggleModal}
+          />
+          <Typography
+            variant="h4"
             sx={{
-              p: 3,
-            }}>
-            <Avatar
-              alt="User Avatar"
-              src={
-                user.data?.avatar
-                  ? `${BASE_URL}/resources/${user.data?.avatar}`
-                  : userAvatar
-              }
-              sx={{ width: 120, height: 120, m: 'auto' }}
-              onClick={toggleModal}
-            />
-            <Typography
-              sx={{
-                fontSize: 21,
-                fontWeight: 600,
-                mt: 2,
-              }}
-              color="white"
-              align="center">
-              {user.data?.first_name}
-            </Typography>
-            <form id="profileChange" onSubmit={handleSubmit}>
-              <Stack color="white" spacing={1} component="nav">
-                <ListChild label="Почта" name="email" text={user.data?.email} />
-                <ListChild
-                  label="Имя"
-                  name="first_name"
-                  text={user.data?.first_name}
-                />
-                <ListChild
-                  label="Имя в игре"
-                  name="display_name"
-                  text={user.data?.display_name}
-                />
-                <ListChild
-                  label="Фамилия"
-                  name="second_name"
-                  text={user.data?.second_name}
-                />
-                <ListChild label="Логин" name="login" text={user.data?.login} />
-                <ListChild
-                  label="Телефон"
-                  name="phone"
-                  text={user.data?.phone}
-                />
-              </Stack>
-              <Box sx={{ mt: '2rem', ml: '16rem' }}>
-                <Button
-                  variant="contained"
-                  sx={{
-                    backgroundColor: '#176acb',
-                    textTransform: 'none',
-                    fontWeight: 700,
-                    fontSize: 16,
-                    p: 1,
-                    width: 350,
-                  }}
-                  type="submit">
-                  Сохранить
-                </Button>
-              </Box>
-            </form>
-          </Box>
-        </Box>
-      </Container>
-      <Modal
-        sx={{
-          backgroundColor: '#131517cc',
-        }}
-        open={modal}
-        onClose={toggleModal}>
-        <Box
-          sx={{
-            width: 450,
-            height: 200,
-            color: 'white',
-            backgroundColor: '#212329',
-            borderRadius: 3,
-            m: '15.5rem auto auto',
-            p: 1,
-            textAlign: 'center',
-          }}>
-          <Typography variant="h5" sx={{ fontWeight: 600, mt: 2 }}>
-            Загрузите ваш аватар
+              fontWeight: 600,
+            }}
+            color="primary"
+            align="center">
+            {user.data?.first_name}
           </Typography>
-          <form id="avatar-form" onSubmit={handleSubmitAvatar}>
+          <form id="profileChange" onSubmit={handleSubmit(onSubmit)}>
             <Input
-              id="avatar"
-              type="file"
-              name="avatar"
-              sx={{ mt: 3, color: 'white' }}
+              name="email"
+              control={control}
+              rules={validateEmail}
+              errors={errors}
+              label="Введите Email"
             />
-            <Box sx={{ mt: 4 }}>
-              <Button
-                variant="contained"
-                sx={{
-                  backgroundColor: '#176acb',
-                  textTransform: 'none',
-                  fontWeight: 700,
-                  fontSize: 16,
-                  p: 1,
-                  width: 350,
-                }}
-                type="submit">
-                Сохранить
-              </Button>
-            </Box>
+            <Input
+              name="first_name"
+              control={control}
+              rules={validateName}
+              errors={errors}
+              label="Введите Имя"
+            />
+            <Input
+              name="second_name"
+              control={control}
+              rules={validateName}
+              errors={errors}
+              label="Введите Фамилию"
+            />
+            <Input
+              name="display_name"
+              control={control}
+              rules={validateName}
+              errors={errors}
+              label="Имя в игре"
+            />
+            <Input
+              name="login"
+              control={control}
+              rules={validateLogin}
+              errors={errors}
+              label="Введите Логин"
+            />
+            <Input
+              name="phone"
+              control={control}
+              rules={validatePhone}
+              errors={errors}
+              label="Введите Телефон"
+            />
+
+            <Button
+              variant="contained"
+              fullWidth
+              sx={styles.button}
+              type="submit">
+              Сохранить
+            </Button>
           </form>
         </Box>
-      </Modal>
+      </Container>
+      <ChangeAvatarModal
+        modal={modal}
+        toggleModal={toggleModal}
+        handleSubmit={handleSubmitAvatar}
+      />
     </>
   )
 }
