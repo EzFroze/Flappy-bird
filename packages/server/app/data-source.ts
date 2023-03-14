@@ -6,12 +6,8 @@ import { LikesModel } from '../features/likes/LikesModel'
 import { SubcommentModel } from '../features/subcomments/subcommentsModel'
 import { ComplainModel } from '../features/complains/ComplainsModel'
 
-const { 
-  POSTGRES_USER, 
-  POSTGRES_PASSWORD, 
-  POSTGRES_DB, 
-  POSTGRES_PORT 
-} = process.env
+const { POSTGRES_USER, POSTGRES_PASSWORD, POSTGRES_DB, POSTGRES_PORT } =
+  process.env
 
 export const AppDataSource = new DataSource({
   type: 'postgres',

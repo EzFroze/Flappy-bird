@@ -6,9 +6,12 @@ export interface Lists {
   handleChange?: (e: any) => void
   defaultVal?: string
 }
+interface UserInformation extends SignUpData {
+  id: number
+}
 
 export interface UserData {
-  data: undefined | SignUpData
+  data: undefined | UserInformation
   status: string
   error: string
 }
