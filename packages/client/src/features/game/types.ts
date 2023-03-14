@@ -32,4 +32,7 @@ export type DialogProps = {
   title: string
   buttonTitle: string
   onClick: () => void
+  progress?: number
 }
+
+export type Bird = Record<'waveUp' | 'waveDown', HTMLImageElement>
