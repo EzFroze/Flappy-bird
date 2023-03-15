@@ -10,8 +10,6 @@ services:
             args:
               CLIENT_PORT: ${CLIENT_PORT}
         restart: always
-        env_file:
-          - ./nginx-certbot.env
         ports:
           - "${CLIENT_PORT}:443"
         volumes:
