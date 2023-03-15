@@ -10,6 +10,8 @@ services:
             args:
               CLIENT_PORT: ${CLIENT_PORT}
         restart: always
+        env_file:
+          - ./nginx-certbot.env
         ports:
           - "${CLIENT_PORT}:443"
         volumes:
@@ -18,6 +20,7 @@ services:
         environment:
           - CLIENT_PORT=${CLIENT_PORT}
           - SERVER_PORT=${SERVER_PORT}
+          - CERTBOT_EMAIL
     postgres:
       image: postgres:14     
       ports:
