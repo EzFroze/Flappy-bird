@@ -10,8 +10,13 @@ services:
             args:
               CLIENT_PORT: ${CLIENT_PORT}
         restart: always
+        env_file:
+          - ./nginx-certbot.env
         ports:
-            - "${CLIENT_PORT}:443"
+          - "${CLIENT_PORT}:443"
+        volumes:
+          - nginx_secrets:/etc/letsencrypt
+          - ./user_conf.d:/etc/nginx/user_conf.d
         environment:
           - CLIENT_PORT=${CLIENT_PORT}
           - SERVER_PORT=${SERVER_PORT}
@@ -45,3 +50,6 @@ services:
           POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
           POSTGRES_USER: ${POSTGRES_USER}
           POSTGRES_DB: ${POSTGRES_DB}
+
+volumes:
+  nginx_secrets:
