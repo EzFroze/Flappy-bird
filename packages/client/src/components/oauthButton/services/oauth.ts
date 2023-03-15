@@ -6,7 +6,7 @@ import { getWindow, ssrWindow, extend } from 'ssr-window'
 extend(ssrWindow, {
   location: {
     protocol: 'http',
-    host: 'localhost:3000',
+    host: 'https://bug-and-play-flappy-bird-21.ya-praktikum.tech',
   },
 })
 
