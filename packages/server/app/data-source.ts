@@ -11,10 +11,10 @@ const { POSTGRES_USER, POSTGRES_PASSWORD, POSTGRES_DB, POSTGRES_PORT } =
 
 export const AppDataSource = new DataSource({
   type: 'postgres',
-  host: 'localhost',
+  host: 'postgres',
   port: Number(POSTGRES_PORT) || 5432,
   username: POSTGRES_USER || 'postgres',
-  password: POSTGRES_PASSWORD || 'drakon2731',
+  password: POSTGRES_PASSWORD || 'postgress',
   database: POSTGRES_DB,
   synchronize: true,
   logging: false,
