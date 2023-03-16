@@ -34,7 +34,7 @@ echo
 
 
 echo "### Starting nginx ..."
-docker-compose up --force-recreate -d client
+docker-compose up
 echo
 
 echo "### Deleting dummy certificate for $domains ..."
@@ -73,3 +73,4 @@ echo
 
 echo "### Reloading nginx ..."
 docker-compose exec client nginx -s reload
+docker-compose exec client nginx -g daemon off
