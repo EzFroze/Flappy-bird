@@ -34,7 +34,7 @@ echo
 
 
 echo "### Starting nginx ..."
-docker-compose up --force-recreate -d prakticum-client
+docker-compose up --force-recreate -d client
 echo
 
 echo "### Deleting dummy certificate for $domains ..."
@@ -72,4 +72,4 @@ docker-compose run --rm --entrypoint "\
 echo
 
 echo "### Reloading nginx ..."
-docker-compose exec prakticum-client nginx -s reload
+docker-compose exec client nginx -s reload
