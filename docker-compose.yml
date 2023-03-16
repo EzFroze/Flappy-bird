@@ -9,18 +9,22 @@ services:
             dockerfile: Dockerfile.client
             args:
               CLIENT_PORT: ${CLIENT_PORT}
-        restart: always
-        env_file:
-          - ./nginx-certbot.env
+        restart: always 
         ports:
+          - "80:80"
           - "${CLIENT_PORT}:443"
-        volumes:
-          - nginx_secrets:/etc/letsencrypt
-          - ./user_conf.d:/etc/nginx/user_conf.d
         environment:
           - CLIENT_PORT=${CLIENT_PORT}
           - SERVER_PORT=${SERVER_PORT}
-          - CERTBOT_EMAIL
+         
+    certbot:
+      image: certbot/certbot
+      container_name: certbot
+      volumes: 
+        - ./certbot/conf:/etc/letsencrypt
+        - ./certbot/www:/var/www/certbot
+      command: certonly --webroot -w /var/www/certbot --force-renewal --email craft_89@inbox.ru -d bug-and-play-flappy-bird-21.ya-praktikum.tech --agree-tos
+    
     postgres:
       image: postgres:14     
       ports:
@@ -51,6 +55,3 @@ services:
           POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
           POSTGRES_USER: ${POSTGRES_USER}
           POSTGRES_DB: ${POSTGRES_DB}
-
-volumes:
-  nginx_secrets:
