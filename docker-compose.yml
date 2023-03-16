@@ -16,7 +16,15 @@ services:
         environment:
           - CLIENT_PORT=${CLIENT_PORT}
           - SERVER_PORT=${SERVER_PORT}
-         
+    nginx:
+        container_name: nginx
+        restart: unless-stopped
+        image: nginx
+        ports:
+            - 80:80
+            - 443:443
+        volumes:
+            - ./nginx/nginx.conf:/etc/nginx/nginx.conf    
     certbot:
       image: certbot/certbot
       container_name: certbot
