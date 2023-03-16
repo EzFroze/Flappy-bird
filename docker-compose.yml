@@ -10,28 +10,24 @@ services:
             args:
               CLIENT_PORT: ${CLIENT_PORT}
         restart: always 
+        volumes:
+          - ./data/certbot/conf:/etc/letsencrypt
+          - ./data/certbot/www:/var/www/certbot
         ports:
           - "80:80"
           - "${CLIENT_PORT}:443"
         environment:
           - CLIENT_PORT=${CLIENT_PORT}
           - SERVER_PORT=${SERVER_PORT}
-    nginx:
-        container_name: nginx
-        restart: unless-stopped
-        image: nginx
-        ports:
-            - 80:80
-            - 443:443
-        volumes:
-            - ./nginx.conf:/etc/nginx/nginx.conf    
-    certbot:
-      image: certbot/certbot
-      container_name: certbot
-      volumes: 
-        - ./certbot/conf:/etc/letsencrypt
-        - ./certbot/www:/var/www/certbot
-      command: certonly --webroot -w /var/www/certbot --force-renewal --email craft_89@inbox.ru -d bug-and-play-flappy-bird-21.ya-praktikum.tech --agree-tos
+        command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
+      
+   certbot:
+    image: certbot/certbot
+    restart: unless-stopped
+    volumes:
+      - ./data/certbot/conf:/etc/letsencrypt
+      - ./data/certbot/www:/var/www/certbot
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
     
     postgres:
       image: postgres:14     
