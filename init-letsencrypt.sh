@@ -34,7 +34,7 @@ echo
 
 
 echo "### Starting nginx ..."
-docker-compose up 
+docker-compose up --force-recreate -d prakticum-client
 echo
 
 echo "### Deleting dummy certificate for $domains ..."
