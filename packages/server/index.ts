@@ -28,7 +28,7 @@ app.use(
   })
 )
 
-const port = Number(process.env.SERVER_PORT) || 81
+const port = Number(process.env.SERVER_PORT) || 3001
 
 AppDataSource.initialize()
   .then(async () => {

@@ -49,7 +49,7 @@ services:
         context: .
         dockerfile: Dockerfile.server
         args:
-          SERVER_PORT: ${SERVER_PORT}
+          SERVER_PORT: 81
     depends_on:
       - postgres
     restart: always
