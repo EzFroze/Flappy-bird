@@ -51,7 +51,8 @@ services:
         args:
           SERVER_PORT: ${SERVER_PORT}
     depends_on:
-      - postgres
+      postgres:
+        condition: service_healthy
     restart: always
     ports:
         - "3001:3001"
