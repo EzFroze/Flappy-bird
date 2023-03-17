@@ -16,7 +16,7 @@ RUN yarn bootstrap
 RUN rm -rf /app/packages/client/dist/ && yarn build --scope=client
 
 
-FROM jonasal/nginx-certbot:latest as production
+FROM nginx:latest as production
 WORKDIR /app
 
 COPY --from=builder /app/packages/client/dist/ /app/
