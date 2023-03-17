@@ -73,3 +73,4 @@ echo
 
 echo "### Reloading nginx ..."
 docker-compose up
+docker-compose restart server

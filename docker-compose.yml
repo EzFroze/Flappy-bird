@@ -52,7 +52,6 @@ services:
           SERVER_PORT: ${SERVER_PORT}
     depends_on:
       - postgres
-    entrypoint: "./wait-for-it.sh postgres:5432"
     restart: always
     ports:
         - "3001:3001"
