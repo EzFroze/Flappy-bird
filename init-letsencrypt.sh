@@ -29,7 +29,7 @@ docker-compose run --rm --entrypoint "\
   openssl req -x509 -nodes -newkey rsa:2048 -days 1\
     -keyout '$path/privkey.pem' \
     -out '$path/fullchain.pem' \
-    -subj '/CN=bug-and-play-flappy-bird-21.ya-praktikum.tech www.bug-and-play-flappy-bird-21.ya-praktikum.tech'" certbot
+    -subj '/CN=localhost'" certbot
 echo
 
 
