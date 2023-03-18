@@ -72,5 +72,5 @@ docker-compose run --rm --entrypoint "\
 echo
 
 echo "### Reloading nginx ..."
-docker-compose up -d
-docker-compose restart
+docker-compose stop
+docker-compose up
