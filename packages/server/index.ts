@@ -37,73 +37,73 @@ AppDataSource.initialize()
   .catch(error => console.log('db err', error))
 
 // get all users
-app.get('/users', async (_req, res) => {
+app.get('/server/users', async (_req, res) => {
   res.send(await findUsers())
 })
 
 // updateTheme
-app.post('/users/theme', async (_req, res) => {
+app.post('/server/users/theme', async (_req, res) => {
   res.send(await findUsers())
 })
 
-app.post('/users', async (req, res) => {
+app.post('/server/users', async (req, res) => {
   res.send(await createUser(req.body))
 })
 
 // get all posts
-app.get('/posts', async (_req, res) => {
+app.get('/server/posts', async (_req, res) => {
   res.send(await findPosts())
 })
 
 // find post by id (for thread)
-app.get('/posts/:id', async (req, res) => {
+app.get('/server/posts/:id', async (req, res) => {
   res.send(await findPostById(Number(req.params.id)))
 })
 
 // create post (and create or update user)
-app.post('/posts', async (req, res) => {
+app.post('/server/posts', async (req, res) => {
   res.send(await createPost(req.body))
 })
 
 // find thread comments
-app.get('/comments/thread/:id', async (req, res) => {
+app.get('/server/comments/thread/:id', async (req, res) => {
   res.send(await findComments(Number(req.params.id)))
 })
 
 // create comment
-app.post('/comments', async (req, res) => {
+app.post('/server/comments', async (req, res) => {
   res.send(await createComment(req.body))
 })
 
 // todo: create sub comments
-app.post('/subcomments', async (req, res) => {
+app.post('/server/subcomments', async (req, res) => {
   res.send(await createSubcomment(req.body))
 })
 
 // get subcomments
-app.get('/subcomments/:commentId', async (req, res) => {
+app.get('/server/subcomments/:commentId', async (req, res) => {
   res.send(await findSubcomments(Number(req.params.commentId)))
 })
 
 // get all likes
-app.get('/likes', async (_req, res) => {
+app.get('/server/likes', async (_req, res) => {
   res.send(await findAllLikes())
 })
 
 // create like
-app.post('/likes', async (req, res) => {
+app.post('/server/likes', async (req, res) => {
   const likes = await createLike(req.body)
 
   res.send(likes)
 })
 
 // get all complains
-app.get('/complains', async (_req, res) => {
+app.get('/server/complains', async (_req, res) => {
   res.send(await findAllComplains())
 })
 
 // create complain
-app.post('/complains', async (req, res) => {
+app.post('/server/complains', async (req, res) => {
   res.send(await createComplain(req.body))
 })
 

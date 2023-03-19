@@ -56,7 +56,6 @@ services:
     restart: always
     ports:
         - "81:81"
-        - "3001:3001"
     environment:
       SERVER_PORT: 81
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
