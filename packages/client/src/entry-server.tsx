@@ -1,3 +1,4 @@
+import { StrictMode } from 'react'
 import ReactDOMServer from 'react-dom/server'
 import { Provider } from 'react-redux'
 import { StaticRouter } from 'react-router-dom/server'
@@ -10,10 +11,12 @@ interface IRenderProps {
 
 export const render = ({ path }: IRenderProps) => {
   return ReactDOMServer.renderToString(
-    <Provider store={store}>
-      <StaticRouter location={path}>
-        <App />
-      </StaticRouter>
-    </Provider>
+    <StrictMode>
+      <Provider store={store}>
+        <StaticRouter location={path}>
+          <App />
+        </StaticRouter>
+      </Provider>
+    </StrictMode>
   )
 }
