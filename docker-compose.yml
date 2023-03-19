@@ -55,6 +55,7 @@ services:
         condition: service_healthy
     restart: always
     ports:
+        - "81:81"
         - "3001:3001"
     environment:
       SERVER_PORT: 81
