@@ -1,8 +1,10 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { PayloadAction } from '@reduxjs/toolkit'
+import * as toolkitRaw from '@reduxjs/toolkit';
+const { createSlice } = ((toolkitRaw as any).default ?? toolkitRaw) as typeof toolkitRaw;
 import { RootState } from '../../../app/store/store'
 //import { ExampleInitialState } from '../types'
 import { getTheme } from './themeApi'
-import { blue, grey, teal } from '@mui/material/colors';
+//import { blue, grey, teal } from '@mui/material/colors';
 import { Theme } from '../types';
 
 export const themeSlice = createSlice({
@@ -11,9 +13,9 @@ export const themeSlice = createSlice({
     mode: 'light' as Theme,
     status: 'idle' as 'idle' | 'pending' | 'success' | 'error',
     config: {
-      bgr: [grey[50], teal[900]],
-      btn: [blue[500], blue[900]],
-      txt: [grey[900], grey[50]]
+      bgr: ['', ''],
+      btn: ['', ''],
+      txt: ['', '']
     }
   } as const,
   reducers: {

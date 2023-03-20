@@ -56,8 +56,7 @@ const bootstrap = async () => {
       res.statusCode = 200
       res.setHeader('Content-Type', 'text/html').end(html)
     } catch (error) {
-      vite.ssrFixStacktrace(error)
-      next(error)
+      console.log('ssr err:', error)
     }
   })
 

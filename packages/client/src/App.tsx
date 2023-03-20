@@ -28,7 +28,7 @@ import LightModeIcon from '@mui/icons-material/LightMode'
 import { useSet, useStore } from './app/store/hooks'
 import { useDb } from './hooks/useDb'
 import { baseOptions, BASE_URL } from './app/api/variables'
-import { grey, teal, common } from '@mui/material/colors'
+//import { grey, teal, common } from '@mui/material/colors'
 
 import './App.css'
 import { saveUser, userSelector } from './features/forums/services/forumSlice'
@@ -39,7 +39,7 @@ const lightTheme = createTheme({
   palette: {
     mode: 'light',
     primary: {
-      main: common.black,
+      main: "#0773c1",
     },
   },
 })
@@ -48,20 +48,20 @@ const darkTheme = createTheme({
   palette: {
     mode: 'dark',
     primary: {
-      main: common.white,
+      main: "#ffffff",
     },
     error: {
-      main: grey[300],
+      main: "#bebebe",
     },
   },
   components: {
     MuiTypography: {
       styleOverrides: {
         h3: {
-          color: grey[50],
+          color: "#bebebe",
         },
         h5: {
-          color: grey[50],
+          color: "#bebebe",
         },
       },
     },

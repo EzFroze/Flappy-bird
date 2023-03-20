@@ -1,4 +1,4 @@
-import { brown, green } from '@mui/material/colors'
+//import { brown, green } from '@mui/material/colors'
 import { Bird, Player, Position } from '../types'
 
 export const renderBlock = (
@@ -8,7 +8,7 @@ export const renderBlock = (
   w: number,
   h: number
 ) => {
-  ctx.fillStyle = '#50C878'
+  ctx.fillStyle = '#50c878'
   ctx.fillRect(x, y, w, h)
 
   ctx.fillStyle = '#000000'
@@ -22,13 +22,13 @@ export const renderGround = (
   height: number
 ) => {
   // ground
-  ctx.fillStyle = brown[500]
+  ctx.fillStyle = "#672d00"
   ctx.fillRect(0, height - 20, width, 20)
   ctx.fillStyle = '#000000'
   ctx.lineWidth = 1
   ctx.strokeRect(0, height - 30, width, 30)
   // grass
-  ctx.fillStyle = green[500]
+  ctx.fillStyle = "#14be00"
   ctx.fillRect(0, height - 30, width, 10)
 }
 
@@ -84,8 +84,8 @@ export const renderBirdWave = (
   if (!bird) return
 
   if (Math.ceil(player.wave) % 2 === 0) {
-    ctx.drawImage(bird.waveUp, player.x, player.y, player.w, player.h)
+    ctx?.drawImage(bird.waveUp, player.x, player.y, player.w, player.h)
   } else {
-    ctx.drawImage(bird.waveDown, player.x, player.y, player.w, player.h)
+    ctx?.drawImage(bird.waveDown, player.x, player.y, player.w, player.h)
   }
 }

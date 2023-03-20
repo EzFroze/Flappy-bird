@@ -8,7 +8,7 @@ import { DialogProps } from '../types'
 import OpenInFull from '@mui/icons-material/OpenInFull';
 import CloseFullscreen from '@mui/icons-material/CloseFullscreen';
 import { toggleFullscreen, updateFullscreen } from '../services/gameSlice'
-import { blue, grey } from '@mui/material/colors'
+//import { blue, grey } from '@mui/material/colors'
 import { TransitionProps } from '@mui/material/transitions'
 import { sendUserResult } from '../../leaderboard/services/leaderboard'
 import { getUser } from '../../profile/services/authSlice'

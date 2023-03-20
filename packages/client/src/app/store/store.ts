@@ -1,9 +1,12 @@
-import { configureStore } from '@reduxjs/toolkit'
+import * as toolkitRaw from '@reduxjs/toolkit';
+const { configureStore } = ((toolkitRaw as any).default ?? toolkitRaw) as typeof toolkitRaw;
 import exampleReducer from '../../features/example/services/exampleSlice'
 import authReducer from '../../features/profile/services/authSlice'
 import gameReducer from '../../features/game/services/gameSlice'
 import forumReducer from '../../features/forums/services/forumSlice'
 import themeReducer from '../../features/themes/services/themeSlice'
+
+
 
 export const store = configureStore({
   reducer: {
