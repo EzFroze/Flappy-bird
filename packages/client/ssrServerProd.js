@@ -6,6 +6,7 @@ import sirv from 'sirv'
 
 const DEV_ENV = 'development'
 const app = express()
+const __dirname = path.resolve()
 
 app.get("*", (req, res) => {
   res.sendFile(path.resolve(__dirname, "client", "index.html"));
