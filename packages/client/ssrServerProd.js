@@ -8,11 +8,6 @@ const DEV_ENV = 'development'
 const app = express()
 const __dirname = path.resolve()
 
-app.get("*", (req, res) => {
-  res.sendFile(path.resolve(__dirname, "client", "index.html"));
-});
-
-
 const bootstrap = async () => {
   
   let vite
@@ -49,6 +44,9 @@ const bootstrap = async () => {
     }
   })
   
+  app.get("*", (req, res) => {
+    res.sendFile(path.resolve(__dirname, "client", "index.html"));
+  });
 
   return { app }
 }
