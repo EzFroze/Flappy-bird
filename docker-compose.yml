@@ -29,7 +29,7 @@ services:
       - "3000:3000"
     environment:
       - CLIENT_PORT=${CLIENT_PORT}
-      - NODE_ENV=production
+      - NODE_ENV="production"
       
   certbot:
     image: certbot/certbot
