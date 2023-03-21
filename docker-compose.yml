@@ -1,12 +1,12 @@
 version: "3.9"
 
 services:
-  client:
-    container_name: prakticum-client
-    image: prakticum-client
+  nginx:
+    container_name: nginx
+    image: nginx
     build:
         context: .
-        dockerfile: Dockerfile.client
+        dockerfile: Dockerfile.nginx
         args:
           CLIENT_PORT: ${CLIENT_PORT}
     restart: always 
@@ -16,12 +16,27 @@ services:
     ports:
       - "80:80"
       - "${CLIENT_PORT}:443"
-      - "3000:3000"
     environment:
       - CLIENT_PORT=${CLIENT_PORT}
       - SERVER_PORT=${SERVER_PORT}
       - NODE_ENV=production
     command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
+  
+  client:
+    container_name: prakticum-client
+    image: prakticum-client
+    build:
+        context: .
+        dockerfile: Dockerfile.client
+        args:
+          CLIENT_PORT: ${CLIENT_PORT}
+    restart: always 
+    ports:
+      - "3000:3000"
+    environment:
+      - CLIENT_PORT=${CLIENT_PORT}
+      - SERVER_PORT=${SERVER_PORT}
+      - NODE_ENV=production
       
   certbot:
     image: certbot/certbot
