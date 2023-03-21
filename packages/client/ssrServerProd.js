@@ -14,7 +14,7 @@ const bootstrap = async () => {
 
   
     app.use(
-      sirv('dist/client', {
+      sirv('client', {
         gzip: true,
       })
     )
@@ -27,10 +27,10 @@ const bootstrap = async () => {
 
     try {
       template = fs.readFileSync(
-        path.resolve('dist/client/index.html'),
+        path.resolve('client/index.html'),
         'utf-8'
       )
-      render = (await import('./dist/server/entry-server.js')).render
+      render = (await import('./server/entry-server.js')).render
       
 
       const appHtml = await render({ path: url })
