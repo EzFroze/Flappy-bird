@@ -15,6 +15,10 @@ COPY . .
 RUN yarn bootstrap
 RUN rm -rf /app/packages/client/dist/ && yarn build --scope=client
 
+
+FROM node:$NODE_VERSION-buster-slim as production
+WORKDIR /app
+
 COPY --from=builder /app/packages/client/dist/ /app/
 COPY --from=builder /app/packages/client/ssrServer.js /app/ssrServer.js
 COPY --from=builder /app/packages/client/package.json /app/package.json
