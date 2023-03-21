@@ -47,6 +47,11 @@ const bootstrap = async () => {
   return { app }
 }
 
+app.get("*", (req, res) => {
+  res.sendFile(path.resolve(__dirname, "client", "index.html"));
+});
+
+
 bootstrap()
   .then(async ({ app }) => {
     app.listen(3000, () => {
