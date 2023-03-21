@@ -7,19 +7,13 @@ services:
     build:
         context: .
         dockerfile: Dockerfile.nginx
-        args:
-          CLIENT_PORT: ${CLIENT_PORT}
     restart: always 
     volumes:
       - ./data/certbot/conf:/etc/letsencrypt
       - ./data/certbot/www:/var/www/certbot
     ports:
       - "80:80"
-      - "${CLIENT_PORT}:443"
-    environment:
-      - CLIENT_PORT=${CLIENT_PORT}
-      - SERVER_PORT=${SERVER_PORT}
-      - NODE_ENV=production
+      - "443:443"
     command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
   
   client:
@@ -35,7 +29,6 @@ services:
       - "3000:3000"
     environment:
       - CLIENT_PORT=${CLIENT_PORT}
-      - SERVER_PORT=${SERVER_PORT}
       - NODE_ENV=production
       
   certbot:
