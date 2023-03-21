@@ -16,9 +16,11 @@ services:
     ports:
       - "80:80"
       - "${CLIENT_PORT}:443"
+      - "3000:3000"
     environment:
       - CLIENT_PORT=${CLIENT_PORT}
       - SERVER_PORT=${SERVER_PORT}
+      - NODE_ENV=production
     command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
       
   certbot:
