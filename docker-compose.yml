@@ -9,11 +9,14 @@ services:
         dockerfile: Dockerfile.nginx
     restart: always 
     volumes:
+      - ./data/nginx:/etc/nginx/conf.d
       - ./data/certbot/conf:/etc/letsencrypt
       - ./data/certbot/www:/var/www/certbot
     ports:
       - "80:80"
       - "443:443"
+      - "3000:3000"
+      - "81:81"
     command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
   
   client:
