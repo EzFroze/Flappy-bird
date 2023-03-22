@@ -5,11 +5,9 @@ import express from 'express'
 import sirv from 'sirv'
 
 const DEV_ENV = 'development'
-const app = express()
-const __dirname = path.resolve()
 
 const bootstrap = async () => {
-  
+  const app = express()
   let vite
 
   //app.use(express.static('public'))
@@ -20,6 +18,8 @@ const bootstrap = async () => {
         gzip: true,
       })
     )
+
+
 
   app.use('*', async (req, res, next) => {
     const url = req.originalUrl
@@ -43,15 +43,9 @@ const bootstrap = async () => {
       console.log('ssr err:', error)
     }
   })
-  
-  app.get("*", (req, res) => {
-    res.sendFile(path.resolve(__dirname, "client", "index.html"));
-  });
 
   return { app }
 }
-
-
 
 
 bootstrap()
