@@ -5,8 +5,8 @@ import { getWindow, ssrWindow, extend } from 'ssr-window'
 /*toDo проверить как будет работать авторизация при деплое на хостинг, возможно отказаться от location */
 extend(ssrWindow, {
   location: {
-    protocol: 'http',
-    host: 'localhost:3000',
+    protocol: 'https',
+    host: 'bug-and-play-flappy-bird-21.ya-praktikum.tech',
   },
 })
 

@@ -14,8 +14,8 @@ export const useDb = <T>(
   }: Partial<Pick<DbRequest, 'id' | 'body' | 'params'>>) => {
     setLoading(true)
 
-    const urlId = `http://localhost:3001/${model}/${id || ''}`
-    const urlParams = `http://localhost:3001/${model}/${params}`
+    const urlId = `/server/${model}/${id || ''}`
+    const urlParams = `/server/${model}/${params}`
 
     try {
       const response = await fetch(params ? urlParams : urlId, {

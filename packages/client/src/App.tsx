@@ -28,7 +28,8 @@ import LightModeIcon from '@mui/icons-material/LightMode'
 import { useSet, useStore } from './app/store/hooks'
 import { useDb } from './hooks/useDb'
 import { baseOptions, BASE_URL } from './app/api/variables'
-//import { grey, teal, common } from '@mui/material/colors'
+import { grey, teal, common } from '@mui/material/colors'
+
 
 import './App.css'
 import { saveUser, userSelector } from './features/forums/services/forumSlice'
@@ -39,7 +40,7 @@ const lightTheme = createTheme({
   palette: {
     mode: 'light',
     primary: {
-      main: "#0773c1",
+      main: common.black,
     },
   },
 })
@@ -48,20 +49,20 @@ const darkTheme = createTheme({
   palette: {
     mode: 'dark',
     primary: {
-      main: "#ffffff",
+      main: common.white,
     },
     error: {
-      main: "#bebebe",
+      main: grey[300],
     },
   },
   components: {
     MuiTypography: {
       styleOverrides: {
         h3: {
-          color: "#bebebe",
+          color: grey[50],
         },
         h5: {
-          color: "#bebebe",
+          color: grey[50],
         },
       },
     },
@@ -164,6 +165,7 @@ export const App = () => {
     <ThemeProvider theme={ theme === 'light' ? lightTheme : darkTheme }>
       { !fullscreen && <><NavMenu /><hr /></> }
       <ErrorBoundary FallbackComponent={ServerErrorPage}>
+
           <Box sx={{ height: 20 }}></Box>
           <Box sx={{ position: 'absolute', top: 0, right: 0, height: 20 }}>
             {user?.login}

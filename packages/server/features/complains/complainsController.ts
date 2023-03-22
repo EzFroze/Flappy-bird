@@ -1,5 +1,5 @@
-import { AppDataSource } from "../../app/data-source"
-import { ComplainModel } from "./ComplainsModel"
+import { AppDataSource } from '../../app/data-source'
+import { ComplainModel } from './ComplainsModel'
 
 const complains = AppDataSource.getRepository(ComplainModel)
 
@@ -9,13 +9,13 @@ export const createComplain = async (data: ComplainModel) => {
   const foundComplain = await complains.findOneBy({
     postId: data.postId,
     commentId: data.commentId,
-    subcommentId: data.subcommentId
+    subcommentId: data.subcommentId,
   })
 
   if (foundComplain) {
     return complains.delete({ id: foundComplain.id })
   }
-  
+
   complain.postId = data?.postId
   complain.commentId = data?.commentId || 0
   complain.subcommentId = data?.subcommentId || 0

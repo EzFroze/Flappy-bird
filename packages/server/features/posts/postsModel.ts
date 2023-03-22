@@ -1,6 +1,12 @@
-import { UserModel } from "../users/usersModel"
-import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm"
-import { CommentModel } from "../comments/commentsModel"
+import { UserModel } from '../users/usersModel'
+import {
+  Column,
+  Entity,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm'
+import { CommentModel } from '../comments/commentsModel'
 
 @Entity('posts')
 export class PostModel {
@@ -22,6 +28,6 @@ export class PostModel {
   @ManyToOne(() => UserModel)
   user!: UserModel
 
-  @OneToMany(() => CommentModel, (comment) => comment.post)
+  @OneToMany(() => CommentModel, comment => comment.post)
   comments!: CommentModel[]
 }

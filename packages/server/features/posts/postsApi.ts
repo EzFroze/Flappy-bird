@@ -1,6 +1,6 @@
-import { UserModel } from "../../features/users/usersModel"
-import { AppDataSource } from "../../app/data-source"
-import { PostModel } from "./postsModel"
+import { UserModel } from '../../features/users/usersModel'
+import { AppDataSource } from '../../app/data-source'
+import { PostModel } from './postsModel'
 
 const posts = AppDataSource.getRepository(PostModel)
 const users = AppDataSource.getRepository(UserModel)
@@ -33,17 +33,17 @@ export const findPosts = async () => {
     relations: {
       user: true,
       comments: {
-        user: true
-      }
-    }
+        user: true,
+      },
+    },
   })
 
-  return foundsPosts.map((post) => ({
+  return foundsPosts.map(post => ({
     ...post,
     comments: {
       last: post.comments[post.comments.length - 1],
-      quantity: post.comments.length
-    }
+      quantity: post.comments.length,
+    },
   }))
 }
 
@@ -52,9 +52,9 @@ export const findPostsByUserId = async (userId: number) => {
 }
 
 export const findPostById = async (id: number) => {
-  const [ thread ] = await posts.find({
+  const [thread] = await posts.find({
     relations: { user: true },
-    where: { id }
+    where: { id },
   })
 
   return thread

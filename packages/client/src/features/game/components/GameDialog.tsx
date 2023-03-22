@@ -1,16 +1,15 @@
-
 import { Box, Button, Dialog, FormHelperText, IconButton, Slide, Tooltip, Typography } from '@mui/material'
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
 import { RoutesEnum } from '../../../app/router/types'
 import { useSet, useStore } from '../../../app/store/hooks'
+import { sendUserResult } from '../../leaderboard/services/leaderboard'
 import { DialogProps } from '../types'
 import OpenInFull from '@mui/icons-material/OpenInFull';
 import CloseFullscreen from '@mui/icons-material/CloseFullscreen';
 import { toggleFullscreen, updateFullscreen } from '../services/gameSlice'
 //import { blue, grey } from '@mui/material/colors'
 import { TransitionProps } from '@mui/material/transitions'
-import { sendUserResult } from '../../leaderboard/services/leaderboard'
 import { getUser } from '../../profile/services/authSlice'
 import { useServerError } from '../../../hooks/useServerError'
 
@@ -22,6 +21,7 @@ const Transition = React.forwardRef(function Transition(
 ) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
+
 
 export const GameDialog: React.FC<DialogProps> = ({
   title,

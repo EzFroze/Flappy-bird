@@ -4,6 +4,7 @@ import {
   ListItemIcon,
   ListItemText,
   Avatar,
+  Typography,
 } from '@mui/material'
 import {
   SportsEsports,
@@ -46,15 +47,20 @@ const RouterLink: React.FC<RouterLinkProps> = props => {
     <ListItemButton component={MyNavLink}>
       <ListItemIcon
         sx={{
-          color: 'black',
-          '.css-19mdmo4-MuiButtonBase-root-MuiListItemButton-root > &': {
-            color: 'white',
+          '.MuiListItemButton-root > &': {
+            color: 'primary',
           },
           '.Mui-selected > &': { color: 'orange' },
         }}>
         {props.icon}
       </ListItemIcon>
-      <ListItemText primary={props.text} />
+
+      <ListItemText
+        sx={{
+          '.Mui-selected > &': { textDecoration: 'underline' },
+        }}>
+        <Typography color="primary">{props.text}</Typography>
+      </ListItemText>
     </ListItemButton>
   )
 }
@@ -66,11 +72,8 @@ export const NavMenu: React.FC = () => {
     <List
       sx={{
         display: 'flex',
-        '& > .css-h4pi96-MuiButtonBase-root-MuiListItemButton-root': {
-          color: 'black',
-        },
-        '& > .css-19mdmo4-MuiButtonBase-root-MuiListItemButton-root': {
-          color: 'white',
+        '& > .MuiListItemButton-root': {
+          color: 'primary',
         },
         '& > .Mui-selected': { color: 'orange' },
       }}>
