@@ -1,5 +1,4 @@
-
-import { Box, Button, Dialog, DialogActions, DialogTitle, FormHelperText, IconButton, Slide, Stack, Tooltip, Typography } from '@mui/material'
+import { Box, Button, Dialog, FormHelperText, IconButton, Slide, Tooltip, Typography } from '@mui/material'
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
 import { RoutesEnum } from '../../../app/router/types'
@@ -9,7 +8,7 @@ import { DialogProps } from '../types'
 import OpenInFull from '@mui/icons-material/OpenInFull';
 import CloseFullscreen from '@mui/icons-material/CloseFullscreen';
 import { toggleFullscreen, updateFullscreen } from '../services/gameSlice'
-import { blue, grey } from '@mui/material/colors'
+//import { blue, grey } from '@mui/material/colors'
 import { TransitionProps } from '@mui/material/transitions'
 import { getUser } from '../../profile/services/authSlice'
 import { useServerError } from '../../../hooks/useServerError'
@@ -36,6 +35,7 @@ export const GameDialog: React.FC<DialogProps> = ({
   const fullscreen = useStore(s => s.game.fullscreen)
   const set = useSet()
 
+  const nav = useNavigate()
   const user = useStore(getUser)
   const { serverError, setError } = useServerError()
 
@@ -47,13 +47,12 @@ export const GameDialog: React.FC<DialogProps> = ({
       progress,
     }).then(response => {
       if (response.status === 200) {
-        goTo(RoutesEnum.Leaderboard)
+        nav(RoutesEnum.Leaderboard)
       } else {
         setError(new Error(`Что-то пошло не так.`))
       }
     })
   }
-
 
   return (
     <Dialog 
@@ -72,6 +71,7 @@ export const GameDialog: React.FC<DialogProps> = ({
         <Button onClick={onClick} variant='contained' color='secondary'>
             {buttonTitle}
         </Button>
+
         <Button 
           onClick={() => {
             set(updateFullscreen(false))
@@ -84,20 +84,14 @@ export const GameDialog: React.FC<DialogProps> = ({
             Таблица рекордов
         </Button>
         {progress ? (
-          <Button onClick={sendResultToLeaderboard}>
+          <Button 
+            variant='contained' color='info'
+            onClick={sendResultToLeaderboard} >
             {'Сохранить результат'}
           </Button>
         ) : (
           ''
         )}
-        <FormHelperText
-          sx={{
-            color: 'red',
-            fontSize: 16,
-          }}>
-          {serverError}
-        </FormHelperText>
-        
         <Tooltip title="Изменение разрешения может перезапустить игру" placement='left'>
           <IconButton
             onClick={() => set(toggleFullscreen())}
@@ -109,7 +103,13 @@ export const GameDialog: React.FC<DialogProps> = ({
           </IconButton>
         </Tooltip>
       </Box>
-
+        <FormHelperText
+          sx={{
+            color: 'red',
+            fontSize: 16,
+          }}>
+          {serverError}
+        </FormHelperText>
     </Dialog>
   )
 }

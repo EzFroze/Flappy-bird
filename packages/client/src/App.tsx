@@ -30,6 +30,7 @@ import { useDb } from './hooks/useDb'
 import { baseOptions, BASE_URL } from './app/api/variables'
 import { grey, teal, common } from '@mui/material/colors'
 
+
 import './App.css'
 import { saveUser, userSelector } from './features/forums/services/forumSlice'
 
@@ -161,11 +162,10 @@ export const App = () => {
   const fullscreen = useStore((state) => state.game.fullscreen)
 
   return (
-    <>
+    <ThemeProvider theme={ theme === 'light' ? lightTheme : darkTheme }>
+      { !fullscreen && <><NavMenu /><hr /></> }
+      <ErrorBoundary FallbackComponent={ServerErrorPage}>
 
-      <ThemeProvider theme={theme === 'light' ? lightTheme : darkTheme}>
-        { !fullscreen && <><NavMenu /><hr /></> }
-        <ErrorBoundary FallbackComponent={ServerErrorPage}>
           <Box sx={{ height: 20 }}></Box>
           <Box sx={{ position: 'absolute', top: 0, right: 0, height: 20 }}>
             {user?.login}
@@ -247,7 +247,6 @@ export const App = () => {
             />
           </Routes>
         </ErrorBoundary>
-      </ThemeProvider>
-    </>
+    </ThemeProvider>
   )
 }
