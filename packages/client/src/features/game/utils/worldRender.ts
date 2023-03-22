@@ -1,7 +1,5 @@
-import { brown, green } from '@mui/material/colors'
-import { Player, Position } from '../types'
-import wingUpFrame from '/bird/frame-1.png'
-import wingDownFrame from '/bird/frame-2.png'
+//import { brown, green } from '@mui/material/colors'
+import { Bird, Player, Position } from '../types'
 
 export const renderBlock = (
   ctx: CanvasRenderingContext2D,
@@ -10,7 +8,7 @@ export const renderBlock = (
   w: number,
   h: number
 ) => {
-  ctx.fillStyle = '#50C878'
+  ctx.fillStyle = '#50c878'
   ctx.fillRect(x, y, w, h)
 
   ctx.fillStyle = '#000000'
@@ -24,13 +22,13 @@ export const renderGround = (
   height: number
 ) => {
   // ground
-  ctx.fillStyle = brown[500]
+  ctx.fillStyle = "#672d00"
   ctx.fillRect(0, height - 20, width, 20)
   ctx.fillStyle = '#000000'
   ctx.lineWidth = 1
   ctx.strokeRect(0, height - 30, width, 30)
   // grass
-  ctx.fillStyle = green[500]
+  ctx.fillStyle = "#14be00"
   ctx.fillRect(0, height - 30, width, 10)
 }
 
@@ -60,33 +58,34 @@ export const renderInfo = ({
 export const renderBirdFall = (
   ctx: CanvasRenderingContext2D,
   player: Player,
-  height: number
+  height: number,
+  bird: Bird
 ) => {
-  const bird = new Image()
-
-  if (Math.round(player.y) >= height - 20 - player.h) {
-    bird.src = wingDownFrame
-  } else {
-    player.y += 2
-    bird.src = wingUpFrame
-  }
+  if (!bird) return
 
   ctx.globalAlpha = 0.7
-  ctx.drawImage(bird, player.x, player.y, player.w, player.h)
+
+  if (Math.round(player.y) >= height - 20 - player.h) {
+    ctx.drawImage(bird.waveDown, player.x, player.y, player.w, player.h)
+  } else {
+    player.y += 2
+    ctx.drawImage(bird.waveUp, player.x, player.y, player.w, player.h)
+  }
+
   ctx.globalAlpha = 1
+
 }
 
 export const renderBirdWave = (
   ctx: CanvasRenderingContext2D,
-  player: Player
+  player: Player,
+  bird: Bird
 ) => {
-  const bird = new Image()
+  if (!bird) return
 
   if (Math.ceil(player.wave) % 2 === 0) {
-    bird.src = wingUpFrame
+    ctx?.drawImage(bird.waveUp, player.x, player.y, player.w, player.h)
   } else {
-    bird.src = wingDownFrame
+    ctx?.drawImage(bird.waveDown, player.x, player.y, player.w, player.h)
   }
-
-  ctx.drawImage(bird, player.x, player.y, player.w, player.h)
 }

@@ -1,0 +1,50 @@
+#app {
+  height: 100vh;
+}
+
+@keyframes forest {
+  0% {
+    transform: translateX(400px);
+  }
+  100% {
+    transform: translateX(-400px);
+  }
+}
+@keyframes forest2 {
+  0% {
+    transform: translateX(0px);
+  }
+  100% {
+    transform: translateX(-400px);
+  }
+}
+
+@keyframes bird1 {
+  30% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+@keyframes bird2 {
+  30% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes birdY {
+  0% {
+    transform: translateY(0px);
+  }
+
+  50% {
+    transform: translateY(-5px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}

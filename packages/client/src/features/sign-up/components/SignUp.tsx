@@ -23,6 +23,7 @@ import { useStore } from '../../../app/store/hooks'
 import { getUser } from '../../profile/services/authSlice'
 import { useSignUpSubmit } from '../hooks/useSignUpSubmit'
 import { useValidationRoute } from '../../../hooks/useValidationRoute'
+import { styles } from '../../profile/styles/styles'
 
 export const SignUp: React.FC = () => {
   const {
@@ -64,7 +65,6 @@ export const SignUp: React.FC = () => {
       component="main"
       maxWidth="xl"
       sx={{
-        minHeight: '100vh',
         display: 'flex',
       }}>
       <Box
@@ -74,9 +74,6 @@ export const SignUp: React.FC = () => {
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
-          backgroundColor: '#f5f5f5',
-          padding: '25px',
-          borderRadius: '25px',
           width: '400px',
         }}>
         <Typography
@@ -84,9 +81,9 @@ export const SignUp: React.FC = () => {
           sx={{
             fontWeight: 'bolder',
           }}
-          color="black"
+          color="primary"
           align="center">
-          {'Create account'}
+          Создать профиль
         </Typography>
         <FormHelperText
           sx={{
@@ -163,15 +160,7 @@ export const SignUp: React.FC = () => {
             type="submit"
             fullWidth
             variant="contained"
-            sx={{
-              borderRadius: '10px',
-              fontSize: 16,
-              mt: 2,
-              backgroundColor: '#2a2f3f',
-              '&:hover': {
-                background: '#1976d2',
-              },
-            }}>
+            sx={styles.button}>
             Создать аккаунт
           </Button>
           <MuiLink
@@ -181,21 +170,7 @@ export const SignUp: React.FC = () => {
             type="button"
             variant="button"
             underline="none"
-            sx={{
-              display: 'block',
-              textAlign: 'center',
-              fontSize: 16,
-              padding: '6px 16px',
-              lineHeight: 1.75,
-              textTransform: 'uppercase',
-              borderWidth: '3px',
-              borderRadius: '10px',
-              mt: 2,
-              backgroundColor: '#2a2f3f',
-              '&:hover': {
-                background: '#1976d2',
-              },
-            }}>
+            sx={styles.link}>
             Войти
           </MuiLink>
         </form>

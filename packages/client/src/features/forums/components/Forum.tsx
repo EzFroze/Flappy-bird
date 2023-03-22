@@ -15,7 +15,6 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  Tooltip,
   Typography,
 } from '@mui/material'
 import {
@@ -23,49 +22,79 @@ import {
   useLocation,
   useParams,
 } from 'react-router-dom'
-import { actionPaths, ForumsNames, ForumsNamesRu } from '../types'
+import { ForumTopic, Like, Topic } from '../types'
 import { Link as RouterLink } from 'react-router-dom'
 import { headers } from '../data'
-
-const rowsMockData = new Array(10).fill(null).map((_, i) => ({
-  name: `Thread ${i}`,
-  user: {
-    name: 'user name',
-    avatar: 'T',
-  },
-  lastMessage: {
-    user: 'User name',
-    date: new Date().toLocaleDateString(),
-    time: new Date().toLocaleTimeString(),
-    content: '',
-  },
-  messagesNumber: 120,
-  views: 8001,
-}))
+import { useEffect, useState } from 'react'
+import { BASE_URL } from '../../../app/api/variables'
+import { useDb } from '../../../hooks/useDb'
+import { RoutesEnum } from '../../../app/router/types'
 
 export const Forum: React.FC = () => {
-  const { forum, thread } = useParams()
+  const { thread } = useParams()
   const { pathname } = useLocation()
+  const [topics, setTopics] = useState<ForumTopic[]>([])
 
-  const forumName = forum as ForumsNames
+  const [ getPosts, { result: posts }] = useDb<Topic[]>('posts')
+  const [ getLikes, { result: likes }] = useDb<Like[]>('likes')
+
+  useEffect(() => {
+    getPosts({})
+    getLikes({})
+  }, [])
+
+  useEffect(() => {
+    const topics = (posts || []).map((topic) => {
+      const lastUser = topic.comments?.last?.user
+      const dt = topic.comments?.last?.datetime
+      const likesNumber = (likes || []).filter((like) => {
+        return like.postId === topic.id
+      }).length
+
+      return {
+        id: topic.id,
+        name: topic.title,
+        lastMessage: {
+          user: lastUser?.display_name || lastUser?.login || '',
+          date: dt ? new Date(dt).toLocaleDateString() : '',
+          time: dt ? new Date(dt).toLocaleTimeString() : '',
+          content: '',
+        },
+        messagesNumber: topic.comments.quantity,
+        likes: likesNumber,
+        user: topic.user
+      }
+    })
+
+    setTopics(topics)
+  }, [posts, likes])
+
+
 
   return (
     <>
-      {thread || pathname.includes(actionPaths.createThread) ? (
+      {thread || pathname.includes(RoutesEnum.CreateThread) ? (
         <ForumThreadOutlet />
       ) : (
-        <Container>
-          <Typography variant="h3">{ForumsNamesRu[forumName]}</Typography>
+        <Container 
+          maxWidth="lg" 
+          sx={{ 
+            pt: 2,
+          }}>
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <Typography variant="h3">Форум</Typography>
+          </Box>
           <Grid container spacing={2} sx={{ mt: 2 }}>
             <Grid item xs={3}>
               <Link
                 data-test="link-create-thread"
                 underline="none"
-                to={actionPaths.createThread}
+                to={RoutesEnum.CreateThread}
                 component={RouterLink}>
                 <Button
                   startIcon={<AddCircleOutlineIcon />}
-                  variant="contained">
+                  variant="contained"
+                >
                   Новая тема
                 </Button>
               </Link>
@@ -74,12 +103,12 @@ export const Forum: React.FC = () => {
             <Grid item xs={7}>
               <Stack direction="row" justifyContent="flex-end">
                 <Chip label="Страницы" />
-                <Pagination count={10} />
+                <Pagination count={Math.ceil(topics.length / 10)} />
               </Stack>
             </Grid>
           </Grid>
 
-          <TableContainer sx={{ mt: 2, backgroundColor: 'white' }}>
+          <TableContainer sx={{ mt: 2 }}>
             <Table>
               <TableHead>
                 <TableRow>
@@ -91,37 +120,38 @@ export const Forum: React.FC = () => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {rowsMockData.map((row, i) => (
-                  <TableRow key={i * 10000}>
+                {topics.map((row) => (
+                  <TableRow key={`topic_table_row_${row.id}`}>
                     <TableCell>
                       <Stack direction={'row'} alignItems="center" spacing={2}>
-                        <Tooltip
-                          title={row.user.name}
-                          placement="top-start"
-                          arrow>
-                          <Avatar sx={{ backgroundColor: 'darkred' }}>
-                            {row.user.avatar}
-                          </Avatar>
-                        </Tooltip>
+                        <Avatar
+                          sx={{ border: '1px solid black' }} 
+                          src={`${BASE_URL}/resources/${row.user.avatar}`} />
                         <Link
                           underline="none"
                           component={RouterLink}
-                          to={`${i}`}>
+                          to={`${row.id}`}>
                           <Typography variant="button">{row.name}</Typography>
                         </Link>
                       </Stack>
                     </TableCell>
                     <TableCell>
-                      <Stack direction={'row'} spacing={1}>
-                        <Box>{row.lastMessage.date}</Box>
-                        <Box sx={{ color: 'darkgrey' }}>
-                          {row.lastMessage.time.slice(0, 5)}
-                        </Box>
-                      </Stack>
-                      от <Link>{row.lastMessage.user}</Link>
+                      {
+                        row.lastMessage.user && (
+                          <>
+                            <Stack direction={'row'} spacing={1}>
+                              <Box>{row.lastMessage.date}</Box>
+                              <Box sx={{ color: 'darkgrey' }}>
+                                {row.lastMessage.time?.slice(0, 5)}
+                              </Box>
+                            </Stack>
+                            от <Link>{row.lastMessage.user}</Link>
+                          </>
+                        ) || 'Нет сообщений'
+                      }
                     </TableCell>
                     <TableCell align="right">{row.messagesNumber}</TableCell>
-                    <TableCell align="right">{row.views}</TableCell>
+                    <TableCell align="right">{row.likes}</TableCell>
                   </TableRow>
                 ))}
               </TableBody>

@@ -7,8 +7,14 @@ export const Dialogs: React.FC<{
   updateStatus: React.Dispatch<React.SetStateAction<GameStatus>>
   restorePlayer: () => void
   restartLevel: () => void
-  progress: number
-}> = ({ status, updateStatus, restorePlayer, restartLevel, progress }) => {
+  progress: number,
+}> = ({ 
+  status, 
+  updateStatus, 
+  restorePlayer, 
+  restartLevel, 
+  progress,
+}) => {
   const restart = useCallback(() => {
     updateStatus(GameStatus.start)
     restorePlayer()
@@ -45,12 +51,14 @@ export const Dialogs: React.FC<{
         title: `Вы прошли игру!`,
         buttonTitle: 'Начать заново',
         onClick: restart,
+        progress,
       },
       [GameStatus.gameover]: {
         open: true,
         title: `Игра окончена! Ваш прогресс: ${progress}`,
         buttonTitle: 'Начать заново',
         onClick: restart,
+        progress,
       },
     }),
     [status, progress, restart]
